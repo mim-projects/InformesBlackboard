@@ -1,0 +1,12 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        template="/error/_all_codes.xhtml">
+    <ui:define name="description_generic_error">
+        <span>
+            <p:commandButton actionListener="#{routerCtrl.navigate('home')}" icon="pi pi-arrow-left"
+                             styleClass="rounded-button" style="text-transform: uppercase" value="#{bundle.return_home}"/>
+        </span>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="Capa_2"
+   data-name="Capa 2"
+   viewBox="0 0 138 138"
+   version="1.1"
+   sodipodi:docname="logo.svg"
+   inkscape:version="1.3 (0e150ed6c4, 2023-07-21)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview3"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     showgrid="false"
+     inkscape:zoom="6.2391304"
+     inkscape:cx="69"
+     inkscape:cy="69"
+     inkscape:window-width="1920"
+     inkscape:window-height="1057"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g3" />
+  <defs
+     id="defs1">
+    <style
+       id="style1">&#10;      .cls-1 {&#10;        fill: none;&#10;      }&#10;&#10;      .cls-2 {&#10;        fill: #399db2;&#10;      }&#10;    </style>
+  </defs>
+  <g
+     id="Capa_1-2"
+     data-name="Capa 1">
+    <g
+       id="g3">
+      <path
+         d="m 62.857962,5.1824972 q 29.154104,0 43.948728,7.1104008 15.01219,6.932641 15.01219,24.353125 0,11.198882 -7.61488,18.664802 -7.61488,7.288162 -21.974364,9.421281 v 0.888802 q 9.790554,1.244319 17.623004,4.621761 8.05001,3.377439 12.61894,9.599041 4.56893,6.221602 4.56893,16.176164 0,17.242726 -14.57706,26.664006 -14.359484,9.42128 -39.379795,9.42128 H 18.474105 V 5.1824972 Z m 3.916224,54.0390478 q 20.01625,0 27.41356,-5.155041 7.397314,-5.332799 7.397314,-15.642882 0,-10.487842 -9.137864,-14.931842 -8.92028,-4.621761 -28.718962,-4.621761 H 38.055218 V 59.221545 Z M 38.055218,72.553548 V 118.5934 H 69.385 q 20.668956,0 28.718966,-6.57712 8.050014,-6.57712 8.050014,-17.242728 0,-9.954562 -8.485144,-15.998403 -8.26758,-6.221601 -29.80681,-6.221601 z"
+         id="text3"
+         aria-label="B"
+         style="fill:#000000;stroke-width:16.3883" />
+      <rect
+         class="cls-1"
+         width="138"
+         height="138"
+         id="rect3" />
+    </g>
+  </g>
+</svg>

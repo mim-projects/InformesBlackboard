@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="icon" type="image/png" href="#{requestCtrl.getResourcesForUrl('images/svg/logo.svg', 'mimsoft')}"/>
+    <title>BestCrew</title>
+    <!-- THEME  -->
+    <h:outputStylesheet name="css/primeflex.min.css" library="poseidon-layout" />
+    <h:outputStylesheet name="css/primeicons.css" library="poseidon-layout" />
+    <h:outputStylesheet name="theme.css" library="primefaces-poseidon-#{commonCtrl.currentCssTheme}-light" />
+    <h:outputStylesheet name="css/layout-light.css" library="poseidon-layout" />
+    <!-- PERSONAL THEME  -->
+    <h:outputStylesheet name="css/custom-theme.css" library="mimsoft" />
+    <h:outputScript name="js/custom-theme.js" library="mimsoft" />
+    <ui:insert name="base_head"/>
+</h:head>
+<h:body>
+    <h:form id="messages">
+        <p:growl showDetail="true"/>
+    </h:form>
+    <ui:insert name="base_body"/>
+    <script type="text/javascript">
+        PrimeFaces.widget.Paginator.prototype.bindSwipeEvents = function() {}
+        PrimeFaces.widget.TabView.prototype.bindSwipeEvents = function() {}
+    </script>
+</h:body>
+</html>

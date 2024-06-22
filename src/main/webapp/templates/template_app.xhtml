@@ -1,0 +1,101 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:p="http://primefaces.org/ui"
+        template="template_base.xhtml">
+    <ui:define name="base_head">
+        <f:event type="preRenderView" listener="#{sessionCtrl.validateSession()}"/>
+        <h:outputStylesheet name="theme.css" library="primefaces-poseidon-#{commonCtrl.currentCssTheme}-#{sessionCtrl.currentTheme}" />
+        <h:outputStylesheet name="css/layout-#{sessionCtrl.currentTheme}.css" library="poseidon-layout" />
+        <h:outputStylesheet library="mimsoft" name="/css/custom-app.css"/>
+        <ui:insert name="end_head"/>
+        <style>
+            @media screen and (max-width: 1080px) {
+                .flex-hide-mobile { display: none; }
+                .flex-show-mobile { display: flex; }
+            }
+        </style>
+    </ui:define>
+    <ui:define name="base_body">
+        <ui:insert name="start_body"/>
+        <div class="navigator-drawer">
+            <h:form class="navigator-content">
+                <div class="navigator-drawer-options">
+                    <div class="profile-mobile" onclick="navigation('profile')">
+                        <p:avatar icon="pi pi-user" styleClass="mr-2" shape="circle" size="xlarge">
+                            <p:graphicImage style="width: 100%; height: 100%; object-fit: cover;" url="#{sessionCtrl.imageThumbnailsProfile}"/>
+                        </p:avatar>
+                        <div style="display: grid">
+                            <span>#{sessionCtrl.name}</span>
+                            <span class="profile-username">#{sessionCtrl.username}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="navigator-drawer-space"></div>
+                <div class="navigator-drawer-title">#{bundle.menu}</div>
+                <div class="navigator-drawer-options" style="margin-top: 2rem">
+                    <ui:insert name="navigation-drawer-menu">
+                        <span>
+                            <p:commandButton actionListener="#{routerCtrl.navigate('home')}" process="@this"
+                                             icon="pi pi-th-large" styleClass="ui-button-flat ui-button-plain" value="#{bundle.home}"/>
+                        </span>
+                    </ui:insert>
+                </div>
+            </h:form>
+        </div>
+        <div class="application">
+            <h:form id="form_app_header" class="toolbar">
+                <div class="toolbar-left">
+                    <div class="toolbar-icon-app">
+                        <p:graphicImage name="/images/svg/logo_v.svg" library="mimsoft" alt="bestcrew"/>
+                    </div>
+                    <div class="flex-hide-mobile">
+                        <ui:insert name="navigation-menu">
+                            <p:commandButton actionListener="#{routerCtrl.navigate('home')}" process="@this"
+                                             icon="pi pi-th-large" styleClass="ui-button-flat ui-button-plain" value="#{bundle.home}"/>
+                        </ui:insert>
+                    </div>
+                </div>
+                <div class="toolbar-right">
+                    <div class="flex-hide-mobile">
+                        <div class="profile-bar" onclick="navigation('profile')">
+                            <div style="display: grid;">
+                                <span>#{sessionCtrl.name}</span>
+                                <span class="profile-username" style="text-align: right">#{sessionCtrl.username}</span>
+                            </div>
+                            <p:avatar icon="pi pi-user" styleClass="mr-2" shape="circle" size="large">
+                                <p:graphicImage style="width: 100%; height: 100%; object-fit: cover;" url="#{sessionCtrl.imageThumbnailsProfile}"/>
+                            </p:avatar>
+                        </div>
+                    </div>
+                    <span class="flex-show-mobile">
+                        <p:commandButton styleClass="rounded-button ui-button-flat ui-button-plain" icon="pi pi-align-justify"
+                                         oncomplete="showNavigationDrawer()"/>
+                    </span>
+                </div>
+            </h:form>
+            <div class="main">
+                <h:form>
+                    <p:idleMonitor timeout="#{sessionCtrl.expiredTime}">
+                        <p:ajax event="idle" listener="#{sessionCtrl.logout()}"/>
+                    </p:idleMonitor>
+                    <p:confirmDialog style="min-width: 300px !important;" global="true" showEffect="fade" hideEffect="fade" responsive="true" closable="false">
+                        <p:commandButton value="#{bundle.cancel}" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
+                        <p:commandButton value="#{bundle.accept}" type="button" styleClass="ui-confirmdialog-yes" />
+                    </p:confirmDialog>
+                    <p:remoteCommand name="navigateRC" actionListener="#{routerCtrl.navigateFromURLParams()}"/>
+                    <p:remoteCommand name="showFacesMessage" actionListener="#{commonCtrl.showFacesMessageAjax()}"/>
+                    <ui:insert name="remotes_sections"/>
+                </h:form>
+                <ui:insert name="container_body"/>
+                <footer style="margin: 3rem 2rem; display: grid; justify-items: center; gap: 0.4rem">
+                    <p:graphicImage style="width: 10rem" library="mimsoft" name="/images/svg/logo_v.svg"/>
+                    <div>#{commonCtrl.getDateFormat(commonCtrl.currentDate, 'yyyy')}. Created By <b>MIMSOFT</b></div>
+                </footer>
+            </div>
+        </div>
+        <ui:insert name="end_body"/>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,31 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        template="template_base.xhtml">
+    <ui:define name="base_head">
+        <h:outputStylesheet library="mimsoft" name="/css/custom-app.css"/>
+        <ui:insert name="end_head"/>
+    </ui:define>
+    <ui:define name="base_body">
+        <ui:insert name="start_body"/>
+        <div class="application">
+            <h:form class="toolbar">
+                <div class="toolbar-left">
+                    <div class="toolbar-icon-app">
+                        <p:graphicImage name="/images/svg/logo_v.svg" library="mimsoft" alt="#{bundle.app_name}"/>
+                    </div>
+                </div>
+            </h:form>
+            <div class="main">
+                <ui:insert name="container_body"/>
+                <footer style="margin: 3rem 2rem; display: grid; justify-items: center; gap: 0.4rem">
+                    <p:graphicImage style="width: 10rem" library="mimsoft" name="/images/svg/logo_v.svg"/>
+                    <div>#{commonCtrl.getDateFormat(commonCtrl.currentDate, 'yyyy')}. #{bundle.created_by} <b>#{bundle.developer}</b></div>
+                </footer>
+            </div>
+        </div>
+        <ui:insert name="end_body"/>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,46 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:composite="http://java.sun.com/jsf/composite">
+<composite:interface>
+    <composite:attribute name="data" type="String" required="true"/>
+    <composite:attribute name="height" type="String" required="true"/>
+    <composite:attribute name="canvasId" type="String" default="null"/>
+    <composite:attribute name="onClickPoint" type="String" default="(params) => {}"/>
+</composite:interface>
+
+<composite:implementation>
+    <div id="#{cc.attrs.canvasId eq 'null' ?commonCtrl.concat('echart_', '', cc.id) :cc.attrs.canvasId}" style="height: 100% !important; width: 100% !important; min-height: #{cc.attrs.height};     display: flex; align-items: center; justify-content: center;"/>
+
+    <script type="text/javascript">
+        if (typeof head === 'undefined') {
+            const head = document.querySelector("head");
+            // JS
+            if (!!![...document.querySelectorAll("script")].filter(item => (item.src + "").includes("echarts")).length) {
+                const jsTagEcharts = document.createElement("script")
+                jsTagEcharts.src = "#{resource['/mimsoft/js/cdn.jsdelivr.net_npm_echarts@5.4.3_dist_echarts.min.js']}";
+                jsTagEcharts.type = "text/javascript";
+                head.appendChild(jsTagEcharts);
+
+                const jsTagCtrlEcharts = document.createElement("script")
+                jsTagCtrlEcharts.src = "#{resource['/mimsoft/js/echart_controller.js']}";
+                jsTagCtrlEcharts.type = "text/javascript";
+                head.appendChild(jsTagCtrlEcharts);
+            }
+        }
+
+        try {
+            echartAppend(
+                "#{cc.attrs.canvasId eq 'null' ?commonCtrl.concat('echart_', '', cc.id) :cc.attrs.canvasId}",
+                echarts.init(document.getElementById("#{cc.attrs.canvasId eq 'null' ?commonCtrl.concat('echart_', '', cc.id) :cc.attrs.canvasId}"), null, {renderer: 'svg'}),
+                #{cc.attrs.onClickPoint}
+            ).setOption(#{cc.attrs.data})
+        } catch (e) {
+            OnLoadData.push(() => {
+                echartAppend(
+                    "#{cc.attrs.canvasId eq 'null' ?commonCtrl.concat('echart_', '', cc.id) :cc.attrs.canvasId}",
+                    echarts.init(document.getElementById("#{cc.attrs.canvasId eq 'null' ?commonCtrl.concat('echart_', '', cc.id) :cc.attrs.canvasId}"), null, {renderer: 'svg'}),
+                    #{cc.attrs.onClickPoint}
+                ).setOption(#{cc.attrs.data})
+            })
+        }
+    </script>
+</composite:implementation>
+</html>

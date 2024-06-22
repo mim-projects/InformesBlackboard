@@ -1,0 +1,104 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:p="http://primefaces.org/ui"
+        template="/templates/template_base.xhtml">
+    <ui:define name="base_head">
+        <f:event type="preRenderView" listener="#{loginCtrl.validateSession()}"/>
+        <style>
+            .login-container {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                background: var(--surface-100);
+            }
+
+            .login-container .card:last-child {
+                margin-bottom: auto;
+            }
+
+            .login-card {
+                margin: auto;
+                width: 32rem;
+                max-width: calc(100% - 6rem)
+            }
+
+            .login {
+                display: grid;
+                gap: 2rem;
+                padding: 2rem 1rem;
+            }
+
+            .login-btn {
+                font-weight: bold;
+                text-transform: uppercase;
+                height: 3rem;
+                width: 100%;
+            }
+
+            .login-title {
+                display: grid;
+                margin-bottom: 1rem;
+            }
+
+            .login-title *:first-child {
+                font-weight: bold;
+                text-align: center;
+                text-transform: uppercase;
+                margin: 0;
+            }
+
+            .login-title *:last-child {
+                font-weight: lighter;
+                text-align: center;
+                font-size: 1.5rem;
+                margin: 0;
+            }
+
+            .w-full, .ui-password, .ui-password-w-full input {
+                width: 100%;
+            }
+
+            @media screen and (min-height: 520px) {
+                .login-container {
+                    padding-bottom: 5% !important;
+                }
+            }
+
+            @media screen and (max-height: 520px) {
+                .login-container {
+                    overflow: auto !important;
+                    padding: 2rem !important;
+                }
+            }
+        </style>
+    </ui:define>
+    <ui:define name="base_body">
+        <div class="login-container">
+            <div class="card login-card">
+                <h:form class="login">
+                    <div class="login-title">
+                        <p:graphicImage library="mimsoft" name="/images/svg/logo_v.svg" alt="#{bundle.app_name}"/>
+                        <h2>#{bundle.app_description}</h2>
+                    </div>
+
+                    <span class="ui-input-icon-right ui-float-label">
+                        <i class="pi pi-user"/>
+                        <p:inputText styleClass="w-full" value="#{loginCtrl.username}"/>
+                        <p:outputLabel for="@previous" value="#{bundle.username}"/>
+                    </span>
+
+                    <span class="ui-float-label ui-password-w-full">
+                        <p:password type="password" value="#{loginCtrl.password}" toggleMask="true"/>
+                        <p:outputLabel style="top:-.75em;font-size:12px" for="@previous" value="#{bundle.password}"/>
+                    </span>
+
+                    <p:commandButton value="#{bundle.login}" actionListener="#{loginCtrl.login()}"
+                                     styleClass="ui-button login-btn"/>
+                </h:form>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>
