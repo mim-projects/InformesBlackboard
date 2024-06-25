@@ -2,10 +2,9 @@ package com.mimsoft.informesblackboard.application.controllers.web.common;
 
 import com.mimsoft.informesblackboard.Configuration;
 import com.mimsoft.informesblackboard.application.controllers.shared.RequestController;
+import com.mimsoft.informesblackboard.application.data.repositories.UserPlatformRepository;
 import com.mimsoft.informesblackboard.application.routes.Routes;
-import com.mimsoft.informesblackboard.domain.core.Repository;
-import com.mimsoft.informesblackboard.domain.core.RepositoryClass;
-import com.mimsoft.informesblackboard.domain.entities.Users;
+import com.mimsoft.informesblackboard.domain.entities.UserPlatform;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
@@ -24,10 +23,9 @@ public class SessionController implements Serializable {
     @Inject
     private RequestController requestController;
     @Inject
-    @RepositoryClass(Users.class)
-    private Repository<Users> usersRepository;
+    private UserPlatformRepository userPlatformRepository;
 
-    private Users currentUser;
+    private UserPlatform currentUser;
     private String currentLang;
     private String currentTheme;
 
@@ -41,26 +39,23 @@ public class SessionController implements Serializable {
         return currentUser != null;
     }
 
-    public void setCurrentUser(Users currentUser) {
+    public void setCurrentUser(UserPlatform currentUser) {
         this.currentUser = currentUser;
     }
 
     public boolean setCurrentUser(String username, String password) {
-        Users currentUser = usersRepository.findOneWhereEqual(
-                new String[]{"username", "password"},
-                new Object[]{"'" + username + "'", "'" + password + "'"}
-        );
+        UserPlatform currentUser = userPlatformRepository.findByUsernamePassword(username, password);
         if (currentUser == null) return false;
         setCurrentUser(currentUser);
         return true;
     }
 
-    public Users getCurrentUser() {
+    public UserPlatform getCurrentUser() {
         return currentUser;
     }
 
     public long getExpiredTime() {
-        return Configuration.MillisExpiredTimeSession;
+        return Configuration.MILLIS_EXPIRED_TIME_SESSION;
     }
 
     public String getName() {

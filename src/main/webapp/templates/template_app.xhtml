@@ -41,6 +41,11 @@
                             <p:commandButton actionListener="#{routerCtrl.navigate('home')}" process="@this"
                                              icon="pi pi-th-large" styleClass="ui-button-flat ui-button-plain" value="#{bundle.home}"/>
                         </span>
+                        <span>
+                            <p:commandButton actionListener="#{routerCtrl.navigate('uploads')}" process="@this"
+                                             icon="pi pi-cloud-upload" styleClass="ui-button-flat ui-button-plain" value="#{bundle.uploads}"/>
+                        </span>
+
                     </ui:insert>
                 </div>
             </h:form>
@@ -55,6 +60,8 @@
                         <ui:insert name="navigation-menu">
                             <p:commandButton actionListener="#{routerCtrl.navigate('home')}" process="@this"
                                              icon="pi pi-th-large" styleClass="ui-button-flat ui-button-plain" value="#{bundle.home}"/>
+                            <p:commandButton actionListener="#{routerCtrl.navigate('uploads')}" process="@this"
+                                             icon="pi pi-cloud-upload" styleClass="ui-button-flat ui-button-plain" value="#{bundle.uploads}"/>
                         </ui:insert>
                     </div>
                 </div>

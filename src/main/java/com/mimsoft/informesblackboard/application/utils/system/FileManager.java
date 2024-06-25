@@ -1,16 +1,17 @@
 package com.mimsoft.informesblackboard.application.utils.system;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 public class FileManager {
     public interface IReadFileForLine {
-        void readLine(Integer index, String content);
+        void readLine(Integer index, String content) throws Exception;
     }
 
     public static void ReadLine(String path, IReadFileForLine readFileForLine) throws Exception {
         File file = new File(path);
         FileInputStream fis = new FileInputStream(file);
-        BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+        BufferedReader br = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8));
         int row = 0;
         String line;
         while ((line = br.readLine()) != null) {

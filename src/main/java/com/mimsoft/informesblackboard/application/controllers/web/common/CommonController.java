@@ -13,7 +13,7 @@ import org.primefaces.PrimeFaces;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-@Named(value = "commonCtrl")
+@Named("commonCtrl")
 @RequestScoped
 public class CommonController {
     @Inject
@@ -157,6 +157,6 @@ public class CommonController {
     }
 
     public String getCurrentCssTheme() {
-        return Configuration.ThemeCSS;
+        return Configuration.THEME_CSS;
     }
 }

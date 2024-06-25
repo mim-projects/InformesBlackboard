@@ -4,17 +4,17 @@ import com.mimsoft.informesblackboard.domain.core.EntityCore;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "users")
-public class Users extends EntityCore {
+@Table(name = "roles")
+public class Roles extends EntityCore {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "keyword")
-    private String keyword;
+    @Column(name = "name")
+    private String name;
 
-    public Users() {
+    public Roles() {
     }
 
     @Override
@@ -27,19 +27,19 @@ public class Users extends EntityCore {
         this.id = id;
     }
 
-    public String getKeyword() {
-        return keyword;
+    public String getName() {
+        return name;
     }
 
-    public void setKeyword(String keyword) {
-        this.keyword = keyword;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
     public String toString() {
-        return "Users{" +
+        return "Roles{" +
                 "id=" + id +
-                ", keyword='" + keyword + '\'' +
+                ", name='" + name + '\'' +
                 '}';
     }
 }

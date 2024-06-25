@@ -1,7 +1,5 @@
 import com.mimsoft.informesblackboard.application.utils.system.FileManager;
 
-import java.util.Arrays;
-
 public class FileTest {
     public static void main(String[] args) {
 //        CoursesFiles();
