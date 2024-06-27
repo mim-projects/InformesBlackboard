@@ -1,12 +1,19 @@
 package com.mimsoft.informesblackboard.application.modules.upload_execute.services;
 
 import com.mimsoft.informesblackboard.application.data.constants.GradesConstant;
-import com.mimsoft.informesblackboard.application.data.repositories.*;
+import com.mimsoft.informesblackboard.application.data.repositories.CampusCodesRepository;
+import com.mimsoft.informesblackboard.application.data.repositories.CoursesRepository;
+import com.mimsoft.informesblackboard.application.data.repositories.GradesRepository;
+import com.mimsoft.informesblackboard.application.data.repositories.ModalityRepository;
 import com.mimsoft.informesblackboard.application.utils.others.StringHelper;
-import com.mimsoft.informesblackboard.domain.entities.*;
+import com.mimsoft.informesblackboard.domain.entities.CampusCodes;
+import com.mimsoft.informesblackboard.domain.entities.Courses;
+import com.mimsoft.informesblackboard.domain.entities.Grades;
+import com.mimsoft.informesblackboard.domain.entities.Modality;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -17,17 +24,11 @@ public class ProcessCoursesServices {
     @Inject
     private GradesRepository gradesRepository;
     @Inject
-    private PeriodsRepository periodsRepository;
-    @Inject
     private CampusCodesRepository campusCodesRepository;
     @Inject
     private ModalityRepository modalityRepository;
     @Inject
     private CoursesRepository coursesRepository;
-    @Inject
-    private HistoryRepository historyRepository;
-    @Inject
-    private CoursesHistoryRepository coursesHistoryRepository;
 
     private HashMap<Integer, Grades> gradesHashMap;
     private HashMap<String, Modality> modalityHasMap;
@@ -50,34 +51,20 @@ public class ProcessCoursesServices {
         }
 
         String[] parts = data.trim().split("\\|");
-        if (!parts[4].equalsIgnoreCase("y")) return;
         String[] keyword = parts[1].split("_");
+        Grades grades = gradesHashMap.get(keyword.length == 10 ? GradesConstant.Posgrado.getValue() : GradesConstant.Licenciatura.getValue());
 
-        Grades grade = gradesHashMap.get(keyword.length == 10 ? GradesConstant.Posgrado.getValue() : GradesConstant.Licenciatura.getValue());
-        Modality modality = modalityHasMap.get(keyword[keyword.length - 2]);
-        CampusCodes campus = campusCodesHashMap.get(keyword[1]);
-
-        Periods periods = periodsRepository.findOrCreate(keyword[0]);
-        Courses courses = coursesRepository.findOrCreateOrUpdate(
-                StringHelper.StripAccents(parts[2].split("\\(")[0]),
-                (grade.getId().equals(GradesConstant.Posgrado.getValue())  ? (keyword[keyword.length - 4] + "_") : "") + keyword[keyword.length - 3]
-        );
-
-        if (modality == null || campus == null || periods == null || courses == null) throw new Exception("xxxxxxxxxxx");
-
-        History history = new History();
-        history.setGradesId(grade);
-        history.setPeriodsId(periods);
-        history.setCampusCodesId(campus);
-        history.setModalityId(modality);
-
-        CoursesHistory coursesHistory = new CoursesHistory();
-        coursesHistory.setCoursesId(courses);
-        coursesHistory.setHistoryId(historyRepository.findOrCreate(history));
-        System.out.println(currentLine + " / " + totalLine);
-
-        coursesHistory = coursesHistoryRepository.findOrCreate(coursesHistory);
-        if (coursesHistory == null) throw new Exception("lllllllllllllll");
-        System.out.println(coursesHistory);
+        Courses courses = new Courses();
+        courses.setKeyword((grades.getId().equals(GradesConstant.Posgrado.getValue())  ? (keyword[keyword.length - 4] + "_") : "") + keyword[keyword.length - 3]);
+        courses.setName(StringHelper.StripAccents(parts[2].split("\\(")[0]));
+        courses.setPeriods(Integer.parseInt(keyword[0]));
+        courses.setModalityId(modalityHasMap.get(keyword[keyword.length - 2]));
+        courses.setCampusCodesId(campusCodesHashMap.get(keyword[1]));
+        courses.setGradesId(grades);
+        courses.setHashCode(parts[0]);
+        System.out.println("---");
+        System.out.println(courses);
+        System.out.println(Arrays.toString(parts));
+        coursesRepository.createIgnore(courses);
     }
 }

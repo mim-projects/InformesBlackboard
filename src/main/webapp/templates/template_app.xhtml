@@ -45,7 +45,6 @@
                             <p:commandButton actionListener="#{routerCtrl.navigate('uploads')}" process="@this"
                                              icon="pi pi-cloud-upload" styleClass="ui-button-flat ui-button-plain" value="#{bundle.uploads}"/>
                         </span>
-
                     </ui:insert>
                 </div>
             </h:form>
@@ -54,7 +53,7 @@
             <h:form id="form_app_header" class="toolbar">
                 <div class="toolbar-left">
                     <div class="toolbar-icon-app">
-                        <p:graphicImage name="/images/svg/logo_v.svg" library="mimsoft" alt="bestcrew"/>
+                        <p:graphicImage name="/images/svg/logo_v#{sessionCtrl.currentTheme eq 'dark' ?'2' :''}.svg" library="mimsoft" alt="bestcrew"/>
                     </div>
                     <div class="flex-hide-mobile">
                         <ui:insert name="navigation-menu">
@@ -62,6 +61,18 @@
                                              icon="pi pi-th-large" styleClass="ui-button-flat ui-button-plain" value="#{bundle.home}"/>
                             <p:commandButton actionListener="#{routerCtrl.navigate('uploads')}" process="@this"
                                              icon="pi pi-cloud-upload" styleClass="ui-button-flat ui-button-plain" value="#{bundle.uploads}"/>
+                            <p:menuButton icon="pi pi-slack" value="#{bundle.registers}" buttonStyleClass="ui-button-flat ui-button-plain">
+                                <p:menuitem actionListener="#{routerCtrl.navigate('register_campus')}" value="#{bundle.campus}" icon="pi pi-building"/>
+                                <p:menuitem actionListener="#{routerCtrl.navigate('register_campus_codes')}" value="#{bundle.campus_codes}" icon="pi pi-tags"/>
+                                <p:menuitem actionListener="#{routerCtrl.navigate('register_grades')}" value="#{bundle.grades}" icon="pi pi-briefcase"/>
+                                <p:menuitem actionListener="#{routerCtrl.navigate('register_modality')}" value="#{bundle.modality}" icon="pi pi-share-alt"/>
+                                <p:menuitem actionListener="#{routerCtrl.navigate('register_users')}" value="#{bundle.users}" icon="pi pi-users"/>
+                                <p:menuitem actionListener="#{routerCtrl.navigate('register_storage')}" value="#{bundle.storage}" icon="pi pi-server"/>
+                            </p:menuButton>
+                            <p:menuButton icon="pi pi-shield" value="#{bundle.platform}" buttonStyleClass="ui-button-flat ui-button-plain">
+                                <p:menuitem actionListener="#{routerCtrl.navigate('platform_roles')}" value="#{bundle.roles}" icon="pi pi-id-card"/>
+                                <p:menuitem actionListener="#{routerCtrl.navigate('platform_users')}" value="#{bundle.users}" icon="pi pi-users"/>
+                            </p:menuButton>
                         </ui:insert>
                     </div>
                 </div>
@@ -86,7 +97,7 @@
             <div class="main">
                 <h:form>
                     <p:idleMonitor timeout="#{sessionCtrl.expiredTime}">
-                        <p:ajax event="idle" listener="#{sessionCtrl.logout()}"/>
+                        <p:ajax event="idle" listener="#{routerCtrl.navigate('logout')}"/>
                     </p:idleMonitor>
                     <p:confirmDialog style="min-width: 300px !important;" global="true" showEffect="fade" hideEffect="fade" responsive="true" closable="false">
                         <p:commandButton value="#{bundle.cancel}" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
@@ -97,8 +108,8 @@
                     <ui:insert name="remotes_sections"/>
                 </h:form>
                 <ui:insert name="container_body"/>
-                <footer style="margin: 3rem 2rem; display: grid; justify-items: center; gap: 0.4rem">
-                    <p:graphicImage style="width: 10rem" library="mimsoft" name="/images/svg/logo_v.svg"/>
+                <footer style="margin: 3rem 2rem; display: grid; justify-items: center; gap: 0.4rem; text-align: center;">
+                    <p:graphicImage style="width: 10rem" library="mimsoft" name="/images/svg/logo_v#{sessionCtrl.currentTheme eq 'dark' ?'2' :''}.svg"/>
                     <div>#{commonCtrl.getDateFormat(commonCtrl.currentDate, 'yyyy')}. Created By <b>MIMSOFT</b></div>
                 </footer>
             </div>

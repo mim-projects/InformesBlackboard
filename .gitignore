@@ -43,3 +43,4 @@ build/
 
 ### - ####
 */storage/upload/*.txt
+*/**/*.~lock*

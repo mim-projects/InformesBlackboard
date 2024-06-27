@@ -12,30 +12,22 @@ public class CoursesRepository {
     @RepositoryClass(Courses.class)
     private Repository<Courses> repository;
 
-    public Courses findOrCreateOrUpdate(String name, String code) {
-        Courses item = findByCodeAndName(code, name);
-        if (item != null) return item;
-
-        item = findByCode(code);
-        if (item != null) {
-            item.setName(name);
-            return repository.update(item);
+    public void createIgnore(Courses courses) {
+        try {
+            String query = "insert ignore into courses (" +
+                    "keyword, periods, name, modality_id, campus_code_id, grades_id, hash_code" +
+                    ") values (" +
+                    "'" + courses.getKeyword() + "'," +
+                    "'" + courses.getPeriods() + "'," +
+                    "'" + courses.getName() + "'," +
+                    "'" + courses.getModalityId().getId() + "'," +
+                    "'" + courses.getCampusCodesId().getId() + "'," +
+                    "'" + courses.getGradesId().getId() + "'," +
+                    "'" + courses.getHashCode() + "'" +
+                    ");";
+            repository.executeNativeQuery(query);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        item = new Courses();
-        item.setName(name);
-        item.setCode(code);
-        return repository.create(item);
-    }
-
-    public Courses findByCodeAndName(String code, String name) {
-        return repository.findOneWhereEqual(
-                new String[] {"code", "name"},
-                new Object[]{"'" + code + "'", "'" + name + "'"}
-        );
-    }
-
-    public Courses findByCode(String code) {
-        return repository.findOne("code", "'" + code + "'");
     }
 }

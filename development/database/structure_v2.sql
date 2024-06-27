@@ -37,81 +37,51 @@ create table grades (
     name varchar(255) unique not null
 );
 
-create table periods (
-    id int not null auto_increment primary key,
-    name varchar(50) unique not null
-);
-
 create table modality (
-                          id int not null auto_increment primary key,
-                          name varchar(10) unique not null,
-                          description varchar(255)
-);
-
-create table storage_history (
-                                 id int not null auto_increment primary key,
-                                 created_at date unique not null,
-                                 value float not null
-);
-
-create table history (
     id int not null auto_increment primary key,
-    modality_id int not null,
-    periods_id int not null,
-    grades_id int not null,
-    campus_codes_id int not null,
-    foreign key (modality_id) references modality(id),
-    foreign key (periods_id) references periods(id),
-    foreign key (grades_id) references grades(id),
-    foreign key (campus_codes_id) references campus_codes(id)
+    name varchar(10) unique not null,
+    description varchar(255)
 );
-
-# =============================================================================
-# === Users
-# =============================================================================
 
 create table roles (
     id int not null auto_increment primary key,
     name varchar(255) unique not null
 );
 
-create table users (
+create table storage_history (
     id int not null auto_increment primary key,
-    keyword varchar(2000) unique not null
+    keyword varchar(255) unique not null,
+    value float not null
 );
-
-create table users_roles (
-    id int not null auto_increment primary key,
-    users_id int not null,
-    roles_id int not null,
-    foreign key (users_id) references users(id),
-    foreign key (roles_id) references roles(id)
-);
-
-create table users_history (
-    id int not null auto_increment primary key,
-    users_roles_id int not null,
-    history_id int not null,
-    foreign key (users_roles_id) references users_roles(id),
-    foreign key (history_id) references history(id)
-);
-
-# =============================================================================
-# === Courses
-# =============================================================================
 
 create table courses (
-    id int not null auto_increment primary key,
-    code varchar(20) unique not null, # Clave Materia
-    name varchar(500)
+    id int unsigned not null auto_increment primary key,
+    keyword varchar(20) not null,
+    name varchar(800) not null,
+    periods int not null,
+    modality_id int not null,
+    campus_code_id int not null,
+    grades_id int not null,
+    hash_code varchar(500) not null,
+    foreign key (modality_id) references modality(id),
+    foreign key (campus_code_id) references campus_codes(id),
+    foreign key (grades_id) references grades(id)
 );
 
-create table courses_history (
-    id int not null auto_increment primary key,
-    courses_id int not null,
-    history_id int not null,
-    foreign key (courses_id) references courses(id),
-    foreign key (history_id) references history(id)
+create table users (
+    id int unsigned not null auto_increment primary key,
+    keyword varchar(2000) not null,
+    periods int not null,
+    keyword_course varchar(50) not null,
+    roles_id int not null,
+    modality_id int not null,
+    campus_code_id int not null,
+    grades_id int not null,
+    hash_code varchar(500) unique not null,
+    foreign key (roles_id) references roles(id),
+    foreign key (modality_id) references modality(id),
+    foreign key (campus_code_id) references campus_codes(id),
+    foreign key (grades_id) references grades(id)
 );
 
 # =============================================================================

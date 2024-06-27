@@ -1,0 +1,80 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/template_app.xhtml">
+    <ui:define name="container_body">
+        <div class="container">
+            <h:form id="form_data" styleClass="card">
+                <div class="title-card">
+                    <div class="title-card-icon-text">
+                        <i class="pi pi-server"></i>
+                        <h1>#{bundle.storage}</h1>
+                    </div>
+                    <div>
+                        <p:commandButton icon="pi pi-plus" value="#{bundle.create}"
+                                         update="form_create" actionListener="#{storageCtrl.preUpdateOrCreate(null)}"
+                                         oncomplete="PF('form_create_wv').show()"/>
+                    </div>
+                </div>
+                <div class="content-card">
+                    <p:dataTable widgetVar="datatable_form_data" styleClass="custom-table" paginator="true" paginatorAlwaysVisible="false" rows="12"
+                                 tableStyle="min-width: 40rem !important;" value="#{storageCtrl.allStorageHistory}" var="item">
+                        <p:column headerText="Id" field="id"/>
+                        <p:column headerText="#{bundle.keyword}" field="keyword"/>
+                        <p:column headerText="#{bundle.value}" field="value"/>
+                        <p:column headerText="#{bundle.options}">
+                            <p:commandButton value="#{bundle.remove}" styleClass="ui-button-flat ui-button-danger"
+                                             update="@form" actionListener="#{storageCtrl.remove(item)}">
+                                <p:confirm header="#{bundle.confirmation}" message="#{bundle.remove_item}" icon="pi pi-info-circle"/>
+                            </p:commandButton>
+                            <p:commandButton value="#{bundle.edit}" styleClass="ui-button-flat ui-button-secondary"
+                                             update="form_edit" actionListener="#{storageCtrl.preUpdateOrCreate(item)}"
+                                             oncomplete="PF('form_edit_wv').show()"/>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </h:form>
+        </div>
+
+        <h:form id="form_create">
+            <p:dialog widgetVar="form_create_wv" styleClass="custom-dialog custom-dialog-top" header="#{bundle.create_item}"
+                      blockScroll="true" draggable="false" resizable="false" responsive="true" modal="true">
+                <div style="display: grid; gap: 1rem">
+                    <div class="input-group">
+                        <p:outputLabel for="@next" value="#{bundle.keyword}"/>
+                        <p:inputText value="#{storageCtrl.selectedStorageHistory.keyword}"/>
+                    </div>
+                    <div class="input-group">
+                        <p:outputLabel for="@next" value="#{bundle.value}"/>
+                        <p:inputNumber decimalPlaces="2" minValue="0" value="#{storageCtrl.selectedStorageHistory.value}"/>
+                    </div>
+                    <div style="display: flex; gap: 0.5rem; justify-content: end">
+                        <p:commandButton value="#{bundle.cancel}" styleClass="ui-button-flat" oncomplete="PF('form_create_wv').hide()"/>
+                        <p:commandButton value="#{bundle.accept}" actionListener="#{storageCtrl.createAndCloseWV('form_create_wv', 'form_data')}"/>
+                    </div>
+                </div>
+            </p:dialog>
+        </h:form>
+
+        <h:form id="form_edit">
+            <p:dialog widgetVar="form_edit_wv" styleClass="custom-dialog custom-dialog-top" header="#{bundle.edit_item}"
+                      blockScroll="true" draggable="false" resizable="false" closable="false" responsive="true" modal="true">
+                <div style="display: grid; gap: 1rem">
+                    <div class="input-group">
+                        <p:outputLabel for="@next" value="#{bundle.keyword}"/>
+                        <p:inputText value="#{storageCtrl.selectedStorageHistory.keyword}"/>
+                    </div>
+                    <div class="input-group">
+                        <p:outputLabel for="@next" value="#{bundle.value}"/>
+                        <p:inputNumber decimalPlaces="2" minValue="0" value="#{storageCtrl.selectedStorageHistory.value}"/>
+                    </div>
+                    <div style="display: flex; gap: 0.5rem; justify-content: end">
+                        <p:commandButton value="#{bundle.cancel}" styleClass="ui-button-flat" oncomplete="PF('form_edit_wv').hide()"/>
+                        <p:commandButton value="#{bundle.accept}" actionListener="#{storageCtrl.updateAndCloseWV('form_edit_wv', 'form_data')}"/>
+                    </div>
+                </div>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+</ui:composition>

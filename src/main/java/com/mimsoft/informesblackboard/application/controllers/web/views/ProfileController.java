@@ -15,11 +15,13 @@ public class ProfileController extends AbstractSessionController {
     private UserPlatformRepository userPlatformRepository;
 
     private UserPlatform currenUser;
+    private boolean editable;
 
     @Override
     public void init() {
         sessionController.setCurrentUser(userPlatformRepository.findById(sessionController.getCurrentUser().getId()));
         currenUser = sessionController.getCurrentUser();
+        editable = false;
     }
 
     public void createRandomPassword() {
@@ -27,6 +29,7 @@ public class ProfileController extends AbstractSessionController {
     }
 
     public void updateUser() {
+        editable = false;
         userPlatformRepository.update(currenUser);
         sessionController.setCurrentUser(userPlatformRepository.findById(sessionController.getCurrentUser().getId()));
         commonController.FacesMessagesInfo("Successful", "Update current user");
@@ -39,5 +42,17 @@ public class ProfileController extends AbstractSessionController {
 
     public void setCurrenUser(UserPlatform currenUser) {
         this.currenUser = currenUser;
+    }
+
+    public void toggleEditable() {
+        editable = !editable;
+    }
+
+    public boolean isEditable() {
+        return editable;
+    }
+
+    public void setEditable(boolean editable) {
+        this.editable = editable;
     }
 }

@@ -41,7 +41,31 @@ Se obtiene el Campus segun el codigo:
 - TIJUANA: 70, 100, 120, 130, 150, 180, 190, 240, 280, 311, 313, 332, 334, 336, 336, 400, 500, 626, 790
 - ENSENADA: 20, 30, 50, 170, 290, 312, 320, 330, 615, 320, 620, 700, 795
 
-
 --- 
+
 ## Database
-![database.png](development/database/database.png)
+
+---
+
+## Times Test :: Upload + Find/Create/Update BD
+Especificaciones del equipo:
+- Windows 11 Pro 23H2
+- Procesador: Intel(R) Core(TM) i7-8650U CPU @ 1.90GHz   2.11 GHz
+- RAM: 16.0 GB
+
+### Database Structure V1
+![database_v1.png](development/database/database_v1.png)
+
+### Database Structure V2
+![database_v2.png](development/database/database_v2.png)
+
+| Folder | Filename                       | Size KB | Time Sec V1 | Time Sec V2 |
+|--------|--------------------------------|---------|-------------|-------------|
+| POS    | 20241_CARGAALUM (03-01-07).txt | 1,302   | 52          | 9           |
+| POS    | 20241_CARGAPROF (03-01-07).txt | 393     | 15          | 4           |
+| POS    | 20241_GRUPOS (03-01-07).txt    | 550     | 19          | -           |
+| LIC    | 20241_CARGAALUM (03-01-07).txt | 53,904  | xxx         | 865         |
+| LIC    | 20241_CARGAPROF (03-01-07).txt | 2,493   | xxx         | 59          |
+| LIC    | 20241_GRUPOS (03-01-07).txt    | 6,571   | xxx         | 5           |
+
+

@@ -220,20 +220,8 @@ abstract class RepositoryCore<T extends EntityCore> {
     }
 
     public T deleteNativeForId(final T entity) {
-        String[] classSimpleArr = getClazzName().split("\\.");
-        String classSimple = classSimpleArr[classSimpleArr.length - 1];
-        String finalClassSimple = "";
-        int k = 0;
-        for (String str : classSimple.split("")) {
-            if (Character.isUpperCase(str.charAt(0))) {
-                if (k > 0) finalClassSimple += "_" + str.toLowerCase();
-                else finalClassSimple += str.toLowerCase();
-            } else finalClassSimple += str;
-            k++;
-        }
-
         String query = "delete from $carga$ where id='" + entity.getId() + "'";
-        query = query.replace("$carga$", finalClassSimple);
+        query = query.replace("$carga$", getClassNameSimple());
         try {
             userTransaction.begin();
             getEntityManager().createNativeQuery(query).executeUpdate();
@@ -259,5 +247,31 @@ abstract class RepositoryCore<T extends EntityCore> {
             return null;
         }
         return findId(entity.getId());
+    }
+
+    public void executeNativeQuery(String query) {
+        try {
+            userTransaction.begin();
+            getEntityManager().createNativeQuery(query).executeUpdate();
+            userTransaction.commit();
+        } catch (NotSupportedException | SystemException | HeuristicRollbackException | HeuristicMixedException |
+                 RollbackException e) {
+//            e.printStackTrace();
+        }
+    }
+
+    private String getClassNameSimple() {
+        String[] classSimpleArr = getClazzName().split("\\.");
+        String classSimple = classSimpleArr[classSimpleArr.length - 1];
+        String finalClassSimple = "";
+        int k = 0;
+        for (String str : classSimple.split("")) {
+            if (Character.isUpperCase(str.charAt(0))) {
+                if (k > 0) finalClassSimple += "_" + str.toLowerCase();
+                else finalClassSimple += str.toLowerCase();
+            } else finalClassSimple += str;
+            k++;
+        }
+        return finalClassSimple;
     }
 }
