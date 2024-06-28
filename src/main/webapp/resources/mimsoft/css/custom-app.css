@@ -1,0 +1,4 @@
+.ui-datatable .ui-datatable-data .ui-datatable-even {
+    border-top: 1px solid var(--surface-ground) !important;
+    border-bottom: 1px solid var(--surface-ground) !important;
+}

@@ -17,4 +17,20 @@ public class CampusCodesRepository {
     public List<CampusCodes> findAll() {
         return repository.findAll();
     }
+
+    public List<CampusCodes> findAllDesc() {
+        return repository.findNativeAll("select * from campus_codes order by id desc");
+    }
+
+    public void remove(CampusCodes campusCodes) {
+        repository.delete(campusCodes);
+    }
+
+    public void create(CampusCodes campusCodes) {
+        repository.create(campusCodes);
+    }
+
+    public CampusCodes findByCode(String code) {
+        return repository.findOne("code", "'" + code + "'");
+    }
 }

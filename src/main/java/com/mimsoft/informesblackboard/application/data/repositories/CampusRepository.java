@@ -6,9 +6,23 @@ import com.mimsoft.informesblackboard.domain.entities.Campus;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 
+import java.util.List;
+
 @RequestScoped
 public class CampusRepository {
     @Inject
     @RepositoryClass(Campus.class)
     private Repository<Campus> repository;
+
+    public List<Campus> findAll() {
+        return repository.findAll();
+    }
+
+    public void update(Campus item) {
+        repository.update(item);
+    }
+
+    public Campus findById(Integer id) {
+        return repository.findId(id);
+    }
 }

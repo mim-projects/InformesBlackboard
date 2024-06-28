@@ -1,9 +1,52 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
                 template="/templates/template_app.xhtml">
     <ui:define name="container_body">
         <div class="container">
-            <h1>Campus</h1>
+            <h:form id="form_data" styleClass="card">
+                <div class="title-card">
+                    <div class="title-card-icon-text">
+                        <i class="pi pi-building"></i>
+                        <h1>#{bundle.campus}</h1>
+                    </div>
+                </div>
+                <div class="content-card">
+                    <p:dataTable widgetVar="datatable_form_data" styleClass="custom-table"
+                                 paginator="true" paginatorAlwaysVisible="false" rows="12" paginatorPosition="bottom"
+                                 tableStyle="min-width: 40rem !important;" value="#{campusCtrl.allCampus}" var="item">
+                        <p:column headerText="#{bundle.name}" field="name"/>
+                        <p:column headerText="#{bundle.description}" field="description"/>
+                        <p:column headerText="#{bundle.options}" width="8rem">
+                            <p:commandButton value="#{bundle.edit}" styleClass="ui-button-flat ui-button-secondary"
+                                             update="form_edit" actionListener="#{campusCtrl.preUpdateOrCreate(item)}"
+                                             oncomplete="PF('form_edit_wv').show()"/>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </h:form>
         </div>
+
+        <h:form id="form_edit">
+            <p:dialog widgetVar="form_edit_wv" styleClass="custom-dialog custom-dialog-top" header="#{bundle.edit_item}"
+                      blockScroll="true" draggable="false" resizable="false" closable="false" responsive="true" modal="true">
+                <div style="display: grid; gap: 1rem">
+                    <div class="input-group">
+                        <p:outputLabel for="@next" value="#{bundle.name}"/>
+                        <p:inputText disabled="true" value="#{campusCtrl.selectedCampus.name}"/>
+                    </div>
+                    <div class="input-group">
+                        <p:outputLabel for="@next" value="#{bundle.description}"/>
+                        <p:inputText value="#{campusCtrl.selectedCampus.description}"/>
+                    </div>
+                    <div style="display: flex; gap: 0.5rem; justify-content: end">
+                        <p:commandButton value="#{bundle.cancel}" styleClass="ui-button-flat" oncomplete="PF('form_edit_wv').hide()"/>
+                        <p:commandButton value="#{bundle.accept}" actionListener="#{campusCtrl.update()}"
+                                         update="form_data" oncomplete="PF('form_edit_wv').hide()"/>
+                    </div>
+                </div>
+            </p:dialog>
+        </h:form>
     </ui:define>
 </ui:composition>

@@ -1,9 +1,66 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
                 template="/templates/template_app.xhtml">
     <ui:define name="container_body">
         <div class="container">
-            <h1>Campus Codes</h1>
+            <h:form id="form_data" styleClass="card">
+                <div class="title-card">
+                    <div class="title-card-icon-text">
+                        <i class="pi pi-tags"></i>
+                        <h1>#{bundle.campus_codes}</h1>
+                    </div>
+                    <div>
+                        <p:commandButton icon="pi pi-plus" value="#{bundle.create}"
+                                         update="form_create" actionListener="#{campusCtrl.preUpdateCampusCode()}"
+                                         oncomplete="PF('form_create_wv').show()"/>
+                    </div>
+                </div>
+                <div class="content-card">
+                    <p:dataTable widgetVar="datatable_form_data" styleClass="custom-table"
+                                 paginator="true" paginatorAlwaysVisible="false" rows="12" paginatorPosition="bottom"
+                                 tableStyle="min-width: 40rem !important;" value="#{campusCtrl.allCampusCodes}" var="item">
+                        <p:column headerText="#{bundle.code}" field="code"/>
+                        <p:column headerText="#{bundle.campus}" field="campusId.name">
+                            <f:facet name="filter">
+                                <p:selectOneMenu onchange="PF('datatable_form_data').filter()" styleClass="ui-custom-filter">
+                                    <f:selectItem itemLabel="#{bundle.all}" itemValue="#{null}" noSelectionOption="true"/>
+                                    <f:selectItems value="#{campusCtrl.allCampus}" var="campus" itemValue="#{campus.name}" itemLabel="#{campus.name}"/>
+                                </p:selectOneMenu>
+                            </f:facet>
+                        </p:column>
+                        <p:column headerText="#{bundle.options}" width="8rem">
+                            <p:commandButton value="#{bundle.remove}" styleClass="ui-button-flat ui-button-danger"
+                                             update="@form" actionListener="#{campusCtrl.removeCampusCode(item)}">
+                                <p:confirm header="#{bundle.confirmation}" message="#{bundle.remove_item}" icon="pi pi-info-circle"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </h:form>
         </div>
+
+        <h:form id="form_create">
+            <p:dialog widgetVar="form_create_wv" styleClass="custom-dialog custom-dialog-top" header="#{bundle.create_item}"
+                      blockScroll="true" draggable="false" resizable="false" responsive="true" modal="true">
+                <div style="display: grid; gap: 1rem">
+                    <div class="input-group">
+                        <p:outputLabel for="@next" value="#{bundle.code}"/>
+                        <p:inputText value="#{campusCtrl.selectedCampusCodes.code}"/>
+                    </div>
+                    <div class="input-group">
+                        <p:outputLabel for="@next" value="#{bundle.value}"/>
+                        <p:selectOneMenu value="#{campusCtrl.selectedCampusId}" filter="true">
+                            <f:selectItems value="#{campusCtrl.allCampus}" var="campus" itemValue="#{campus.id}" itemLabel="#{campus.name}"/>
+                        </p:selectOneMenu>
+                    </div>
+                    <div style="display: flex; gap: 0.5rem; justify-content: end">
+                        <p:commandButton value="#{bundle.cancel}" styleClass="ui-button-flat" oncomplete="PF('form_create_wv').hide()"/>
+                        <p:commandButton value="#{bundle.accept}" actionListener="#{campusCtrl.createAndCloseWVCampusCode('form_create_wv', 'form_data')}"/>
+                    </div>
+                </div>
+            </p:dialog>
+        </h:form>
     </ui:define>
 </ui:composition>

@@ -18,12 +18,12 @@
                     </div>
                 </div>
                 <div class="content-card">
-                    <p:dataTable widgetVar="datatable_form_data" styleClass="custom-table" paginator="true" paginatorAlwaysVisible="false" rows="12"
+                    <p:dataTable widgetVar="datatable_form_data" styleClass="custom-table"
+                                 paginator="true" paginatorAlwaysVisible="false" rows="12" paginatorPosition="bottom"
                                  tableStyle="min-width: 40rem !important;" value="#{storageCtrl.allStorageHistory}" var="item">
-                        <p:column headerText="Id" field="id"/>
                         <p:column headerText="#{bundle.keyword}" field="keyword"/>
                         <p:column headerText="#{bundle.value}" field="value"/>
-                        <p:column headerText="#{bundle.options}">
+                        <p:column headerText="#{bundle.options}" width="12rem">
                             <p:commandButton value="#{bundle.remove}" styleClass="ui-button-flat ui-button-danger"
                                              update="@form" actionListener="#{storageCtrl.remove(item)}">
                                 <p:confirm header="#{bundle.confirmation}" message="#{bundle.remove_item}" icon="pi pi-info-circle"/>

@@ -57,17 +57,15 @@ public abstract class GenericLazyDataModel<T extends EntityCore> extends LazyDat
             i = Math.max((numberOfPages - 1) * i1, 0);
         }
 
-        List<T> list = data.stream().skip(i).limit(i1).collect(Collectors.toList());
-
         if (!map.isEmpty()) {
             List<Comparator<T>> comparators = map.values().stream()
                     .map(o -> new LazySorter(o.getField(), o.getOrder()))
                     .collect(Collectors.toList());
             Comparator<T> cp = ComparatorUtils.chainedComparator(comparators);
-            list.sort(cp);
+            data.sort(cp);
         }
 
-        return list;
+        return data.stream().skip(i).limit(i1).collect(Collectors.toList());
     }
 
     private class LazySorter implements Comparator<T> {

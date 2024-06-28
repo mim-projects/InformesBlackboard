@@ -33,4 +33,8 @@ public class UsersRepository {
             e.printStackTrace();
         }
     }
+
+    public Users findByCampusCode(Integer campusCodeId) {
+        return repository.findOne("campusCodesId.id", "'" + campusCodeId + "'");
+    }
 }

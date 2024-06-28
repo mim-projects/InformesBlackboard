@@ -8,18 +8,16 @@
             <h:form id="form_data" styleClass="card">
                 <div class="title-card">
                     <div class="title-card-icon-text">
-                        <i class="pi pi-users"></i>
-                        <h1>#{bundle.users}</h1>
+                        <i class="pi pi-share-alt"></i>
+                        <h1>#{bundle.modality}</h1>
                     </div>
                 </div>
                 <div class="content-card">
                     <p:dataTable widgetVar="datatable_form_data" styleClass="custom-table"
                                  paginator="true" paginatorAlwaysVisible="false" rows="12" paginatorPosition="bottom"
-                                 tableStyle="min-width: 40rem !important;" value="#{usersCtrl.customUsersLazyDataModel}" var="item">
-                        <p:column headerText="Id"/>
-                        <p:column headerText="#{bundle.options}" width="8rem">
-                            <p:commandButton value="#{bundle.details}" styleClass="ui-button-flat ui-button-warning"/>
-                        </p:column>
+                                 tableStyle="min-width: 40rem !important;" value="#{modalityCtrl.allModalities}" var="item">
+                        <p:column headerText="#{bundle.name}" field="name"/>
+                        <p:column headerText="#{bundle.description}" field="description"/>
                     </p:dataTable>
                 </div>
             </h:form>

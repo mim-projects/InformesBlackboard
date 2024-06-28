@@ -1,0 +1,60 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+                template="/templates/template_app.xhtml">
+    <ui:define name="remotes_sections">
+        <p:remoteCommand name="updateCoursesCounter" actionListener="#{coursesCtrl.updateCounter()}" update="form_data:counter"/>
+    </ui:define>
+    <ui:define name="container_body">
+        <div class="container">
+            <h:form id="form_data" styleClass="card">
+                <div class="title-card">
+                    <div class="title-card-icon-text">
+                        <i class="pi pi-book"></i>
+                        <h1>#{bundle.courses}</h1>
+                    </div>
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem; border: 1px solid var(--text-color);">
+                            <span style="background: var(--text-color); color: var(--surface-ground); font-weight: bold; text-transform: uppercase; padding: 0.2rem 0.5rem;">#{bundle.total}</span>
+                            <h:outputText id="counter" value="#{coursesCtrl.counterFilter}" style="padding-right: 0.5rem; font-weight: bold; letter-spacing: 1px;"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-card">
+                    <p:dataTable widgetVar="datatable_form_data" styleClass="custom-table" lazy="true"
+                                 paginator="true" paginatorAlwaysVisible="false" rows="12" paginatorPosition="bottom"
+                                 tableStyle="min-width: 40rem !important;" value="#{coursesCtrl.coursesLazyDataModel}" var="item">
+                        <p:ajax event="filter" oncomplete="updateCoursesCounter()"/>
+                        <p:column headerText="#{bundle.keyword}" field="keyword" width="8rem"/>
+                        <p:column headerText="#{bundle.name}" field="name"/>
+                        <p:column headerText="#{bundle.grades}" field="gradesId.name">
+                            <f:facet name="filter">
+                                <p:selectOneMenu onchange="PF('datatable_form_data').filter()" styleClass="ui-custom-filter">
+                                    <f:selectItem itemLabel="#{bundle.all}" itemValue="#{null}" noSelectionOption="true"/>
+                                    <f:selectItems value="#{coursesCtrl.allGrades}" var="grade" itemValue="#{grade.name}" itemLabel="#{grade.name}"/>
+                                </p:selectOneMenu>
+                            </f:facet>
+                        </p:column>
+                        <p:column headerText="#{bundle.modality}" field="modalityId.description">
+                            <f:facet name="filter">
+                                <p:selectOneMenu onchange="PF('datatable_form_data').filter()" styleClass="ui-custom-filter">
+                                    <f:selectItem itemLabel="#{bundle.all}" itemValue="#{null}" noSelectionOption="true"/>
+                                    <f:selectItems value="#{coursesCtrl.allModalities}" var="modality" itemValue="#{modality.description}" itemLabel="#{modality.description}"/>
+                                </p:selectOneMenu>
+                            </f:facet>
+                        </p:column>
+                        <p:column headerText="#{bundle.campus}" field="campusCodesId.campusId.name">
+                            <f:facet name="filter">
+                                <p:selectOneMenu onchange="PF('datatable_form_data').filter()" styleClass="ui-custom-filter">
+                                    <f:selectItem itemLabel="#{bundle.all}" itemValue="#{null}" noSelectionOption="true"/>
+                                    <f:selectItems value="#{coursesCtrl.allCampus}" var="campus" itemValue="#{campus.name}" itemLabel="#{campus.name}"/>
+                                </p:selectOneMenu>
+                            </f:facet>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>
