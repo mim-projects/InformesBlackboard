@@ -31,23 +31,23 @@ public class CoursesLazyDataModel extends GenericLazyDataModel<Courses> {
                     break;
                 }
                 case "name": {
-                    if (CleanStrLowerCase(o.getName()).contains(current)) match++;
+                    if (CleanStrLowerCase(o.getName()).equalsIgnoreCase(current)) match++;
                     break;
                 }
                 case "keyword": {
-                    if (CleanStrLowerCase(o.getKeyword()).contains(current)) match++;
+                    if (CleanStrLowerCase(o.getKeyword()).equalsIgnoreCase(current)) match++;
                     break;
                 }
                 case "gradesId.name": {
-                    if (CleanStrLowerCase(o.getGradesId().getName()).contains(current)) match++;
+                    if (CleanStrLowerCase(o.getGradesId().getName()).equalsIgnoreCase(current)) match++;
                     break;
                 }
                 case "modalityId.description": {
-                    if (CleanStrLowerCase(o.getModalityId().getDescription()).contains(current)) match++;
+                    if (CleanStrLowerCase(o.getModalityId().getDescription()).equalsIgnoreCase(current)) match++;
                     break;
                 }
                 case "campusCodesId.campusId.name": {
-                    if (CleanStrLowerCase(o.getCampusCodesId().getCampusId().getName()).contains(current)) match++;
+                    if (CleanStrLowerCase(o.getCampusCodesId().getCampusId().getName()).equalsIgnoreCase(current)) match++;
                     break;
                 }
             }

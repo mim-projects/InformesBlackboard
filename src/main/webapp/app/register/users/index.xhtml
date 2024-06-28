@@ -1,8 +1,11 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
                 template="/templates/template_app.xhtml">
+    <ui:define name="remotes_sections">
+        <p:remoteCommand name="updateCoursesCounter" actionListener="#{usersCtrl.updateCounter()}" update="form_data:counter"/>
+    </ui:define>
     <ui:define name="container_body">
         <div class="container">
             <h:form id="form_data" styleClass="card">
@@ -11,12 +14,67 @@
                         <i class="pi pi-users"></i>
                         <h1>#{bundle.users}</h1>
                     </div>
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem; border: 1px solid var(--text-color);">
+                            <span style="background: var(--text-color); color: var(--surface-ground); font-weight: bold; text-transform: uppercase; padding: 0.2rem 0.5rem;">#{bundle.total}</span>
+                            <h:outputText id="counter" value="#{usersCtrl.counterFilter}" style="padding-right: 0.5rem; font-weight: bold; letter-spacing: 1px;"/>
+                        </div>
+                    </div>
                 </div>
                 <div class="content-card">
                     <p:dataTable widgetVar="datatable_form_data" styleClass="custom-table"
                                  paginator="true" paginatorAlwaysVisible="false" rows="12" paginatorPosition="bottom"
                                  tableStyle="min-width: 40rem !important;" value="#{usersCtrl.customUsersLazyDataModel}" var="item">
-                        <p:column headerText="Id"/>
+                        <p:ajax event="filter" oncomplete="updateCoursesCounter()"/>
+                        <p:column headerText="#{bundle.users}" field="userKeyword"/>
+                        <p:column headerText="#{bundle.periods}" field="period" width="">
+                            <f:facet name="filter">
+                                <p:selectOneMenu onchange="PF('datatable_form_data').filter()" styleClass="ui-custom-filter">
+                                    <f:selectItem itemLabel="#{bundle.all}" itemValue="#{null}" noSelectionOption="true"/>
+                                    <f:selectItems value="#{usersCtrl.allPeriodsString}" var="period" itemValue="#{period}" itemLabel="#{period}"/>
+                                </p:selectOneMenu>
+                            </f:facet>
+                        </p:column>
+                        <p:column headerText="#{bundle.role}" field="role">
+                            <f:facet name="filter">
+                                <p:selectOneMenu onchange="PF('datatable_form_data').filter()" styleClass="ui-custom-filter">
+                                    <f:selectItem itemLabel="#{bundle.all}" itemValue="#{null}" noSelectionOption="true"/>
+                                    <f:selectItems value="#{usersCtrl.allRoles}" var="roles" itemValue="#{roles.name}" itemLabel="#{roles.name}"/>
+                                </p:selectOneMenu>
+                            </f:facet>
+                        </p:column>
+                        <p:column headerText="#{bundle.modality}" field="modality">
+                            <f:facet name="filter">
+                                <p:selectOneMenu onchange="PF('datatable_form_data').filter()" styleClass="ui-custom-filter">
+                                    <f:selectItem itemLabel="#{bundle.all}" itemValue="#{null}" noSelectionOption="true"/>
+                                    <f:selectItems value="#{usersCtrl.allModalities}" var="modality" itemValue="#{modality.description}" itemLabel="#{modality.description}"/>
+                                </p:selectOneMenu>
+                            </f:facet>
+                        </p:column>
+                        <p:column headerText="#{bundle.campus}" field="campus">
+                            <f:facet name="filter">
+                                <p:selectOneMenu onchange="PF('datatable_form_data').filter()" styleClass="ui-custom-filter">
+                                    <f:selectItem itemLabel="#{bundle.all}" itemValue="#{null}" noSelectionOption="true"/>
+                                    <f:selectItems value="#{usersCtrl.allCampus}" var="campus" itemValue="#{campus.name}" itemLabel="#{campus.name}"/>
+                                </p:selectOneMenu>
+                            </f:facet>
+                        </p:column>
+                        <p:column headerText="#{bundle.grades}" field="grade">
+                            <f:facet name="filter">
+                                <p:selectOneMenu onchange="PF('datatable_form_data').filter()" styleClass="ui-custom-filter">
+                                    <f:selectItem itemLabel="#{bundle.all}" itemValue="#{null}" noSelectionOption="true"/>
+                                    <f:selectItems value="#{usersCtrl.allGrades}" var="grades" itemValue="#{grades.name}" itemLabel="#{grades.name}"/>
+                                </p:selectOneMenu>
+                            </f:facet>
+                        </p:column>
+                        <p:column headerText="#{bundle.courses}" field="coursesKeyword">
+                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap">
+                                <ui:repeat value="#{item.getListCoursesKeyword()}" var="courses" varStatus="status">
+                                    <h:outputText rendered="#{status.index lt 7}" styleClass="custom-badge custom-badge-#{commonCtrl.getCustomBadge(status.index)}" value="#{courses}"/>
+                                </ui:repeat>
+                                <h:outputText rendered="#{item.getListCoursesKeyword().size() ge 7}" value="..." styleClass="custom-badge"/>
+                            </div>
+                        </p:column>
                         <p:column headerText="#{bundle.options}" width="8rem">
                             <p:commandButton value="#{bundle.details}" styleClass="ui-button-flat ui-button-warning"/>
                         </p:column>

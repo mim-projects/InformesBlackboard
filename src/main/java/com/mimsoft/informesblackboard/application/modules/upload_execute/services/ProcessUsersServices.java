@@ -53,6 +53,10 @@ public class ProcessUsersServices {
         String[] keyword = parts[0].split("_");
         Grades grades = gradesHashMap.get(keyword.length == 10 ? GradesConstant.Posgrado.getValue() : GradesConstant.Licenciatura.getValue());
 
+        if (parts[1].length() < 2) {
+            System.out.println(data);
+        }
+
         Users users = new Users();
         users.setKeyword(parts[1]);
         users.setRolesId(rolesHashMap.get(parts[2].equalsIgnoreCase("student") ? RolesConstant.Estudiantes.getValue() : RolesConstant.Docentes.getValue()));
