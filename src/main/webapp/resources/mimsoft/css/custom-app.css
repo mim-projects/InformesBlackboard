@@ -2,3 +2,14 @@
     border-top: 1px solid var(--surface-ground) !important;
     border-bottom: 1px solid var(--surface-ground) !important;
 }
+
+.menu-accordion button {
+    width: 100% !important;
+    text-align: left !important;
+}
+
+.menu-accordion .ui-state-active,
+.menu-accordion .ui-state-focus {
+    border: 0 !important;
+    box-shadow: none !important;
+}

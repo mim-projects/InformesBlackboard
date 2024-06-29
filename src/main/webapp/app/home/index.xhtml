@@ -1,9 +1,15 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:m="http://java.sun.com/jsf/composite/mimsoft/components" xmlns:h="http://java.sun.com/jsf/html"
                 template="/templates/template_app.xhtml">
+    <ui:define name="end_head">
+        <h:outputStylesheet library="mimsoft" name="/css/dashboard.css"/>
+    </ui:define>
     <ui:define name="container_body">
         <div class="container">
-            <h1>Hola mundo</h1>
+            <div class="card">
+                <m:eChartCustom data="#{homeCtrl.storageHistory}" height="500px"/>
+            </div>
         </div>
     </ui:define>
 </ui:composition>

@@ -12,7 +12,7 @@
         <h:outputStylesheet library="mimsoft" name="/css/custom-app.css"/>
         <ui:insert name="end_head"/>
         <style>
-            @media screen and (max-width: 1080px) {
+            @media screen and (max-width: 820px) {
                 .flex-hide-mobile { display: none; }
                 .flex-show-mobile { display: flex; }
             }
@@ -45,6 +45,23 @@
                             <p:commandButton actionListener="#{routerCtrl.navigate('uploads')}" process="@this"
                                              icon="pi pi-cloud-upload" styleClass="ui-button-flat ui-button-plain" value="#{bundle.uploads}"/>
                         </span>
+                        <p:accordionPanel activeIndex="-1" styleClass="menu-accordion">
+                            <p:tab title="#{bundle.registers}">
+                                <p:commandButton actionListener="#{routerCtrl.navigate('register_campus')}" value="#{bundle.campus}" icon="pi pi-building" styleClass="ui-button-flat"/>
+                                <p:commandButton actionListener="#{routerCtrl.navigate('register_campus_codes')}" value="#{bundle.campus_codes}" icon="pi pi-tags" styleClass="ui-button-flat"/>
+                                <p:commandButton actionListener="#{routerCtrl.navigate('register_grades')}" value="#{bundle.grades}" icon="pi pi-briefcase" styleClass="ui-button-flat"/>
+                                <p:commandButton actionListener="#{routerCtrl.navigate('register_modality')}" value="#{bundle.modality}" icon="pi pi-share-alt" styleClass="ui-button-flat"/>
+                                <p:commandButton actionListener="#{routerCtrl.navigate('register_courses')}" value="#{bundle.courses}" icon="pi pi-book" styleClass="ui-button-flat"/>
+                                <p:commandButton actionListener="#{routerCtrl.navigate('register_users')}" value="#{bundle.users}" icon="pi pi-users" styleClass="ui-button-flat"/>
+                                <p:commandButton actionListener="#{routerCtrl.navigate('register_storage')}" value="#{bundle.storage}" icon="pi pi-server" styleClass="ui-button-flat"/>
+                            </p:tab>
+                        </p:accordionPanel>
+                        <p:accordionPanel activeIndex="-1" styleClass="menu-accordion">
+                            <p:tab title="#{bundle.platform}">
+                                <p:commandButton actionListener="#{routerCtrl.navigate('platform_roles')}" value="#{bundle.roles}" icon="pi pi-id-card" styleClass="ui-button-flat"/>
+                                <p:commandButton actionListener="#{routerCtrl.navigate('platform_users')}" value="#{bundle.users}" icon="pi pi-users" styleClass="ui-button-flat"/>
+                            </p:tab>
+                        </p:accordionPanel>
                     </ui:insert>
                 </div>
             </h:form>
