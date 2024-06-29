@@ -6,6 +6,8 @@ import com.mimsoft.informesblackboard.domain.entities.UserPlatform;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 
+import java.util.List;
+
 @RequestScoped
 public class UserPlatformRepository {
     @Inject
@@ -23,7 +25,23 @@ public class UserPlatformRepository {
         return repository.findId(id);
     }
 
+    public UserPlatform findByUsername(String username) {
+        return repository.findOne("username", "'" + username + "'");
+    }
+
     public void update(UserPlatform currenUser) {
         repository.update(currenUser);
+    }
+
+    public List<UserPlatform> findAll() {
+        return repository.findAll();
+    }
+
+    public void create(UserPlatform item) {
+        repository.create(item);
+    }
+
+    public void remove(UserPlatform item) {
+        repository.delete(item);
     }
 }
