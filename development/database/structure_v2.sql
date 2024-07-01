@@ -50,7 +50,7 @@ create table roles (
 
 create table storage_history (
     id int not null auto_increment primary key,
-    keyword varchar(255) unique not null,
+    created_at date unique not null,
     value float not null
 );
 

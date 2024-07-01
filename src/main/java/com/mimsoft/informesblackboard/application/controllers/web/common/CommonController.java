@@ -159,4 +159,12 @@ public class CommonController {
     public String getCurrentCssTheme() {
         return Configuration.THEME_CSS;
     }
+
+    public String getCurrentYearAddYear(Integer add) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+        int year = Integer.parseInt(sdf.format(getCurrentDate()));
+        if (add == null) return String.valueOf(year);
+        year += add;
+        return String.valueOf(year);
+    }
 }

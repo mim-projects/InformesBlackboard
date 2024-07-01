@@ -21,7 +21,11 @@
                     <p:dataTable widgetVar="datatable_form_data" styleClass="custom-table"
                                  paginator="true" paginatorAlwaysVisible="false" rows="12" paginatorPosition="bottom"
                                  tableStyle="min-width: 40rem !important;" value="#{storageCtrl.allStorageHistory}" var="item">
-                        <p:column headerText="#{bundle.keyword}" field="keyword"/>
+                        <p:column headerText="#{bundle.date}" filterMatchMode="contains"
+                                  filterBy="#{commonCtrl.getDateFormat(item.createdAt, 'yyyy / MM')}"
+                                  sortBy="#{commonCtrl.getDateFormat(item.createdAt, 'yyyy / MM')}">
+                            <h:outputText value="#{commonCtrl.getDateFormat(item.createdAt, 'yyyy / MM')}"/>
+                        </p:column>
                         <p:column headerText="#{bundle.value}" field="value"/>
                         <p:column headerText="#{bundle.options}" width="12rem">
                             <p:commandButton value="#{bundle.remove}" styleClass="ui-button-flat ui-button-danger"
@@ -42,8 +46,9 @@
                       blockScroll="true" draggable="false" resizable="false" responsive="true" modal="true">
                 <div style="display: grid; gap: 1rem">
                     <div class="input-group">
-                        <p:outputLabel for="@next" value="#{bundle.keyword}"/>
-                        <p:inputText value="#{storageCtrl.selectedStorageHistory.keyword}"/>
+                        <p:outputLabel for="@next" value="#{bundle.date}"/>
+                        <p:datePicker inputStyle="width: 100%" view="month" value="#{storageCtrl.selectedStorageHistory.createdAt}"
+                                      pattern="yyyy / MM" yearNavigator="true" yearRange="#{commonCtrl.getCurrentYearAddYear(-50)}:#{commonCtrl.getCurrentYearAddYear( 50)}"/>
                     </div>
                     <div class="input-group">
                         <p:outputLabel for="@next" value="#{bundle.value}"/>
@@ -62,8 +67,8 @@
                       blockScroll="true" draggable="false" resizable="false" closable="false" responsive="true" modal="true">
                 <div style="display: grid; gap: 1rem">
                     <div class="input-group">
-                        <p:outputLabel for="@next" value="#{bundle.keyword}"/>
-                        <p:inputText value="#{storageCtrl.selectedStorageHistory.keyword}"/>
+                        <p:outputLabel for="@next" value="#{bundle.date}"/>
+                        <p:inputText disabled="true" value="#{commonCtrl.getDateFormat(storageCtrl.selectedStorageHistory.createdAt, 'yyyy / MM')}"/>
                     </div>
                     <div class="input-group">
                         <p:outputLabel for="@next" value="#{bundle.value}"/>

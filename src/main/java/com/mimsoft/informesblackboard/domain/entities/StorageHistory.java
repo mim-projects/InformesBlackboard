@@ -3,6 +3,8 @@ package com.mimsoft.informesblackboard.domain.entities;
 import com.mimsoft.informesblackboard.domain.core.EntityCore;
 import jakarta.persistence.*;
 
+import java.util.Date;
+
 @Entity
 @Table(name = "storage_history")
 public class StorageHistory extends EntityCore {
@@ -11,8 +13,9 @@ public class StorageHistory extends EntityCore {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "keyword")
-    private String keyword;
+    @Column(name = "created_at")
+    @Temporal(TemporalType.DATE)
+    private Date createdAt;
 
     @Column(name = "value")
     private Float value;
@@ -30,12 +33,12 @@ public class StorageHistory extends EntityCore {
         this.id = id;
     }
 
-    public String getKeyword() {
-        return keyword;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setKeyword(String keyword) {
-        this.keyword = keyword;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     public Float getValue() {
@@ -50,7 +53,7 @@ public class StorageHistory extends EntityCore {
     public String toString() {
         return "StorageHistory{" +
                 "id=" + id +
-                ", keyword=" + keyword +
+                ", createdAt=" + createdAt +
                 ", value=" + value +
                 '}';
     }

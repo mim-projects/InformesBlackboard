@@ -2,6 +2,7 @@ package com.mimsoft.informesblackboard.application.controllers.web.views.registe
 
 import com.mimsoft.informesblackboard.application.controllers.web.common.AbstractSessionController;
 import com.mimsoft.informesblackboard.application.data.repositories.StorageHistoryRepository;
+import com.mimsoft.informesblackboard.application.utils.others.DateHelper;
 import com.mimsoft.informesblackboard.domain.entities.StorageHistory;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -33,9 +34,10 @@ public class StorageCtrl extends AbstractSessionController {
     }
 
     public void createAndCloseWV(String modalWidgetVar, String updateForm) {
-        if (validateIfExistKeyword(selectedStorageHistory)) {
+        if (storageHistoryRepository.findCreatedAt(selectedStorageHistory.getCreatedAt()) != null) {
             commonController.FacesMessagesError("Failed", "Keyword exists");
         } else {
+            selectedStorageHistory.setCreatedAt(DateHelper.DateToStartMonth(selectedStorageHistory.getCreatedAt()));
             storageHistoryRepository.create(selectedStorageHistory);
             commonController.FacesMessagesInfo("Successful", "Create Item");
             PrimeFaces.current().executeScript("PF('" + modalWidgetVar + "').hide()");
@@ -44,20 +46,10 @@ public class StorageCtrl extends AbstractSessionController {
     }
 
     public void updateAndCloseWV(String modalWidgetVar, String updateForm) {
-        if (validateIfExistKeyword(selectedStorageHistory)) {
-            commonController.FacesMessagesError("Failed", "Keyword exists");
-        } else {
-            storageHistoryRepository.update(selectedStorageHistory);
-            commonController.FacesMessagesInfo("Successful", "Update Item");
-            PrimeFaces.current().executeScript("PF('" + modalWidgetVar + "').hide()");
-            PrimeFaces.current().ajax().update(updateForm);
-        }
-    }
-
-    private boolean validateIfExistKeyword(StorageHistory item) {
-        StorageHistory result = storageHistoryRepository.findKeyword(item.getKeyword());
-        if (result == null) return false;
-        return item.getId() == null || !result.getKeyword().equalsIgnoreCase(item.getKeyword());
+        storageHistoryRepository.update(selectedStorageHistory);
+        commonController.FacesMessagesInfo("Successful", "Update Item");
+        PrimeFaces.current().executeScript("PF('" + modalWidgetVar + "').hide()");
+        PrimeFaces.current().ajax().update(updateForm);
     }
 
     public void remove(StorageHistory item) {

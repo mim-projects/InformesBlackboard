@@ -67,6 +67,14 @@ public class DateHelper {
         return _date;
     }
 
+    public static Date DateToEndMonth(Date date) {
+        Date _date = new Date(date.getTime());
+        _date.setDate(1);
+        _date.setMonth(_date.getMonth() + 1);
+        _date.setDate(_date.getDate() - 1);
+        return _date;
+    }
+
     public static Date SetDataHMS(Date date, int h, int m, int s) {
         Date _date = new Date(date.getTime());
         _date.setHours(h);
