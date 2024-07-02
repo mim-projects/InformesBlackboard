@@ -9,37 +9,45 @@
     </ui:define>
     <ui:define name="container_body">
         <div class="container">
-            <div class="card">
-                <div class="title-card">
-                    <div class="title-card-icon-text">
-                        <i class="pi pi-book" style="font-size: 1rem !important;"></i>
-                        <h1 style="font-size: 1rem !important;">#{bundle.courses}</h1>
+            <ui:repeat value="#{homeCtrl.allGrades}" var="grade" varStatus="status">
+                <h:form class="card">
+                    <div class="title-card">
+                        <div class="title-card-icon-text">
+                            <i class="pi pi-book" style="font-size: 1rem !important;"></i>
+                            <h1 style="font-size: 1rem !important;">#{bundle.courses}. #{grade.name}</h1>
+                        </div>
+                        <div>
+                            <p:selectOneMenu value="#{homeCtrl.selectedPeriodCourses[status.index]}">
+                                <f:selectItems value="#{homeCtrl.coursesPeriod}" var="period" itemValue="#{period}" itemLabel="#{period}"/>
+                                <p:ajax event="change" update="@form"/>
+                            </p:selectOneMenu>
+                        </div>
                     </div>
-                    <div>
-                        <p:selectOneMenu>
-                            <f:selectItems value="#{homeCtrl.coursesPeriod}" var="period" itemValue="#{period}" itemLabel="#{period}"/>
-                        </p:selectOneMenu>
+                    <div class="content-card">
+                        <h:outputText escape="false" value="#{homeCtrl.getCustomTableCourses(homeCtrl.selectedPeriodCourses[status.index], grade)}"/>
                     </div>
-                </div>
-                <div class="content-card">
-                </div>
-            </div>
+                </h:form>
+            </ui:repeat>
 
-            <div class="card">
-                <div class="title-card">
-                    <div class="title-card-icon-text">
-                        <i class="pi pi-users" style="font-size: 1rem !important;"></i>
-                        <h1 style="font-size: 1rem !important;">#{bundle.users}</h1>
+            <ui:repeat value="#{homeCtrl.allGrades}" var="grade" varStatus="status">
+                <h:form class="card">
+                    <div class="title-card">
+                        <div class="title-card-icon-text">
+                            <i class="pi pi-users" style="font-size: 1rem !important;"></i>
+                            <h1 style="font-size: 1rem !important;">#{bundle.users}. #{grade.name}</h1>
+                        </div>
+                        <div>
+                            <p:selectOneMenu value="#{homeCtrl.selectedPeriodUsers[status.index]}">
+                                <f:selectItems value="#{homeCtrl.coursesPeriod}" var="period" itemValue="#{period}" itemLabel="#{period}"/>
+                                <p:ajax event="change" update="@form"/>
+                            </p:selectOneMenu>
+                        </div>
                     </div>
-                    <div>
-                        <p:selectOneMenu>
-                            <f:selectItems value="#{homeCtrl.coursesPeriod}" var="period" itemValue="#{period}" itemLabel="#{period}"/>
-                        </p:selectOneMenu>
+                    <div class="content-card">
+                        <h:outputText escape="false" value="#{homeCtrl.getCustomTableUsers(homeCtrl.selectedPeriodCourses[status.index], grade)}"/>
                     </div>
-                </div>
-                <div class="content-card">
-                </div>
-            </div>
+                </h:form>
+            </ui:repeat>
 
             <div class="card">
                 <div class="title-card">

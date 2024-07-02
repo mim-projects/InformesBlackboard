@@ -33,3 +33,38 @@ from users
     left join grades on grades.id = users.grades_id
 group by users.keyword, users.periods, roles.id, modality.id, campus.id, grades.id
 order by users.keyword, users.periods, roles.id, campus.id, modality.id;
+
+
+# Cantidad de usuarios por campus, periodo, grado y rol
+select
+    uuid() as id,
+    '' as keyword,
+    count(t.keyword) as value
+from (
+    select
+        users.keyword
+    from users
+        left join campus_codes on campus_codes.id = users.campus_code_id
+    where
+        campus_codes.campus_id = '1' and
+        periods = '20241' and
+        grades_id = '2' and
+        roles_id = '1'
+    group by users.keyword
+) as t;
+
+# Cantidad de cursos por campus, periodo y grado
+select
+    uuid() as id,
+    '' as keyword,
+    count(t.keyword) as value
+from (
+    select
+        courses.hash_code as keyword
+    from courses
+        left join campus_codes on campus_codes.id = courses.campus_code_id
+    where
+        campus_codes.campus_id = '1' and
+        periods = '20241' and
+        grades_id = '1'
+)as t;

@@ -1,4 +1,4 @@
-package com.mimsoft.informesblackboard.application.modules.charts;
+package com.mimsoft.informesblackboard.application.modules.graphics;
 
 import com.mimsoft.informesblackboard.application.data.repositories.StorageHistoryRepository;
 import com.mimsoft.informesblackboard.domain.entities.StorageHistory;
