@@ -3,9 +3,11 @@ package com.mimsoft.informesblackboard.application.controllers.web.views;
 import com.mimsoft.informesblackboard.application.controllers.web.common.AbstractSessionController;
 import com.mimsoft.informesblackboard.application.data.queries.custom_periods.CustomPeriodsRepository;
 import com.mimsoft.informesblackboard.application.data.repositories.GradesRepository;
+import com.mimsoft.informesblackboard.application.data.repositories.StorageHistoryRepository;
 import com.mimsoft.informesblackboard.application.modules.graphics.ChartsServices;
 import com.mimsoft.informesblackboard.application.modules.graphics.TablesServices;
 import com.mimsoft.informesblackboard.domain.entities.Grades;
+import com.mimsoft.informesblackboard.domain.entities.StorageHistory;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -23,6 +25,8 @@ public class HomeController extends AbstractSessionController {
     private CustomPeriodsRepository customPeriodsRepository;
     @Inject
     private GradesRepository gradesRepository;
+    @Inject
+    private StorageHistoryRepository storageHistoryRepository;
 
     private String[] selectedPeriodUsers;
     private String[] selectedPeriodCourses;
@@ -48,7 +52,9 @@ public class HomeController extends AbstractSessionController {
     }
 
     public String getStorageHistory() {
-        return chartsServices.getStorageHistory();
+        List<StorageHistory> list = storageHistoryRepository.findAll();
+        if (list.isEmpty()) return chartsServices.getEmptyShowMessage(sessionController.getBundleMessage("empty_graphic"));
+        return chartsServices.getStorageHistory(list);
     }
 
     public List<String> getCoursesPeriod() {

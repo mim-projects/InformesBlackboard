@@ -13,7 +13,6 @@ import com.mimsoft.informesblackboard.domain.entities.Modality;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -62,9 +61,6 @@ public class ProcessCoursesServices {
         courses.setCampusCodesId(campusCodesHashMap.get(keyword[1]));
         courses.setGradesId(grades);
         courses.setHashCode(parts[0]);
-        System.out.println("---");
-        System.out.println(courses);
-        System.out.println(Arrays.toString(parts));
         coursesRepository.createIgnore(courses);
     }
 }

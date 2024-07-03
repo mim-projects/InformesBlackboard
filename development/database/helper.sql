@@ -67,4 +67,4 @@ from (
         campus_codes.campus_id = '1' and
         periods = '20241' and
         grades_id = '1'
-)as t;
+) as t;

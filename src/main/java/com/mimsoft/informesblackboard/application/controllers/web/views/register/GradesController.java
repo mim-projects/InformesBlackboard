@@ -11,7 +11,7 @@ import java.util.List;
 
 @Named("gradesCtrl")
 @ViewScoped
-public class GradesCtrl extends AbstractSessionController {
+public class GradesController extends AbstractSessionController {
     @Inject
     private GradesRepository gradesRepository;
 

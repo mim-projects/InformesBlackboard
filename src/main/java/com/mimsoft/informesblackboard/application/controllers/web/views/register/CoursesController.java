@@ -19,7 +19,7 @@ import java.util.List;
 
 @Named("coursesCtrl")
 @ViewScoped
-public class CoursesCtrl extends AbstractSessionController {
+public class CoursesController extends AbstractSessionController {
     @Inject
     private CoursesRepository coursesRepository;
     @Inject

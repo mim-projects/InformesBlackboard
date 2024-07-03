@@ -11,7 +11,7 @@ import java.util.List;
 
 @Named("modalityCtrl")
 @ViewScoped
-public class ModalityCtrl extends AbstractSessionController {
+public class ModalityController extends AbstractSessionController {
     @Inject
     private ModalityRepository modalityRepository;
 

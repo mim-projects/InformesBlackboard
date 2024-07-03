@@ -18,6 +18,10 @@ public class UsersRepository {
     @Inject
     private CustomKeywordValueRepository customKeywordValueRepository;
 
+    public Users findById(String id) {
+        return repository.findOne("id", "'" + id + "'");
+    }
+
     public void createIgnore(Users users) {
         try {
             String hashCode = users.getKeyword() + users.getPeriods() + users.getKeywordCourse() + + users.getRolesId().getId() + users.getModalityId().getId() + users.getCampusCodesId().getId() + users.getGradesId().getId();

@@ -16,7 +16,7 @@ import java.util.List;
 
 @Named("campusCtrl")
 @ViewScoped
-public class CampusCtrl extends AbstractSessionController {
+public class CampusController extends AbstractSessionController {
     @Inject
     private CampusRepository campusRepository;
     @Inject
@@ -51,11 +51,11 @@ public class CampusCtrl extends AbstractSessionController {
 
     public void createAndCloseWVCampusCode(String modalWidgetVar, String updateForm) {
         if (validateIfExistCode(selectedCampusCodes.getCode())) {
-            commonController.FacesMessagesError("Failed", "Keyword exists");
+            commonController.FacesMessagesError(sessionController.getBundleMessage("failed"), sessionController.getBundleMessage("keyword_exist"));
         } else {
             selectedCampusCodes.setCampusId(campusRepository.findById(selectedCampusId));
             campusCodesRepository.create(selectedCampusCodes);
-            commonController.FacesMessagesInfo("Successful", "Create Item");
+            commonController.FacesMessagesInfo(sessionController.getBundleMessage("successful"), sessionController.getBundleMessage("create_item"));
             PrimeFaces.current().executeScript("PF('" + modalWidgetVar + "').hide()");
             PrimeFaces.current().ajax().update(updateForm);
         }
@@ -68,10 +68,10 @@ public class CampusCtrl extends AbstractSessionController {
     public void removeCampusCode(CampusCodes campusCodes) {
         if (usersRepository.findByCampusCode(campusCodes.getId()) != null ||
                 coursesRepository.findByCampusCode(campusCodes.getId()) != null) {
-            commonController.FacesMessagesError("Failed", "Item is used");
+            commonController.FacesMessagesError(sessionController.getBundleMessage("failed"), sessionController.getBundleMessage("keyword_exist"));
         } else {
             campusCodesRepository.remove(campusCodes);
-            commonController.FacesMessagesWarn("Successful", "Remove Item");
+            commonController.FacesMessagesWarn(sessionController.getBundleMessage("successful"), sessionController.getBundleMessage("remove_item"));
         }
     }
 

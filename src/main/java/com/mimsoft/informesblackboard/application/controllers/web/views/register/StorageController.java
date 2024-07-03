@@ -13,7 +13,7 @@ import java.util.List;
 
 @Named("storageCtrl")
 @ViewScoped
-public class StorageCtrl extends AbstractSessionController {
+public class StorageController extends AbstractSessionController {
     @Inject
     private StorageHistoryRepository storageHistoryRepository;
 
@@ -35,11 +35,11 @@ public class StorageCtrl extends AbstractSessionController {
 
     public void createAndCloseWV(String modalWidgetVar, String updateForm) {
         if (storageHistoryRepository.findCreatedAt(selectedStorageHistory.getCreatedAt()) != null) {
-            commonController.FacesMessagesError("Failed", "Keyword exists");
+            commonController.FacesMessagesError(sessionController.getBundleMessage("failed"), sessionController.getBundleMessage("keyword_exist"));
         } else {
             selectedStorageHistory.setCreatedAt(DateHelper.DateToStartMonth(selectedStorageHistory.getCreatedAt()));
             storageHistoryRepository.create(selectedStorageHistory);
-            commonController.FacesMessagesInfo("Successful", "Create Item");
+            commonController.FacesMessagesInfo(sessionController.getBundleMessage("successful"), sessionController.getBundleMessage("create_item"));
             PrimeFaces.current().executeScript("PF('" + modalWidgetVar + "').hide()");
             PrimeFaces.current().ajax().update(updateForm);
         }
@@ -47,13 +47,14 @@ public class StorageCtrl extends AbstractSessionController {
 
     public void updateAndCloseWV(String modalWidgetVar, String updateForm) {
         storageHistoryRepository.update(selectedStorageHistory);
-        commonController.FacesMessagesInfo("Successful", "Update Item");
+        commonController.FacesMessagesInfo(sessionController.getBundleMessage("successful"), sessionController.getBundleMessage("update_item"));
         PrimeFaces.current().executeScript("PF('" + modalWidgetVar + "').hide()");
         PrimeFaces.current().ajax().update(updateForm);
     }
 
     public void remove(StorageHistory item) {
         storageHistoryRepository.remove(item);
+        commonController.FacesMessagesWarn(sessionController.getBundleMessage("successful"), sessionController.getBundleMessage("remove_item"));
     }
 
     public List<StorageHistory> getAllStorageHistory() {

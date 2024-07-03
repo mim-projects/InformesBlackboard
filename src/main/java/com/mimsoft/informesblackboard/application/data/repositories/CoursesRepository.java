@@ -20,6 +20,10 @@ public class CoursesRepository {
     @Inject
     private CustomKeywordValueRepository customKeywordValueRepository;
 
+    public Courses findByKeyword(String keyword) {
+        return repository.findOne("keyword", "'" + keyword + "'");
+    }
+
     public Courses findByCampusCode(Integer campusCodeId) {
         return repository.findOne("campusCodesId.id", "'" + campusCodeId + "'");
     }

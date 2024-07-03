@@ -32,7 +32,7 @@ public class ProfileController extends AbstractSessionController {
         editable = false;
         userPlatformRepository.update(currenUser);
         sessionController.setCurrentUser(userPlatformRepository.findById(sessionController.getCurrentUser().getId()));
-        commonController.FacesMessagesInfo("Successful", "Update current user");
+        commonController.FacesMessagesInfo(sessionController.getBundleMessage("successful"), sessionController.getBundleMessage("update_profile_data"));
         PrimeFaces.current().ajax().update("form_app_header");
     }
 

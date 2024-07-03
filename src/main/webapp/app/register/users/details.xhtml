@@ -1,9 +1,75 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
                 template="/templates/template_app.xhtml">
     <ui:define name="container_body">
         <div class="container">
-            <h1>Users Details</h1>
+            <p:outputPanel rendered="#{empty usersDetailsCtrl.currentUser}" style="display: flex; align-items: center; justify-content: center; margin-top: 4rem">
+                <h1 style="font-weight: bold; opacity: 0.8">#{bundle.empty_result}</h1>
+            </p:outputPanel>
+            <p:outputPanel rendered="#{not empty usersDetailsCtrl.currentUser}">
+                <h:form id="form_data" styleClass="card">
+                    <div class="title-card">
+                        <div class="title-card-icon-text">
+                            <i class="pi pi-user"></i>
+                            <h1>#{bundle.user_details}</h1>
+                        </div>
+                    </div>
+                    <div class="content-card">
+                        <div style="margin: 2rem 0" class="input-group">
+                            <p:outputLabel for="@next" value="#{bundle.user_keyword}"/>
+                            <p:inputText disabled="true" value="#{usersDetailsCtrl.currentUser.keyword}"/>
+                        </div>
+                        <p:dataTable widgetVar="datatable_form_data" styleClass="custom-table"
+                                     paginator="true" paginatorAlwaysVisible="false" rows="12" paginatorPosition="bottom"
+                                     tableStyle="min-width: 40rem !important;" value="#{usersDetailsCtrl.customUsersLazyDataModel}" var="item">
+                            <p:column headerText="#{bundle.periods}" field="period">
+                                <f:facet name="filter">
+                                    <p:selectOneMenu onchange="PF('datatable_form_data').filter()" styleClass="ui-custom-filter">
+                                        <f:selectItem itemLabel="#{bundle.all}" itemValue="#{null}" noSelectionOption="true"/>
+                                        <f:selectItems value="#{usersDetailsCtrl.allPeriodsString}" var="period" itemValue="#{period}" itemLabel="#{period}"/>
+                                    </p:selectOneMenu>
+                                </f:facet>
+                            </p:column>
+                            <p:column headerText="#{bundle.role}" field="role">
+                                <f:facet name="filter">
+                                    <p:selectOneMenu onchange="PF('datatable_form_data').filter()" styleClass="ui-custom-filter">
+                                        <f:selectItem itemLabel="#{bundle.all}" itemValue="#{null}" noSelectionOption="true"/>
+                                        <f:selectItems value="#{usersDetailsCtrl.allRoles}" var="roles" itemValue="#{roles.name}" itemLabel="#{roles.name}"/>
+                                    </p:selectOneMenu>
+                                </f:facet>
+                            </p:column>
+                            <p:column headerText="#{bundle.modality}" field="modality">
+                                <f:facet name="filter">
+                                    <p:selectOneMenu onchange="PF('datatable_form_data').filter()" styleClass="ui-custom-filter">
+                                        <f:selectItem itemLabel="#{bundle.all}" itemValue="#{null}" noSelectionOption="true"/>
+                                        <f:selectItems value="#{usersDetailsCtrl.allModalities}" var="modality" itemValue="#{modality.description}" itemLabel="#{modality.description}"/>
+                                    </p:selectOneMenu>
+                                </f:facet>
+                            </p:column>
+                            <p:column headerText="#{bundle.campus}" field="campus">
+                                <f:facet name="filter">
+                                    <p:selectOneMenu onchange="PF('datatable_form_data').filter()" styleClass="ui-custom-filter">
+                                        <f:selectItem itemLabel="#{bundle.all}" itemValue="#{null}" noSelectionOption="true"/>
+                                        <f:selectItems value="#{usersDetailsCtrl.allCampus}" var="campus" itemValue="#{campus.name}" itemLabel="#{campus.name}"/>
+                                    </p:selectOneMenu>
+                                </f:facet>
+                            </p:column>
+                            <p:column headerText="#{bundle.grades}" field="grade">
+                                <f:facet name="filter">
+                                    <p:selectOneMenu onchange="PF('datatable_form_data').filter()" styleClass="ui-custom-filter">
+                                        <f:selectItem itemLabel="#{bundle.all}" itemValue="#{null}" noSelectionOption="true"/>
+                                        <f:selectItems value="#{usersDetailsCtrl.allGrades}" var="grades" itemValue="#{grades.name}" itemLabel="#{grades.name}"/>
+                                    </p:selectOneMenu>
+                                </f:facet>
+                            </p:column>
+                            <p:column headerText="#{bundle.courses}" field="coursesKeyword"/>
+                        </p:dataTable>
+                    </div>
+                </h:form>
+            </p:outputPanel>
         </div>
     </ui:define>
 </ui:composition>

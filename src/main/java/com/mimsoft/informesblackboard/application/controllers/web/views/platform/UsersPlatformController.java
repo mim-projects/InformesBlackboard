@@ -53,42 +53,42 @@ public class UsersPlatformController extends AbstractSessionController {
 
     public void createAndCloseWidget(String widget, String update) {
         if (selectedUserPlatform.getName().isEmpty() || selectedUserPlatform.getUsername().isEmpty() || selectedUserRolesPlatformId == null) {
-            commonController.FacesMessagesError("Failed", "Empty data");
+            commonController.FacesMessagesError(sessionController.getBundleMessage("failed"), sessionController.getBundleMessage("empty_data"));
             return;
         }
         if (userPlatformRepository.findByUsername(selectedUserPlatform.getUsername()) != null) {
-            commonController.FacesMessagesError("Failed", "Exist username");
+            commonController.FacesMessagesError(sessionController.getBundleMessage("failed"), sessionController.getBundleMessage("username_exist"));
             return;
         }
         try {
             selectedUserPlatform.setUserPlatformRolesId(userPlatformRolesRepository.findById(selectedUserRolesPlatformId));
             userPlatformRepository.create(selectedUserPlatform);
-            commonController.FacesMessagesInfo("Successful", "Create Item");
+            commonController.FacesMessagesInfo(sessionController.getBundleMessage("successful"), sessionController.getBundleMessage("create_item"));
             PrimeFaces.current().ajax().update(update);
             PrimeFaces.current().executeScript("PF('" + widget + "').hide()");
         } catch (Exception ignore) {
-            commonController.FacesMessagesError("Failed", "Try Again");
+            commonController.FacesMessagesError(sessionController.getBundleMessage("failed"), sessionController.getBundleMessage("try_again"));
         }
     }
 
     public void updateAndCloseWidget(String widget, String update) {
         if (selectedUserPlatform.getName().isEmpty() || selectedUserPlatform.getUsername().isEmpty() || selectedUserRolesPlatformId == null) {
-            commonController.FacesMessagesError("Failed", "Empty data");
+            commonController.FacesMessagesError(sessionController.getBundleMessage("failed"), sessionController.getBundleMessage("empty_data"));
             return;
         }
         UserPlatform result = userPlatformRepository.findByUsername(selectedUserPlatform.getUsername());
         if (result != null && !Objects.equals(result.getId(), selectedUserPlatform.getId()) && !result.getName().equals(selectedUserPlatform.getName())) {
-            commonController.FacesMessagesError("Failed", "Exist username");
+            commonController.FacesMessagesError(sessionController.getBundleMessage("failed"), sessionController.getBundleMessage("username_exist"));
             return;
         }
         try {
             selectedUserPlatform.setUserPlatformRolesId(userPlatformRolesRepository.findById(selectedUserRolesPlatformId));
             userPlatformRepository.update(selectedUserPlatform);
-            commonController.FacesMessagesInfo("Successful", "Update Item");
+            commonController.FacesMessagesInfo(sessionController.getBundleMessage("successful"), sessionController.getBundleMessage("update_item"));
             PrimeFaces.current().ajax().update(update);
             PrimeFaces.current().executeScript("PF('" + widget + "').hide()");
         } catch (Exception ignore) {
-            commonController.FacesMessagesError("Failed", "Try Again");
+            commonController.FacesMessagesError(sessionController.getBundleMessage("failed"), sessionController.getBundleMessage("try_again"));
         }
     }
 

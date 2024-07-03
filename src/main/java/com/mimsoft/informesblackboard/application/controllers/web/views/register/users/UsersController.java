@@ -1,4 +1,4 @@
-package com.mimsoft.informesblackboard.application.controllers.web.views.register;
+package com.mimsoft.informesblackboard.application.controllers.web.views.register.users;
 
 import com.mimsoft.informesblackboard.application.controllers.web.common.AbstractSessionController;
 import com.mimsoft.informesblackboard.application.data.models.lazy.UsersLazyDataModel;
@@ -22,7 +22,7 @@ import java.util.List;
 
 @Named("usersCtrl")
 @ViewScoped
-public class UsersCtrl extends AbstractSessionController {
+public class UsersController extends AbstractSessionController {
     @Inject
     private CustomUsersRepository customUsersRepository;
     @Inject

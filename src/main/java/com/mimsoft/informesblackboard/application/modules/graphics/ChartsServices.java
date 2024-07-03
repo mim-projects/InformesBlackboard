@@ -1,23 +1,23 @@
 package com.mimsoft.informesblackboard.application.modules.graphics;
 
-import com.mimsoft.informesblackboard.application.data.repositories.StorageHistoryRepository;
 import com.mimsoft.informesblackboard.domain.entities.StorageHistory;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Inject;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 @RequestScoped
 public class ChartsServices {
-    @Inject
-    private StorageHistoryRepository storageHistoryRepository;
+    public String getEmptyShowMessage(String message) {
+        return "{ grid: { left: '2%', right: '2%', top: '2%', bottom: '2%' }, title: { text: \"" + message + "\", show: true, left: \"center\", top: \"center\", textStyle: { fontWeight: \"normal\" } } }";
+    }
 
-    public String getStorageHistory() {
+    public String getStorageHistory(List<StorageHistory> list) {
         String axisX = "";
         String data = "";
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
 
-        for (StorageHistory item: storageHistoryRepository.findAll()) {
+        for (StorageHistory item: list) {
             axisX += "'" + sdf.format(item.getCreatedAt()) + "',";
             data += "'" + item.getValue() + "',";
         }
