@@ -61,6 +61,6 @@ public class ProcessCoursesServices {
         courses.setCampusCodesId(campusCodesHashMap.get(keyword[1]));
         courses.setGradesId(grades);
         courses.setHashCode(parts[0]);
-        coursesRepository.createIgnore(courses);
+        coursesRepository.create(courses);
     }
 }

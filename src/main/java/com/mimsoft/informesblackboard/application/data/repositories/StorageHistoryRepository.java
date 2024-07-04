@@ -16,8 +16,12 @@ public class StorageHistoryRepository {
     @RepositoryClass(StorageHistory.class)
     private Repository<StorageHistory> repository;
 
-    public List<StorageHistory> findAll() {
+    public List<StorageHistory> findAllDesc() {
         return repository.findNativeAll("select * from storage_history order by created_at desc");
+    }
+
+    public List<StorageHistory> findAll() {
+        return repository.findNativeAll("select * from storage_history");
     }
 
     public StorageHistory  findCreatedAt(Date createdAt) {

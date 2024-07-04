@@ -505,17 +505,8 @@
     transform: translateX(-50%);
     user-select: none;
 }
-@keyframes animation_icon {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
 .global-loader i {
     user-select: none;
-    animation-name: animation_icon;
-    animation-duration: 1s;
-    animation-direction: normal;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
 }
 .global-loader span {
     font-weight: bold;

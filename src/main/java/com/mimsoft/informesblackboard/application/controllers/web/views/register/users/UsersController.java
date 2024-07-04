@@ -1,7 +1,7 @@
 package com.mimsoft.informesblackboard.application.controllers.web.views.register.users;
 
 import com.mimsoft.informesblackboard.application.controllers.web.common.AbstractSessionController;
-import com.mimsoft.informesblackboard.application.data.models.lazy.UsersLazyDataModel;
+import com.mimsoft.informesblackboard.application.data.models.lazy.CustomUserLazyDataModel;
 import com.mimsoft.informesblackboard.application.data.queries.custom_periods.CustomPeriodsRepository;
 import com.mimsoft.informesblackboard.application.data.queries.custom_users.CustomUsers;
 import com.mimsoft.informesblackboard.application.data.queries.custom_users.CustomUsersRepository;
@@ -37,12 +37,25 @@ public class UsersController extends AbstractSessionController {
     private RolesRepository rolesRepository;
 
     private LazyDataModel<CustomUsers> customUsersLazyDataModel;
+    private String selectedPeriodId;
+    private Integer selectedGradeId;
+    private Integer selectedRoleId;
+    private Integer selectedCampusId;
     private Integer counterFilter;
 
     @Override
     public void init() {
-        List<CustomUsers> list = customUsersRepository.findAll();
-        customUsersLazyDataModel = new UsersLazyDataModel(list);
+        counterFilter = 0;
+        selectedPeriodId = periodsRepository.findLastString();
+    }
+
+    public boolean isDisabledSearch() {
+        return selectedPeriodId == null || selectedPeriodId.isEmpty();
+    }
+
+    public void search() {
+        List<CustomUsers> list = customUsersRepository.findAllByPeriodGradeRoleCampusIds(selectedPeriodId, selectedGradeId, selectedRoleId, selectedCampusId);
+        customUsersLazyDataModel = new CustomUserLazyDataModel(list);
         counterFilter = list.size();
     }
 
@@ -84,5 +97,37 @@ public class UsersController extends AbstractSessionController {
 
     public List<Grades> getAllGrades() {
         return gradesRepository.findAll();
+    }
+
+    public String getSelectedPeriodId() {
+        return selectedPeriodId;
+    }
+
+    public void setSelectedPeriodId(String selectedPeriodId) {
+        this.selectedPeriodId = selectedPeriodId;
+    }
+
+    public Integer getSelectedGradeId() {
+        return selectedGradeId;
+    }
+
+    public void setSelectedGradeId(Integer selectedGradeId) {
+        this.selectedGradeId = selectedGradeId;
+    }
+
+    public Integer getSelectedRoleId() {
+        return selectedRoleId;
+    }
+
+    public void setSelectedRoleId(Integer selectedRoleId) {
+        this.selectedRoleId = selectedRoleId;
+    }
+
+    public Integer getSelectedCampusId() {
+        return selectedCampusId;
+    }
+
+    public void setSelectedCampusId(Integer selectedCampusId) {
+        this.selectedCampusId = selectedCampusId;
     }
 }

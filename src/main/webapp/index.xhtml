@@ -91,11 +91,10 @@
 
                     <span class="ui-float-label ui-password-w-full">
                         <p:password type="password" value="#{loginCtrl.password}" toggleMask="true"/>
-                        <p:outputLabel style="top:-.75em;font-size:12px" for="@previous" value="#{bundle.password}"/>
+                        <p:outputLabel for="@previous" value="#{bundle.password}"/>
                     </span>
 
-                    <p:commandButton value="#{bundle.login}" actionListener="#{loginCtrl.login()}"
-                                     styleClass="ui-button login-btn"/>
+                    <p:commandButton value="#{bundle.login}" actionListener="#{loginCtrl.login()}" styleClass="login-btn"/>
                 </h:form>
             </div>
         </div>

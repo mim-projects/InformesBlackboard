@@ -9,7 +9,7 @@
     </ui:define>
     <ui:define name="container_body">
         <div class="container">
-            <ui:repeat value="#{homeCtrl.allGrades}" var="grade" varStatus="status">
+            <ui:repeat value="#{homeCtrl.allGrades}" var="grade" varStatus="statusCourses">
                 <h:form class="card">
                     <div class="title-card">
                         <div class="title-card-icon-text">
@@ -17,19 +17,20 @@
                             <h1 style="font-size: 1rem !important;">#{bundle.courses}. #{grade.name}</h1>
                         </div>
                         <div>
-                            <p:selectOneMenu value="#{homeCtrl.selectedPeriodCourses[status.index]}">
-                                <f:selectItems value="#{homeCtrl.coursesPeriod}" var="period" itemValue="#{period}" itemLabel="#{period}"/>
-                                <p:ajax event="change" update="@form"/>
+                            <p:selectOneMenu value="#{homeCtrl.selectedPeriodCourses[statusCourses.index + 1]}">
+                                <f:selectItem itemValue="#{null}" itemLabel="-"/>
+                                <f:selectItems value="#{homeCtrl.coursesPeriodCourses}" var="period" itemValue="#{period.name}" itemLabel="#{period.name}"/>
+                                <p:ajax event="change" update="@form" onstart="createGlobalLoader('#{bundle.loading}')" oncomplete="removeGlobalLoader()"/>
                             </p:selectOneMenu>
                         </div>
                     </div>
                     <div class="content-card">
-                        <h:outputText escape="false" value="#{homeCtrl.getCustomTableCourses(homeCtrl.selectedPeriodCourses[status.index], grade)}"/>
+                        <h:outputText escape="false" value="#{homeCtrl.getCustomTableCourses(homeCtrl.selectedPeriodCourses[statusCourses.index + 1], grade)}"/>
                     </div>
                 </h:form>
             </ui:repeat>
 
-            <ui:repeat value="#{homeCtrl.allGrades}" var="grade" varStatus="status">
+            <ui:repeat value="#{homeCtrl.allGrades}" var="grade" varStatus="statusUsers">
                 <h:form class="card">
                     <div class="title-card">
                         <div class="title-card-icon-text">
@@ -37,14 +38,15 @@
                             <h1 style="font-size: 1rem !important;">#{bundle.users}. #{grade.name}</h1>
                         </div>
                         <div>
-                            <p:selectOneMenu value="#{homeCtrl.selectedPeriodUsers[status.index]}">
-                                <f:selectItems value="#{homeCtrl.coursesPeriod}" var="period" itemValue="#{period}" itemLabel="#{period}"/>
-                                <p:ajax event="change" update="@form"/>
+                            <p:selectOneMenu value="#{homeCtrl.selectedPeriodUsers[statusUsers.index + 1]}">
+                                <f:selectItem itemValue="#{null}" itemLabel="-"/>
+                                <f:selectItems value="#{homeCtrl.coursesPeriodUsers}" var="period" itemValue="#{period.name}" itemLabel="#{period.name}"/>
+                                <p:ajax event="change" update="@form" onstart="createGlobalLoader('#{bundle.loading}')" oncomplete="removeGlobalLoader()"/>
                             </p:selectOneMenu>
                         </div>
                     </div>
                     <div class="content-card">
-                        <h:outputText escape="false" value="#{homeCtrl.getCustomTableUsers(homeCtrl.selectedPeriodCourses[status.index], grade)}"/>
+                        <h:outputText escape="false" value="#{homeCtrl.getCustomTableUsers(homeCtrl.selectedPeriodUsers[statusUsers.index + 1], grade)}"/>
                     </div>
                 </h:form>
             </ui:repeat>

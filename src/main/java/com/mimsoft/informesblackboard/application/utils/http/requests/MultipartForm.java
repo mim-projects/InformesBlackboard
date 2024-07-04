@@ -5,7 +5,6 @@ import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.Date;
 
 public class MultipartForm {
@@ -42,7 +41,6 @@ public class MultipartForm {
         try {
             InputPart inputParts = input.getFormDataMap().get(key).get(0);
             String[] headers = inputParts.getHeaders().getFirst("Content-Disposition").split(";");
-            System.out.println(Arrays.toString(headers));
 
             for (String section : headers) {
                 if (section.trim().startsWith("filename")) {

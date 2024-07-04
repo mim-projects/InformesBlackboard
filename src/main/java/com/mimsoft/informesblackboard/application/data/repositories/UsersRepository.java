@@ -10,6 +10,8 @@ import com.mimsoft.informesblackboard.domain.entities.Users;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 
+import java.util.List;
+
 @RequestScoped
 public class UsersRepository {
     @Inject
@@ -20,6 +22,10 @@ public class UsersRepository {
 
     public Users findById(String id) {
         return repository.findOne("id", "'" + id + "'");
+    }
+
+    public List<Users> findAll() {
+        return repository.findAll();
     }
 
     public void createIgnore(Users users) {

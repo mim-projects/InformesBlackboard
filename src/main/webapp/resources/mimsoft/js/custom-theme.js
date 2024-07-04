@@ -1,15 +1,15 @@
 const OnLoadData = []
 let globalLoader = null;
 
-const createGlobalLoader = () => {
+const createGlobalLoader = (textLoading = "loading") => {
     globalLoader = document.createElement("div")
     globalLoader.classList.add("global-loader")
     const icon = document.createElement("i")
-    icon.classList.add("pi", "pi-spinner")
+    icon.classList.add("pi", "pi-spinner", "pi-spin")
     globalLoader.appendChild(icon)
     const span = document.createElement("span")
     globalLoader.appendChild(span)
-    span.textContent = "#{bundle.loading}"
+    span.textContent = textLoading
     document.getElementsByTagName("body")[0].appendChild(globalLoader)
 }
 

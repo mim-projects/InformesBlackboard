@@ -31,8 +31,7 @@ from users
     left join campus_codes on campus_codes.id = users.campus_code_id
     left join campus on campus.id = campus_codes.campus_id
     left join grades on grades.id = users.grades_id
-group by users.keyword, users.periods, roles.id, modality.id, campus.id, grades.id
-order by users.keyword, users.periods, roles.id, campus.id, modality.id;
+group by users.keyword, users.periods, roles.id, modality.id, campus.id, grades.id;
 
 
 # Cantidad de usuarios por campus, periodo, grado y rol

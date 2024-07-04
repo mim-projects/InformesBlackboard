@@ -38,28 +38,28 @@
                 <div class="navigator-drawer-options" style="margin-top: 2rem">
                     <ui:insert name="navigation-drawer-menu">
                         <span>
-                            <p:commandButton actionListener="#{routerCtrl.navigate('home')}" process="@this"
+                            <p:commandButton onstart="createGlobalLoader('#{bundle.loading}')" actionListener="#{routerCtrl.navigate('home')}" process="@this"
                                              icon="pi pi-th-large" styleClass="ui-button-flat ui-button-plain" value="#{bundle.home}"/>
                         </span>
                         <span>
-                            <p:commandButton actionListener="#{routerCtrl.navigate('uploads')}" process="@this"
+                            <p:commandButton onstart="createGlobalLoader('#{bundle.loading}')" actionListener="#{routerCtrl.navigate('uploads')}" process="@this"
                                              icon="pi pi-cloud-upload" styleClass="ui-button-flat ui-button-plain" value="#{bundle.uploads}"/>
                         </span>
                         <p:accordionPanel activeIndex="-1" styleClass="menu-accordion">
                             <p:tab title="#{bundle.registers}">
-                                <p:commandButton actionListener="#{routerCtrl.navigate('register_campus')}" value="#{bundle.campus}" icon="pi pi-building" styleClass="ui-button-flat"/>
-                                <p:commandButton actionListener="#{routerCtrl.navigate('register_campus_codes')}" value="#{bundle.campus_codes}" icon="pi pi-tags" styleClass="ui-button-flat"/>
-                                <p:commandButton actionListener="#{routerCtrl.navigate('register_grades')}" value="#{bundle.grades}" icon="pi pi-briefcase" styleClass="ui-button-flat"/>
-                                <p:commandButton actionListener="#{routerCtrl.navigate('register_modality')}" value="#{bundle.modality}" icon="pi pi-share-alt" styleClass="ui-button-flat"/>
-                                <p:commandButton actionListener="#{routerCtrl.navigate('register_courses')}" value="#{bundle.courses}" icon="pi pi-book" styleClass="ui-button-flat"/>
-                                <p:commandButton actionListener="#{routerCtrl.navigate('register_users')}" value="#{bundle.users}" icon="pi pi-users" styleClass="ui-button-flat"/>
-                                <p:commandButton actionListener="#{routerCtrl.navigate('register_storage')}" value="#{bundle.storage}" icon="pi pi-server" styleClass="ui-button-flat"/>
+                                <p:commandButton onstart="createGlobalLoader('#{bundle.loading}')" actionListener="#{routerCtrl.navigate('register_campus')}" value="#{bundle.campus}" icon="pi pi-building" styleClass="ui-button-flat"/>
+                                <p:commandButton onstart="createGlobalLoader('#{bundle.loading}')" actionListener="#{routerCtrl.navigate('register_campus_codes')}" value="#{bundle.campus_codes}" icon="pi pi-tags" styleClass="ui-button-flat"/>
+                                <p:commandButton onstart="createGlobalLoader('#{bundle.loading}')" actionListener="#{routerCtrl.navigate('register_grades')}" value="#{bundle.grades}" icon="pi pi-briefcase" styleClass="ui-button-flat"/>
+                                <p:commandButton onstart="createGlobalLoader('#{bundle.loading}')" actionListener="#{routerCtrl.navigate('register_modality')}" value="#{bundle.modality}" icon="pi pi-share-alt" styleClass="ui-button-flat"/>
+                                <p:commandButton onstart="createGlobalLoader('#{bundle.loading}')" actionListener="#{routerCtrl.navigate('register_courses')}" value="#{bundle.courses}" icon="pi pi-book" styleClass="ui-button-flat"/>
+                                <p:commandButton onstart="createGlobalLoader('#{bundle.loading}')" actionListener="#{routerCtrl.navigate('register_users')}" value="#{bundle.users}" icon="pi pi-users" styleClass="ui-button-flat"/>
+                                <p:commandButton onstart="createGlobalLoader('#{bundle.loading}')" actionListener="#{routerCtrl.navigate('register_storage')}" value="#{bundle.storage}" icon="pi pi-server" styleClass="ui-button-flat"/>
                             </p:tab>
                         </p:accordionPanel>
                         <p:accordionPanel activeIndex="-1" styleClass="menu-accordion">
                             <p:tab title="#{bundle.platform}">
-                                <p:commandButton actionListener="#{routerCtrl.navigate('platform_roles')}" value="#{bundle.roles}" icon="pi pi-id-card" styleClass="ui-button-flat"/>
-                                <p:commandButton actionListener="#{routerCtrl.navigate('platform_users')}" value="#{bundle.users}" icon="pi pi-users" styleClass="ui-button-flat"/>
+                                <p:commandButton onstart="createGlobalLoader('#{bundle.loading}')" actionListener="#{routerCtrl.navigate('platform_roles')}" value="#{bundle.roles}" icon="pi pi-id-card" styleClass="ui-button-flat"/>
+                                <p:commandButton onstart="createGlobalLoader('#{bundle.loading}')" actionListener="#{routerCtrl.navigate('platform_users')}" value="#{bundle.users}" icon="pi pi-users" styleClass="ui-button-flat"/>
                             </p:tab>
                         </p:accordionPanel>
                     </ui:insert>
@@ -74,22 +74,22 @@
                     </div>
                     <div class="flex-hide-mobile">
                         <ui:insert name="navigation-menu">
-                            <p:commandButton actionListener="#{routerCtrl.navigate('home')}" process="@this"
+                            <p:commandButton onstart="createGlobalLoader('#{bundle.loading}')" actionListener="#{routerCtrl.navigate('home')}" process="@this"
                                              icon="pi pi-th-large" styleClass="ui-button-flat ui-button-plain" value="#{bundle.home}"/>
-                            <p:commandButton actionListener="#{routerCtrl.navigate('uploads')}" process="@this"
+                            <p:commandButton onstart="createGlobalLoader('#{bundle.loading}')" actionListener="#{routerCtrl.navigate('uploads')}" process="@this"
                                              icon="pi pi-cloud-upload" styleClass="ui-button-flat ui-button-plain" value="#{bundle.uploads}"/>
                             <p:menuButton icon="pi pi-slack" value="#{bundle.registers}" buttonStyleClass="ui-button-flat ui-button-plain">
-                                <p:menuitem actionListener="#{routerCtrl.navigate('register_campus')}" value="#{bundle.campus}" icon="pi pi-building"/>
-                                <p:menuitem actionListener="#{routerCtrl.navigate('register_campus_codes')}" value="#{bundle.campus_codes}" icon="pi pi-tags"/>
-                                <p:menuitem actionListener="#{routerCtrl.navigate('register_grades')}" value="#{bundle.grades}" icon="pi pi-briefcase"/>
-                                <p:menuitem actionListener="#{routerCtrl.navigate('register_modality')}" value="#{bundle.modality}" icon="pi pi-share-alt"/>
-                                <p:menuitem actionListener="#{routerCtrl.navigate('register_courses')}" value="#{bundle.courses}" icon="pi pi-book"/>
-                                <p:menuitem actionListener="#{routerCtrl.navigate('register_users')}" value="#{bundle.users}" icon="pi pi-users"/>
-                                <p:menuitem actionListener="#{routerCtrl.navigate('register_storage')}" value="#{bundle.storage}" icon="pi pi-server"/>
+                                <p:menuitem onstart="createGlobalLoader('#{bundle.loading}')" actionListener="#{routerCtrl.navigate('register_campus')}" value="#{bundle.campus}" icon="pi pi-building"/>
+                                <p:menuitem onstart="createGlobalLoader('#{bundle.loading}')" actionListener="#{routerCtrl.navigate('register_campus_codes')}" value="#{bundle.campus_codes}" icon="pi pi-tags"/>
+                                <p:menuitem onstart="createGlobalLoader('#{bundle.loading}')" actionListener="#{routerCtrl.navigate('register_grades')}" value="#{bundle.grades}" icon="pi pi-briefcase"/>
+                                <p:menuitem onstart="createGlobalLoader('#{bundle.loading}')" actionListener="#{routerCtrl.navigate('register_modality')}" value="#{bundle.modality}" icon="pi pi-share-alt"/>
+                                <p:menuitem onstart="createGlobalLoader('#{bundle.loading}')" actionListener="#{routerCtrl.navigate('register_courses')}" value="#{bundle.courses}" icon="pi pi-book"/>
+                                <p:menuitem onstart="createGlobalLoader('#{bundle.loading}')" actionListener="#{routerCtrl.navigate('register_users')}" value="#{bundle.users}" icon="pi pi-users"/>
+                                <p:menuitem onstart="createGlobalLoader('#{bundle.loading}')" actionListener="#{routerCtrl.navigate('register_storage')}" value="#{bundle.storage}" icon="pi pi-server"/>
                             </p:menuButton>
                             <p:menuButton icon="pi pi-shield" value="#{bundle.platform}" buttonStyleClass="ui-button-flat ui-button-plain">
-                                <p:menuitem actionListener="#{routerCtrl.navigate('platform_roles')}" value="#{bundle.roles}" icon="pi pi-id-card"/>
-                                <p:menuitem actionListener="#{routerCtrl.navigate('platform_users')}" value="#{bundle.users}" icon="pi pi-users"/>
+                                <p:menuitem onstart="createGlobalLoader('#{bundle.loading}')" actionListener="#{routerCtrl.navigate('platform_roles')}" value="#{bundle.roles}" icon="pi pi-id-card"/>
+                                <p:menuitem onstart="createGlobalLoader('#{bundle.loading}')" actionListener="#{routerCtrl.navigate('platform_users')}" value="#{bundle.users}" icon="pi pi-users"/>
                             </p:menuButton>
                         </ui:insert>
                     </div>

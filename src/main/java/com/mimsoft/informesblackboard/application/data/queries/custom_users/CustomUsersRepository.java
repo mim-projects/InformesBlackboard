@@ -80,4 +80,32 @@ public class CustomUsersRepository extends QueryRepository {
         try { return entityManager.createNativeQuery(query, CustomUsers.class).getResultList(); }
         catch (Exception ignore) { return new ArrayList<>(); }
     }
+
+    public List<CustomUsers> findAllByPeriodGradeRoleCampusIds(String period, Integer gradeId, Integer roleId, Integer campusId) {
+        String query = "select " +
+                "    uuid() as uuid, " +
+                "    substring_index(group_concat(users.id), ',', 1) as id, " +
+                "    users.keyword as userKeyword, " +
+                "    users.periods as period, " +
+                "    roles.name as role, " +
+                "    modality.description as modality, " +
+                "    campus.name as campus, " +
+                "    grades.name as grade, " +
+                "    group_concat(users.keyword_course) as coursesKeyword " +
+                "from users " +
+                "    left join roles on roles.id = users.roles_id " +
+                "    left join modality on modality.id = users.modality_id " +
+                "    left join campus_codes on campus_codes.id = users.campus_code_id " +
+                "    left join campus on campus.id = campus_codes.campus_id " +
+                "    left join grades on grades.id = users.grades_id " +
+                "where " +
+                (period == null || period.isEmpty() ?"" :("users.periods = '" + period + "' and ")) +
+                (gradeId == null ? "" :("users.grades_id = '" + gradeId + "' and ")) +
+                (roleId == null ? "" :("   users.roles_id = '" + roleId + "' and ")) +
+                "   campus_codes.campus_id = '" + campusId + "' " +
+                "group by users.keyword, users.periods, roles.id, modality.id, campus.id, grades.id " +
+                "order by users.keyword, users.periods, roles.id, campus.id, modality.id;";
+        try { return entityManager.createNativeQuery(query, CustomUsers.class).getResultList(); }
+        catch (Exception ignore) { return new ArrayList<>(); }
+    }
 }

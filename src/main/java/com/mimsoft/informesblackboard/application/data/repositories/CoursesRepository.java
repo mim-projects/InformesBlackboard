@@ -44,6 +44,10 @@ public class CoursesRepository {
                 "order by trim(courses.name);");
     }
 
+    public void create(Courses courses) {
+        repository.create(courses);
+    }
+
     public void createIgnore(Courses courses) {
         try {
             String query = "insert ignore into courses (" +

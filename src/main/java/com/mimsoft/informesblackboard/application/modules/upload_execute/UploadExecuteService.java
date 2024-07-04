@@ -47,7 +47,7 @@ public class UploadExecuteService {
         setProgress(0);
     }
 
-    private synchronized void processCycle(String path, UploadExecuteCycle uploadExecuteCycle) throws Exception {
+    private void processCycle(String path, UploadExecuteCycle uploadExecuteCycle) throws Exception {
         if (processComplete != null && processComplete) throw new IllegalStateException("processComplete has already been called");
         try {
             processComplete = false;
@@ -72,14 +72,14 @@ public class UploadExecuteService {
     }
 
     @Lock(LockType.READ)
-    public synchronized void executeProcessUsers(String path, UserTransaction userTransaction) throws Exception {
+    public void executeProcessUsers(String path, UserTransaction userTransaction) throws Exception {
         processUsersServices.load();
         userTransaction.setTransactionTimeout(Configuration.TRANSACTION_TIME_SQL);
         process(path, (currentLine, totalLine, data) -> processUsersServices.execute(currentLine, totalLine, data));
     }
 
     @Lock(LockType.READ)
-    public synchronized void executeProcessCourses(String path, UserTransaction userTransaction) throws Exception {
+    public void executeProcessCourses(String path, UserTransaction userTransaction) throws Exception {
         processCoursesServices.load();
         userTransaction.setTransactionTimeout(Configuration.TRANSACTION_TIME_SQL);
         process(path, (currentLine, totalLine, data) -> processCoursesServices.execute(currentLine, totalLine, data));

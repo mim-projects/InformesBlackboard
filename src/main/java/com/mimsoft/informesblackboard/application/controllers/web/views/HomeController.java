@@ -1,6 +1,7 @@
 package com.mimsoft.informesblackboard.application.controllers.web.views;
 
 import com.mimsoft.informesblackboard.application.controllers.web.common.AbstractSessionController;
+import com.mimsoft.informesblackboard.application.data.queries.custom_periods.CustomPeriods;
 import com.mimsoft.informesblackboard.application.data.queries.custom_periods.CustomPeriodsRepository;
 import com.mimsoft.informesblackboard.application.data.repositories.GradesRepository;
 import com.mimsoft.informesblackboard.application.data.repositories.StorageHistoryRepository;
@@ -34,20 +35,17 @@ public class HomeController extends AbstractSessionController {
     @Override
     public void init() {
         List<Grades> gradesList = gradesRepository.findAll();
-        String result = customPeriodsRepository.findLastString();
-        selectedPeriodUsers = new String[gradesList.size()];
-        selectedPeriodCourses = new String[gradesList.size()];
-        for (int i = 0; i < gradesList.size(); i++) {
-            selectedPeriodUsers[i] = result;
-            selectedPeriodCourses[i] = result;
-        }
+        selectedPeriodUsers = new String[gradesList.size() + 1];
+        selectedPeriodCourses = new String[gradesList.size() + 1];
     }
 
     public String getCustomTableCourses(String period, Grades grades) {
+        if (period == null || period.isEmpty()) return "<div style='text-align: center; font-size: 1.35rem; margin: 2rem;'>" + sessionController.getBundleMessage("empty_table") + "</div>";
         return tablesServices.getCustomPeriodCourses(period, grades);
     }
 
     public String getCustomTableUsers(String period, Grades grades) {
+        if (period == null || period.isEmpty()) return "<div style='text-align: center; font-size: 1.35rem; margin: 2rem;'>" + sessionController.getBundleMessage("empty_table") + "</div>";
         return tablesServices.getCustomPeriodUsers(period, grades);
     }
 
@@ -57,8 +55,12 @@ public class HomeController extends AbstractSessionController {
         return chartsServices.getStorageHistory(list);
     }
 
-    public List<String> getCoursesPeriod() {
-        return customPeriodsRepository.findAllString();
+    public List<CustomPeriods> getCoursesPeriodUsers() {
+        return customPeriodsRepository.findAllForUsers();
+    }
+
+    public List<CustomPeriods> getCoursesPeriodCourses() {
+        return customPeriodsRepository.findAllForCourses();
     }
 
     public List<Grades> getAllGrades() {

@@ -9,7 +9,7 @@ import java.util.List;
 @RequestScoped
 public class ChartsServices {
     public String getEmptyShowMessage(String message) {
-        return "{ grid: { left: '2%', right: '2%', top: '2%', bottom: '2%' }, title: { text: \"" + message + "\", show: true, left: \"center\", top: \"center\", textStyle: { fontWeight: \"normal\" } } }";
+        return "{ grid: { left: '2%', right: '2%', top: '2%', bottom: '2%' }, title: { text: \"" + message + "\", show: true, left: \"center\", top: \"center\", textStyle: { fontWeight: \"normal\", color: \"var(--text-color)\" } } }";
     }
 
     public String getStorageHistory(List<StorageHistory> list) {

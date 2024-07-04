@@ -23,24 +23,61 @@
                     </div>
                 </div>
                 <div class="content-card">
-                    <p:dataTable widgetVar="datatable_form_data" styleClass="custom-table"
+                    <div style="display: grid; gap: 1.5rem; margin: 2rem 0">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem">
+                            <div class="input-group">
+                                <p:outputLabel for="@next" value="#{bundle.periods}"/>
+                                <p:selectOneMenu value="#{usersCtrl.selectedPeriodId}" styleClass="ui-custom-filter">
+                                    <f:selectItems value="#{usersCtrl.allPeriodsString}" var="period" itemValue="#{period}" itemLabel="#{period}"/>
+                                    <p:ajax event="change" update="btn_search"/>
+                                </p:selectOneMenu>
+                            </div>
+                            <div class="input-group">
+                                <p:outputLabel for="@next" value="#{bundle.grades}"/>
+                                <p:selectOneMenu value="#{usersCtrl.selectedGradeId}" styleClass="ui-custom-filter">
+                                    <f:selectItem itemLabel="#{bundle.all}" itemValue="#{null}" noSelectionOption="true"/>
+                                    <f:selectItems value="#{usersCtrl.allGrades}" var="grades" itemValue="#{grades.id}" itemLabel="#{grades.name}"/>
+                                </p:selectOneMenu>
+                            </div>
+                            <div class="input-group">
+                                <p:outputLabel for="@next" value="#{bundle.roles}"/>
+                                <p:selectOneMenu value="#{usersCtrl.selectedRoleId}" styleClass="ui-custom-filter">
+                                    <f:selectItem itemLabel="#{bundle.all}" itemValue="#{null}" noSelectionOption="true"/>
+                                    <f:selectItems value="#{usersCtrl.allRoles}" var="roles" itemValue="#{roles.id}" itemLabel="#{roles.name}"/>
+                                </p:selectOneMenu>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <p:outputLabel for="@next" value="#{bundle.campus}"/>
+                            <p:selectOneMenu value="#{usersCtrl.selectedCampusId}" styleClass="ui-custom-filter">
+                                <f:selectItems value="#{usersCtrl.allCampus}" var="campus" itemValue="#{campus.id}" itemLabel="#{campus.name}"/>
+                            </p:selectOneMenu>
+                        </div>
+                        <div>
+                            <p:commandButton id="btn_search" disabled="#{usersCtrl.disabledSearch}" value="#{bundle.search}"
+                                             icon="pi pi-search" actionListener="#{usersCtrl.search()}"
+                                             update="datatable_form_data_id counter"
+                                             onstart="createGlobalLoader()" oncomplete="removeGlobalLoader()"/>
+                        </div>
+                    </div>
+                    <p:dataTable id="datatable_form_data_id" widgetVar="datatable_form_data" styleClass="custom-table"
                                  paginator="true" paginatorAlwaysVisible="false" rows="12" paginatorPosition="bottom"
                                  tableStyle="min-width: 70rem !important;" value="#{usersCtrl.customUsersLazyDataModel}" var="item">
                         <p:ajax event="filter" oncomplete="updateCoursesCounter()"/>
                         <p:column headerText="#{bundle.users}" field="userKeyword"/>
-                        <p:column headerText="#{bundle.periods}" field="period">
-                            <f:facet name="filter">
-                                <p:selectOneMenu onchange="PF('datatable_form_data').filter()" styleClass="ui-custom-filter">
-                                    <f:selectItem itemLabel="#{bundle.all}" itemValue="#{null}" noSelectionOption="true"/>
-                                    <f:selectItems value="#{usersCtrl.allPeriodsString}" var="period" itemValue="#{period}" itemLabel="#{period}"/>
-                                </p:selectOneMenu>
-                            </f:facet>
-                        </p:column>
-                        <p:column headerText="#{bundle.role}" field="role">
+                        <p:column headerText="#{bundle.role}" field="role" rendered="#{empty usersCtrl.selectedRoleId}">
                             <f:facet name="filter">
                                 <p:selectOneMenu onchange="PF('datatable_form_data').filter()" styleClass="ui-custom-filter">
                                     <f:selectItem itemLabel="#{bundle.all}" itemValue="#{null}" noSelectionOption="true"/>
                                     <f:selectItems value="#{usersCtrl.allRoles}" var="roles" itemValue="#{roles.name}" itemLabel="#{roles.name}"/>
+                                </p:selectOneMenu>
+                            </f:facet>
+                        </p:column>
+                        <p:column headerText="#{bundle.grades}" field="grade" rendered="#{empty usersCtrl.selectedGradeId}">
+                            <f:facet name="filter">
+                                <p:selectOneMenu onchange="PF('datatable_form_data').filter()" styleClass="ui-custom-filter">
+                                    <f:selectItem itemLabel="#{bundle.all}" itemValue="#{null}" noSelectionOption="true"/>
+                                    <f:selectItems value="#{usersCtrl.allGrades}" var="grades" itemValue="#{grades.name}" itemLabel="#{grades.name}"/>
                                 </p:selectOneMenu>
                             </f:facet>
                         </p:column>
@@ -49,22 +86,6 @@
                                 <p:selectOneMenu onchange="PF('datatable_form_data').filter()" styleClass="ui-custom-filter">
                                     <f:selectItem itemLabel="#{bundle.all}" itemValue="#{null}" noSelectionOption="true"/>
                                     <f:selectItems value="#{usersCtrl.allModalities}" var="modality" itemValue="#{modality.description}" itemLabel="#{modality.description}"/>
-                                </p:selectOneMenu>
-                            </f:facet>
-                        </p:column>
-                        <p:column headerText="#{bundle.campus}" field="campus">
-                            <f:facet name="filter">
-                                <p:selectOneMenu onchange="PF('datatable_form_data').filter()" styleClass="ui-custom-filter">
-                                    <f:selectItem itemLabel="#{bundle.all}" itemValue="#{null}" noSelectionOption="true"/>
-                                    <f:selectItems value="#{usersCtrl.allCampus}" var="campus" itemValue="#{campus.name}" itemLabel="#{campus.name}"/>
-                                </p:selectOneMenu>
-                            </f:facet>
-                        </p:column>
-                        <p:column headerText="#{bundle.grades}" field="grade">
-                            <f:facet name="filter">
-                                <p:selectOneMenu onchange="PF('datatable_form_data').filter()" styleClass="ui-custom-filter">
-                                    <f:selectItem itemLabel="#{bundle.all}" itemValue="#{null}" noSelectionOption="true"/>
-                                    <f:selectItems value="#{usersCtrl.allGrades}" var="grades" itemValue="#{grades.name}" itemLabel="#{grades.name}"/>
                                 </p:selectOneMenu>
                             </f:facet>
                         </p:column>

@@ -58,7 +58,7 @@ public class StorageController extends AbstractSessionController {
     }
 
     public List<StorageHistory> getAllStorageHistory() {
-        return storageHistoryRepository.findAll();
+        return storageHistoryRepository.findAllDesc();
     }
 
     public StorageHistory getSelectedStorageHistory() {

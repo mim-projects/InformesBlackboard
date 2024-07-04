@@ -2,7 +2,7 @@ package com.mimsoft.informesblackboard.application.controllers.web.views.registe
 
 import com.mimsoft.informesblackboard.application.controllers.shared.RequestController;
 import com.mimsoft.informesblackboard.application.controllers.web.common.AbstractSessionController;
-import com.mimsoft.informesblackboard.application.data.models.lazy.UsersLazyDataModel;
+import com.mimsoft.informesblackboard.application.data.models.lazy.CustomUserLazyDataModel;
 import com.mimsoft.informesblackboard.application.data.queries.custom_periods.CustomPeriodsRepository;
 import com.mimsoft.informesblackboard.application.data.queries.custom_users.CustomUsers;
 import com.mimsoft.informesblackboard.application.data.queries.custom_users.CustomUsersHelper;
@@ -62,7 +62,7 @@ public class UsersDetailsController extends AbstractSessionController {
                 result.add(CustomUsersHelper.copy(item, current));
             }
         }
-        customUsersLazyDataModel = new UsersLazyDataModel(new ArrayList<>(result));
+        customUsersLazyDataModel = new CustomUserLazyDataModel(new ArrayList<>(result));
     }
 
     public Users getCurrentUser() {

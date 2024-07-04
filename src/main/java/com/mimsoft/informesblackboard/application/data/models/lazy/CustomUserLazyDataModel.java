@@ -11,8 +11,8 @@ import java.util.List;
 import static com.mimsoft.informesblackboard.application.utils.others.StringHelper.CleanStrLowerCase;
 import static com.mimsoft.informesblackboard.application.utils.others.StringHelper.CompareStrings;
 
-public class UsersLazyDataModel extends GenericLazyDataModel<CustomUsers> {
-    public UsersLazyDataModel(List<CustomUsers> datasource) {
+public class CustomUserLazyDataModel extends GenericLazyDataModel<CustomUsers> {
+    public CustomUserLazyDataModel(List<CustomUsers> datasource) {
         super(datasource);
     }
 
