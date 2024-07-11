@@ -1,8 +1,11 @@
 package com.mimsoft.informesblackboard.application.controllers.web.views;
 
 import com.mimsoft.informesblackboard.application.controllers.web.common.AbstractSessionController;
+import com.mimsoft.informesblackboard.application.data.models.helper.CustomTableCoursesUsersHelper;
 import com.mimsoft.informesblackboard.application.data.queries.custom_periods.CustomPeriods;
 import com.mimsoft.informesblackboard.application.data.queries.custom_periods.CustomPeriodsRepository;
+import com.mimsoft.informesblackboard.application.data.queries.custom_table_courses_users.CustomTableCoursesUsers;
+import com.mimsoft.informesblackboard.application.data.queries.custom_table_courses_users.CustomTableCoursesUsersRepository;
 import com.mimsoft.informesblackboard.application.data.repositories.GradesRepository;
 import com.mimsoft.informesblackboard.application.data.repositories.StorageHistoryRepository;
 import com.mimsoft.informesblackboard.application.modules.graphics.ChartsServices;
@@ -28,6 +31,8 @@ public class HomeController extends AbstractSessionController {
     private GradesRepository gradesRepository;
     @Inject
     private StorageHistoryRepository storageHistoryRepository;
+    @Inject
+    private CustomTableCoursesUsersRepository customTableCoursesUsersRepository;
 
     private String[] selectedPeriodUsers;
     private String[] selectedPeriodCourses;
@@ -40,13 +45,25 @@ public class HomeController extends AbstractSessionController {
     }
 
     public String getCustomTableCourses(String period, Grades grades) {
-        if (period == null || period.isEmpty()) return "<div style='text-align: center; font-size: 1.35rem; margin: 2rem;'>" + sessionController.getBundleMessage("empty_table") + "</div>";
-        return tablesServices.getCustomPeriodCourses(period, grades);
+        String defaultTableStr = "<div style='text-align: center; font-size: 1.35rem; margin: 2rem;'>" + sessionController.getBundleMessage("empty_table") + "</div>";
+        if (period == null || period.isEmpty() || grades == null) return defaultTableStr;
+        CustomTableCoursesUsersHelper customTableCoursesUsersHelper = new CustomTableCoursesUsersHelper();
+        for (CustomTableCoursesUsers item: customTableCoursesUsersRepository.findCourses(period, grades.getId())) {
+            customTableCoursesUsersHelper.add(item.getCampusId().getName(), item.getModalityId().getDescription() + " (" + item.getModalityId().getName() + ")", item.getValue());
+        }
+        if (!customTableCoursesUsersHelper.render()) return defaultTableStr;
+        return tablesServices.getCustomPeriodTable(customTableCoursesUsersHelper);
     }
 
     public String getCustomTableUsers(String period, Grades grades) {
-        if (period == null || period.isEmpty()) return "<div style='text-align: center; font-size: 1.35rem; margin: 2rem;'>" + sessionController.getBundleMessage("empty_table") + "</div>";
-        return tablesServices.getCustomPeriodUsers(period, grades);
+        String defaultTableStr = "<div style='text-align: center; font-size: 1.35rem; margin: 2rem;'>" + sessionController.getBundleMessage("empty_table") + "</div>";
+        if (period == null || period.isEmpty() || grades == null) return defaultTableStr;
+        CustomTableCoursesUsersHelper customTableCoursesUsersHelper = new CustomTableCoursesUsersHelper();
+        for (CustomTableCoursesUsers item: customTableCoursesUsersRepository.findUsers(period, grades.getId())) {
+            customTableCoursesUsersHelper.add(item.getCampusId().getName(), item.getRolesId().getName(), item.getValue());
+        }
+        if (!customTableCoursesUsersHelper.render()) return defaultTableStr;
+        return tablesServices.getCustomPeriodTable(customTableCoursesUsersHelper);
     }
 
     public String getStorageHistory() {
