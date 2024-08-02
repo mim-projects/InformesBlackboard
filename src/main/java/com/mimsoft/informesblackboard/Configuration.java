@@ -1,9 +1,9 @@
 package com.mimsoft.informesblackboard;
 
 public class Configuration {
-    public static final boolean SERVER = false;
+    public static final boolean SERVER = true;
     public static final String PATH_FILE = SERVER
-            ?"/opt/wildfly/xxxx-xxxx-xxxx/storage/"
+            ?"/opt/wildfly/informes_blackboard/storage/"
             :"C:/Users/amcod/Desktop/mimsoft/SistemaInformesBlackboard/InformesBlackboard/development/storage/";
     public static final String PATH_FILE_UPLOADS = PATH_FILE + "upload/";
     public static final long MILLIS_EXPIRED_TIME_SESSION = 40 * 60000;
