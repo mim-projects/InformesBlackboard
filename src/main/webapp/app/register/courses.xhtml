@@ -24,7 +24,8 @@
                 <div class="content-card">
                     <p:dataTable widgetVar="datatable_form_data" styleClass="custom-table" lazy="true"
                                  paginator="true" paginatorAlwaysVisible="false" rows="12" paginatorPosition="bottom"
-                                 tableStyle="min-width: 50rem !important;" value="#{coursesCtrl.coursesLazyDataModel}" var="item">
+                                 tableStyle="min-width: 50rem !important;" value="#{coursesCtrl.coursesLazyDataModel}" var="item"
+                                 multiViewState="true">
                         <p:ajax event="filter" oncomplete="updateCoursesCounter()"/>
                         <p:column headerText="#{bundle.keyword}" field="keyword" width="8rem"/>
                         <p:column headerText="#{bundle.name}" field="name"/>
