@@ -3,6 +3,9 @@ package com.mimsoft.informesblackboard.application.modules.upload_execute.servic
 import com.mimsoft.informesblackboard.application.data.constants.GradesConstant;
 import com.mimsoft.informesblackboard.application.data.constants.RolesConstant;
 import com.mimsoft.informesblackboard.application.data.repositories.*;
+import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheKeywords;
+import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheServices;
+import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheStatus;
 import com.mimsoft.informesblackboard.domain.entities.*;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -24,6 +27,8 @@ public class ProcessUsersServices {
     private RolesRepository rolesRepository;
     @Inject
     private UsersRepository usersRepository;
+    @Inject
+    private SimulateCacheServices simulateCacheServices;
 
     private HashMap<Integer, Grades> gradesHashMap;
     private HashMap<String, Modality> modalityHasMap;
@@ -62,5 +67,14 @@ public class ProcessUsersServices {
         users.setCampusCodesId(campusCodesHashMap.get(keyword[1]));
         users.setModalityId(modalityHasMap.get(keyword[keyword.length - 2]));
         usersRepository.createIgnore(users);
+
+        // ====================================================================
+        if (currentLine == 1) {
+            String keywords = SimulateCacheKeywords.CustomTableCoursesUsersRepositoryFindUsers.getKeyword() + users.getPeriods() + "_" + grades.getId();
+            simulateCacheServices.status(keywords, SimulateCacheStatus.PROCESS);
+        } else if (currentLine == totalLine - 1) {
+            String keywords = SimulateCacheKeywords.CustomTableCoursesUsersRepositoryFindUsers.getKeyword() + users.getPeriods() + "_" + grades.getId();
+            simulateCacheServices.status(keywords, SimulateCacheStatus.UPDATED);
+        }
     }
 }

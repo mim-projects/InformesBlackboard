@@ -3,7 +3,6 @@ package com.mimsoft.informesblackboard.application.controllers.web.views;
 import com.mimsoft.informesblackboard.Configuration;
 import com.mimsoft.informesblackboard.application.controllers.web.common.AbstractSessionController;
 import com.mimsoft.informesblackboard.application.modules.upload_execute.UploadExecuteService;
-import com.mimsoft.informesblackboard.application.utils.others.DateHelper;
 import jakarta.annotation.Resource;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -46,10 +45,8 @@ public class UploadController extends AbstractSessionController {
             String pathname = Configuration.PATH_FILE_UPLOADS + filename;
             File file = new File(pathname);
             FileUtils.writeByteArrayToFile(file, data);
-            Date start = new Date();
             if (selectedTypeFile.equalsIgnoreCase("users")) uploadExecuteService.executeProcessUsers(pathname, userTransaction);
             else if (selectedTypeFile.equalsIgnoreCase("courses")) uploadExecuteService.executeProcessCourses(pathname, userTransaction);
-            System.out.println("Duration: " + DateHelper.DiffSeconds(start, new Date()));
             FileUtils.forceDelete(file);
         } catch (Exception e) {
             e.printStackTrace();

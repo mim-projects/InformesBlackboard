@@ -5,6 +5,9 @@ import com.mimsoft.informesblackboard.application.data.repositories.CampusCodesR
 import com.mimsoft.informesblackboard.application.data.repositories.CoursesRepository;
 import com.mimsoft.informesblackboard.application.data.repositories.GradesRepository;
 import com.mimsoft.informesblackboard.application.data.repositories.ModalityRepository;
+import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheKeywords;
+import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheServices;
+import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheStatus;
 import com.mimsoft.informesblackboard.application.utils.others.StringHelper;
 import com.mimsoft.informesblackboard.domain.entities.CampusCodes;
 import com.mimsoft.informesblackboard.domain.entities.Courses;
@@ -28,6 +31,8 @@ public class ProcessCoursesServices {
     private ModalityRepository modalityRepository;
     @Inject
     private CoursesRepository coursesRepository;
+    @Inject
+    private SimulateCacheServices simulateCacheServices;
 
     private HashMap<Integer, Grades> gradesHashMap;
     private HashMap<String, Modality> modalityHasMap;
@@ -62,5 +67,14 @@ public class ProcessCoursesServices {
         courses.setGradesId(grades);
         courses.setHashCode(parts[0]);
         coursesRepository.create(courses);
+
+        // ====================================================================
+        if (currentLine == 1) {
+            String keywords = SimulateCacheKeywords.CustomTableCoursesUsersRepositoryFindUsers.getKeyword() + courses.getPeriods() + "_" + grades.getId();
+            simulateCacheServices.status(keywords, SimulateCacheStatus.PROCESS);
+        } else if (currentLine == totalLine - 1) {
+            String keywords = SimulateCacheKeywords.CustomTableCoursesUsersRepositoryFindUsers.getKeyword() + courses.getPeriods() + "_" + grades.getId();
+            simulateCacheServices.status(keywords, SimulateCacheStatus.UPDATED);
+        }
     }
 }

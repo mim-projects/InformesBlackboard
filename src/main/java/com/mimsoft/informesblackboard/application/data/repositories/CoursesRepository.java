@@ -2,7 +2,9 @@ package com.mimsoft.informesblackboard.application.data.repositories;
 
 import com.mimsoft.informesblackboard.domain.core.Repository;
 import com.mimsoft.informesblackboard.domain.core.RepositoryClass;
+import com.mimsoft.informesblackboard.domain.entities.Campus;
 import com.mimsoft.informesblackboard.domain.entities.Courses;
+import com.mimsoft.informesblackboard.domain.entities.Grades;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 
@@ -40,5 +42,13 @@ public class CoursesRepository {
 
     public void create(Courses courses) {
         repository.create(courses);
+    }
+
+    public void removeAllByPeriodCampusGrades(String periods, Campus campusId, Grades gradesId) {
+        String query = "delete courses from courses left join campus_codes on campus_codes.id = courses.campus_code_id where " +
+                "periods = '" + periods + "' and " +
+                "grades_id = '" + gradesId.getId() + "' and " +
+                "campus_id = '" + campusId.getId() + "'";
+        repository.executeNativeQuery(query);
     }
 }

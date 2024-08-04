@@ -5,7 +5,6 @@ import com.mimsoft.informesblackboard.domain.core.Repository;
 import com.mimsoft.informesblackboard.domain.core.RepositoryClass;
 import com.mimsoft.informesblackboard.domain.entities.Campus;
 import com.mimsoft.informesblackboard.domain.entities.Grades;
-import com.mimsoft.informesblackboard.domain.entities.Roles;
 import com.mimsoft.informesblackboard.domain.entities.Users;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -54,44 +53,11 @@ public class UsersRepository {
         return repository.findOne("campusCodesId.id", "'" + campusCodeId + "'");
     }
 
-    public int findTotalByRolesCampusPeriodGrade(Roles roles, Campus campus, String period, Grades grades) {
-        String query = " " +
-                "select " +
-                "    uuid() as id, " +
-                "    '' as keyword, " +
-                "    count(t.keyword) as value " +
-                "from ( " +
-                "    select " +
-                "        users.keyword " +
-                "    from users " +
-                "        left join campus_codes on campus_codes.id = users.campus_code_id " +
-                "    where " +
-                "        campus_codes.campus_id = '" + campus.getId() + "' and " +
-                "        periods = '" + period + "' and " +
-                "        grades_id = '" + grades.getId() + "' and " +
-                "        roles_id = '" + roles.getId() + "' " +
-                "    group by users.keyword " +
-                ") as t;";
-        return (int) customKeywordValueRepository.getValueSingleQuery(0, query);
-    }
-
-    public int findTotalByCampusPeriodGrade(Campus campus, String period, Grades grades) {
-        String query = " " +
-                "select " +
-                "    uuid() as id, " +
-                "    '' as keyword, " +
-                "    count(t.keyword) as value " +
-                "from ( " +
-                "    select " +
-                "        users.keyword " +
-                "    from users " +
-                "        left join campus_codes on campus_codes.id = users.campus_code_id " +
-                "    where " +
-                "        campus_codes.campus_id = '" + campus.getId() + "' and " +
-                "        periods = '" + period + "' and " +
-                "        grades_id = '" + grades.getId() + "' " +
-                "    group by users.keyword " +
-                ") as t;";
-        return (int) customKeywordValueRepository.getValueSingleQuery(0, query);
+    public void removeAllByPeriodCampusGrades(String periods, Campus campusId, Grades gradesId) {
+        String query = "delete users from users left join campus_codes on campus_codes.id = users.campus_code_id where " +
+                "periods = '" + periods + "' and " +
+                "grades_id = '" + gradesId.getId() + "' and " +
+                "campus_id = '" + campusId.getId() + "'";
+        repository.executeNativeQuery(query);
     }
 }

@@ -7,6 +7,7 @@ public enum Routes {
     REGISTER_CAMPUS(new Route("register_campus", "/app/register/campus/index.xhtml")),
     REGISTER_CAMPUS_CODES(new Route("register_campus_codes", "/app/register/campus/codes.xhtml")),
     REGISTER_GRADES(new Route("register_grades", "/app/register/grades.xhtml")),
+    REGISTER_PERIODS(new Route("register_periods", "/app/register/periods.xhtml")),
     REGISTER_MODALITY(new Route("register_modality", "/app/register/modality.xhtml")),
     REGISTER_COURSES(new Route("register_courses", "/app/register/courses.xhtml")),
     REGISTER_USERS(new Route("register_users", "/app/register/users/index.xhtml")),
@@ -14,6 +15,7 @@ public enum Routes {
     REGISTER_STORAGE(new Route("register_storage", "/app/register/storage.xhtml")),
     PLATFORM_ROLES(new Route("platform_roles", "/app/platform/roles.xhtml")),
     PLATFORM_USERS(new Route("platform_users", "/app/platform/users.xhtml")),
+    PLATFORM_CACHE(new Route("platform_cache", "/app/platform/cache.xhtml")),
     PROFILE(new Route("profile", "/app/profile.xhtml")),
     ;
     private final Route route;

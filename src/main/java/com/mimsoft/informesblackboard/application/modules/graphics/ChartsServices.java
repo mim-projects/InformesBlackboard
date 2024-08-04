@@ -41,7 +41,10 @@ public class ChartsServices {
                 "    { " +
                 "      data: [" + data + "], " +
                 "      type: 'line', " +
-                "      areaStyle: {} " +
+                "      emphasis: { disabled: true }, " +
+                "      areaStyle: { color: \"var(--primary-color)\" }, " +
+                "      lineStyle: { color: \"var(--primary-color)\" }, " +
+                "      itemStyle: { color: \"var(--primary-color)\" }" +
                 "    } " +
                 "  ] " +
                 "}";

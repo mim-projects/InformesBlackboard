@@ -1,0 +1,59 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+                template="/templates/template_app.xhtml">
+   <ui:define name="container_body">
+      <div class="container">
+         <h:form id="form_data" styleClass="card">
+            <div class="title-card">
+               <div class="title-card-icon-text">
+                  <i class="pi pi-calendar-times"></i>
+                  <h1>#{bundle.periods}</h1>
+               </div>
+            </div>
+            <div class="content-card">
+               <p:dataTable widgetVar="datatable_form_data" styleClass="custom-table"
+                            paginator="true" paginatorAlwaysVisible="false" rows="12" paginatorPosition="bottom"
+                            tableStyle="min-width: 60rem !important;" value="#{periodsCtrl.allCustomPeriodsGradesCampus}" var="item">
+                  <p:column headerText="#{bundle.periods}" field="periods"/>
+                   <p:column headerText="#{bundle.campus}" field="campusId.name">
+                       <f:facet name="filter">
+                           <p:selectOneMenu onchange="PF('datatable_form_data').filter()" styleClass="ui-custom-filter">
+                               <f:selectItem itemLabel="#{bundle.all}" itemValue="#{null}" noSelectionOption="true"/>
+                               <f:selectItems value="#{periodsCtrl.allCampus}" var="campus" itemValue="#{campus}" itemLabel="#{campus}"/>
+                           </p:selectOneMenu>
+                       </f:facet>
+                   </p:column>
+                   <p:column headerText="#{bundle.grades}" field="gradesId.name">
+                       <f:facet name="filter">
+                           <p:selectOneMenu onchange="PF('datatable_form_data').filter()" styleClass="ui-custom-filter">
+                               <f:selectItem itemLabel="#{bundle.all}" itemValue="#{null}" noSelectionOption="true"/>
+                               <f:selectItems value="#{periodsCtrl.allGrades}" var="grades" itemValue="#{grades}" itemLabel="#{grades}"/>
+                           </p:selectOneMenu>
+                       </f:facet>
+                   </p:column>
+                   <p:column headerText="#{bundle.type}" field="table">
+                       <f:facet name="filter">
+                           <p:selectOneMenu onchange="PF('datatable_form_data').filter()" styleClass="ui-custom-filter">
+                               <f:selectItem itemLabel="#{bundle.all}" itemValue="#{null}" noSelectionOption="true"/>
+                               <f:selectItems value="#{periodsCtrl.allTables}" var="tables" itemValue="#{tables}" itemLabel="#{tables}"/>
+                           </p:selectOneMenu>
+                       </f:facet>
+                   </p:column>
+                   <p:column headerText="#{bundle.options}" width="18rem">
+                       <p:commandButton value="#{bundle.remove}" styleClass="ui-button-flat ui-button-danger"
+                                        actionListener="#{periodsCtrl.remove(item)}" update="@form"
+                                        onstart="createGlobalLoader('#{bundle.loading}')" oncomplete="removeGlobalLoader()">
+                           <p:confirm header="#{bundle.confirmation}" message="#{bundle.want_delete_record}" icon="pi pi-info-circle"/>
+                       </p:commandButton>
+                       <p:commandButton value="#{bundle.clean_cache}" styleClass="ui-button-flat ui-button-success"
+                                        actionListener="#{periodsCtrl.cleanCache(item)}" update="@form"
+                                        onstart="createGlobalLoader('#{bundle.loading}')" oncomplete="removeGlobalLoader()"/>
+                   </p:column>
+               </p:dataTable>
+            </div>
+         </h:form>
+      </div>
+   </ui:define>
+</ui:composition>

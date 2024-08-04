@@ -25,7 +25,9 @@
                         </div>
                     </div>
                     <div class="content-card">
-                        <h:outputText escape="false" value="#{homeCtrl.getCustomTableCourses(homeCtrl.selectedPeriodCourses[statusCourses.index + 1], grade)}"/>
+                        <div style="overflow-x: auto">
+                            <h:outputText escape="false" value="#{homeCtrl.getCustomTableCourses(homeCtrl.selectedPeriodCourses[statusCourses.index + 1], grade)}"/>
+                        </div>
                     </div>
                 </h:form>
             </ui:repeat>
@@ -46,7 +48,9 @@
                         </div>
                     </div>
                     <div class="content-card">
-                        <h:outputText escape="false" value="#{homeCtrl.getCustomTableUsers(homeCtrl.selectedPeriodUsers[statusUsers.index + 1], grade)}"/>
+                        <div style="overflow-x: auto">
+                            <h:outputText escape="false" value="#{homeCtrl.getCustomTableUsers(homeCtrl.selectedPeriodUsers[statusUsers.index + 1], grade)}"/>
+                        </div>
                     </div>
                 </h:form>
             </ui:repeat>

@@ -1,6 +1,6 @@
-drop database if exists informes_backboard;
-create database informes_backboard;
-use informes_backboard;
+drop database if exists informes_blackboard;
+create database informes_blackboard;
+use informes_blackboard;
 
 create table user_platform_roles (
     id int not null auto_increment primary key,
@@ -82,6 +82,15 @@ create table users (
     foreign key (modality_id) references modality(id),
     foreign key (campus_code_id) references campus_codes(id),
     foreign key (grades_id) references grades(id)
+);
+
+create table static_simple_data_json (
+    id int not null auto_increment primary key,
+    keyword varchar(255) not null,
+    value text not null,
+    status int not null default 0,
+    created_at timestamp default current_timestamp,
+    updated_at timestamp default current_timestamp
 );
 
 # =============================================================================

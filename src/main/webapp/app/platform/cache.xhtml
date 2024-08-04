@@ -1,0 +1,42 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                template="/templates/template_app.xhtml">
+    <ui:define name="container_body">
+        <div class="container">
+            <h:form id="form_data" styleClass="card">
+                <div class="title-card">
+                    <div class="title-card-icon-text">
+                        <i class="pi pi-database"></i>
+                        <h1>#{bundle.cache}</h1>
+                    </div>
+                    <div>
+                        <p:commandButton icon="pi pi-trash" value="#{bundle.clear_all}" actionListener="#{cachePlatformCtrl.removeAll()}"
+                                         styleClass="ui-button-danger ui-button-flat"
+                                         update="@form" onstart="createGlobalLoader('#{bundle.loading}')" oncomplete="removeGlobalLoader()">
+                            <p:confirm header="#{bundle.confirmation}" message="#{bundle.want_delete_record}" icon="pi pi-info-circle"/>
+                        </p:commandButton>
+                    </div>
+                </div>
+                <div class="content-card">
+                    <div style="display: grid; gap: 2rem">
+                        <ui:repeat value="#{cachePlatformCtrl.allCache}" var="item">
+                            <div style="display: grid; overflow-x: auto">
+                                <h1 style="margin: 0 !important; font-size: 1.5rem">#{item.keyword}</h1>
+                                <p style="margin: 0 !important;">#{item.value}</p>
+                                <div>
+                                    <p:commandButton value="#{bundle.remove}" actionListener="#{cachePlatformCtrl.remove(item.keyword)}"
+                                                     icon="pi pi-trash" styleClass="ui-button-danger ui-button-flat" update="@form"
+                                                     onstart="createGlobalLoader('#{bundle.loading}')" oncomplete="removeGlobalLoader()">
+                                        <p:confirm header="#{bundle.confirmation}" message="#{bundle.want_delete_record}" icon="pi pi-info-circle"/>
+                                    </p:commandButton>
+                                </div>
+                            </div>
+                        </ui:repeat>
+                    </div>
+                </div>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>
