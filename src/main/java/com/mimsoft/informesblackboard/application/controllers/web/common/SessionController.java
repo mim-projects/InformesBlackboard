@@ -68,10 +68,6 @@ public class SessionController implements Serializable {
         return currentUser.getUsername().length() > 15 ?currentUser.getUsername().substring(0, 14) :currentUser.getUsername();
     }
 
-    public String getImageThumbnailsProfile() {
-        return "https://rickandmortyapi.com/api/character/avatar/" + currentUser.getId() + ".jpeg";
-    }
-
     public void logout() {
         try {
             currentUser = null;

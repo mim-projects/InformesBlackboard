@@ -9,5 +9,5 @@ public class Configuration {
     public static final long MILLIS_EXPIRED_TIME_SESSION = 40 * 60000;
     public static final long DURATION_MAX_UPDATE_SIMULATE_CACHE = 120 * 60000;
     public static final Integer TRANSACTION_TIME_SQL = 5000;
-    public static String THEME_CSS = "wedgewood";
+    public static String THEME_CSS = "sea-green";
 }

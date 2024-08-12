@@ -24,9 +24,7 @@
             <h:form class="navigator-content">
                 <div class="navigator-drawer-options">
                     <div class="profile-mobile" onclick="navigation('profile')">
-                        <p:avatar icon="pi pi-user" styleClass="mr-2" shape="circle" size="xlarge">
-                            <p:graphicImage style="width: 100%; height: 100%; object-fit: cover;" url="#{sessionCtrl.imageThumbnailsProfile}"/>
-                        </p:avatar>
+                        <p:avatar icon="pi pi-user" label="#{commonCtrl.toUppercase(sessionCtrl.username)}" styleClass="mr-2" shape="square" size="xlarge"/>
                         <div style="display: grid">
                             <span>#{sessionCtrl.name}</span>
                             <span class="profile-username">#{sessionCtrl.username}</span>
@@ -72,7 +70,7 @@
             <h:form id="form_app_header" class="toolbar">
                 <div class="toolbar-left">
                     <div class="toolbar-icon-app">
-                        <p:graphicImage name="/images/svg/logo_v#{sessionCtrl.currentTheme eq 'dark' ?'2' :''}.svg" library="mimsoft" alt="bestcrew"/>
+                        <p:graphicImage name="/images/svg/logo_v2.svg" library="mimsoft" alt="#{bundle.app_name}"/>
                     </div>
                     <div class="flex-hide-mobile">
                         <ui:insert name="navigation-menu">
@@ -105,9 +103,7 @@
                                 <span>#{sessionCtrl.name}</span>
                                 <span class="profile-username" style="text-align: right">#{sessionCtrl.username}</span>
                             </div>
-                            <p:avatar icon="pi pi-user" styleClass="mr-2" shape="circle" size="large">
-                                <p:graphicImage style="width: 100%; height: 100%; object-fit: cover;" url="#{sessionCtrl.imageThumbnailsProfile}"/>
-                            </p:avatar>
+                            <p:avatar icon="pi pi-user" label="#{commonCtrl.toUppercase(sessionCtrl.username)}" styleClass="mr-2" shape="square" size="large"/>
                         </div>
                     </div>
                     <span class="flex-show-mobile">

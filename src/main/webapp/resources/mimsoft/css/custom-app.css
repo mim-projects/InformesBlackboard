@@ -1,3 +1,29 @@
+:root {
+    --uabc-green:  #00723F;
+    --uabc-yellow: #DD971A;
+    --uabc-blue: #20419A;
+    --uabc-black: #000000;
+}
+
+.toolbar {
+    height: calc(var(--toolbar-height) + 10px) !important;
+    background: var(--uabc-green) !important;
+    border-bottom: 10px solid var(--uabc-yellow) !important;
+}
+
+.toolbar button,
+.toolbar .profile-bar {
+    color: white !important;
+}
+
+.toolbar .profile-bar:hover {
+    color: var(--primary-color) !important;
+}
+
+.ui-avatar {
+    background: var(--surface-c) !important;
+}
+
 .ui-datatable .ui-datatable-data .ui-datatable-even {
     border-top: 1px solid var(--surface-ground) !important;
     border-bottom: 1px solid var(--surface-ground) !important;
