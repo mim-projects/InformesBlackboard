@@ -1,31 +1,75 @@
+:root {
+    --columns: 3;
+    --table-height: calc(7 * 2rem);
+    --graphic-height: 16rem;
+}
+
 .container {
     display: grid;
-    grid-template-columns: 1fr 1fr;
     gap: 2rem;
 }
 
-.container .card:nth-child(n+5) {
-    grid-column: span 2;
+#filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 2rem;
+}
+
+#filters p {
+    margin: 0 !important;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.filter-group {
+    display: grid;
+    grid-template-rows: auto 1fr;
+}
+
+.filter-group .filter-groups-checkbox {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
 }
 
 .card {
     margin-bottom: 0 !important;
 }
 
-table td,
-table th {
-    padding: 0.25rem !important;
-    min-width: 2rem !important;
-    border: 1px solid var(--surface-c);
+.card .content-card {
+    display: grid;
+    grid-template-rows: var(--table-height) var(--graphic-height);
+    gap: 1rem;
 }
 
-@media screen and (max-width: 860px) {
-    .container {
-        display: flex;
-        flex-wrap: wrap;
-    }
+.content-card .table {
+    background-color: red;
+}
 
-    .container .card {
+#tables {
+    display: grid;
+    grid-template-columns: repeat(var(--columns), 1fr);
+    gap: 2rem;
+}
+
+@media screen and (max-width: 650px) {
+    .filter-group {
         width: 100%;
+    }
+}
+
+@media screen and (max-width: 1280px) {
+    #tables {
+        --columns: 2;
+    }
+}
+
+@media screen and (max-width: 990px) {
+    #tables {
+        --columns: 1;
     }
 }

@@ -1,13 +1,19 @@
 package com.mimsoft.informesblackboard.application.modules.upload_execute;
 
 import com.mimsoft.informesblackboard.Configuration;
+import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheKeywords;
+import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheServices;
 import com.mimsoft.informesblackboard.application.modules.upload_execute.interfaces.ProcessLineCSV;
 import com.mimsoft.informesblackboard.application.modules.upload_execute.interfaces.UploadExecuteCycle;
 import com.mimsoft.informesblackboard.application.modules.upload_execute.services.ProcessCoursesServices;
+import com.mimsoft.informesblackboard.application.modules.upload_execute.services.ProcessMassiveServices;
 import com.mimsoft.informesblackboard.application.modules.upload_execute.services.ProcessUsersServices;
 import com.mimsoft.informesblackboard.application.utils.system.FileManager;
+import com.mimsoft.informesblackboard.domain.entities.Courses;
+import com.mimsoft.informesblackboard.domain.entities.Users;
 import jakarta.ejb.*;
 import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.UserTransaction;
 
 import java.nio.file.Files;
@@ -15,13 +21,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Singleton
-@ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
+@ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 @TransactionManagement(TransactionManagementType.BEAN)
 public class UploadExecuteService {
     @Inject
     private ProcessUsersServices processUsersServices;
     @Inject
     private ProcessCoursesServices processCoursesServices;
+    @Inject
+    private SimulateCacheServices simulateCacheServices;
 
     private Boolean processComplete = null;
     private int progress = 0;
@@ -72,16 +80,20 @@ public class UploadExecuteService {
     }
 
     @Lock(LockType.READ)
-    public void executeProcessUsers(String path, UserTransaction userTransaction) throws Exception {
+    public void executeProcessUsers(String path, EntityManager entityManager, UserTransaction userTransaction) throws Exception {
         processUsersServices.load();
-        userTransaction.setTransactionTimeout(Configuration.TRANSACTION_TIME_SQL);
-        process(path, (currentLine, totalLine, data) -> processUsersServices.execute(currentLine, totalLine, data));
+        ProcessMassiveServices<Users> processMassiveServices = new ProcessMassiveServices<>(entityManager, userTransaction);
+        process(path, (currentLine, totalLine, data) -> processUsersServices.execute(currentLine, totalLine, data, processMassiveServices::addQueryString));
+        processMassiveServices.executeString();
+        simulateCacheServices.remove(SimulateCacheKeywords.AllPeriods.getKeyword());
     }
 
     @Lock(LockType.READ)
-    public void executeProcessCourses(String path, UserTransaction userTransaction) throws Exception {
+    public void executeProcessCourses(String path, EntityManager entityManager, UserTransaction userTransaction) throws Exception {
         processCoursesServices.load();
-        userTransaction.setTransactionTimeout(Configuration.TRANSACTION_TIME_SQL);
-        process(path, (currentLine, totalLine, data) -> processCoursesServices.execute(currentLine, totalLine, data));
+        ProcessMassiveServices<Courses> processMassiveServices = new ProcessMassiveServices<>(entityManager, userTransaction);
+        process(path, (currentLine, totalLine, data) -> processCoursesServices.execute(currentLine, totalLine, data, processMassiveServices::add));
+        processMassiveServices.execute();
+        simulateCacheServices.remove(SimulateCacheKeywords.AllPeriods.getKeyword());
     }
 }

@@ -71,3 +71,7 @@
     top: 0;
     z-index: -1;
 }
+
+.custom-dialog-title-uppercase .ui-dialog-title {
+    text-transform: uppercase !important;
+}

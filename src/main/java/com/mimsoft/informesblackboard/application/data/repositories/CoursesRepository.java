@@ -8,6 +8,8 @@ import com.mimsoft.informesblackboard.domain.entities.Grades;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @RequestScoped
@@ -25,7 +27,7 @@ public class CoursesRepository {
     }
 
     public List<Courses> findAllDistinct() {
-        return repository.findNativeAll("select " +
+        String query = "select " +
                 "    substring_index(group_concat(courses.id), ',', 1) as id, " +
                 "    courses.keyword, " +
                 "    trim(courses.name) as name, " +
@@ -33,22 +35,25 @@ public class CoursesRepository {
                 "    courses.modality_id, " +
                 "    substring_index(group_concat(courses.campus_code_id), ',', 1) as campus_code_id, " +
                 "    courses.grades_id, " +
-                "    substring_index(group_concat(courses.hash_code), ',', 1) as hash_code " +
+                "    substring_index(group_concat(courses.hash_code), ',', 1) as hash_code, " +
+                "    null as dated_at " +
                 "from courses " +
                 "left join campus_codes on campus_codes.id = courses.campus_code_id " +
                 "group by courses.keyword, courses.name, courses.periods, courses.modality_id, courses.grades_id, campus_codes.campus_id " +
-                "order by trim(courses.name);");
+                "order by trim(courses.name);";
+        return repository.findNativeAll(query);
     }
 
     public void create(Courses courses) {
         repository.create(courses);
     }
 
-    public void removeAllByPeriodCampusGrades(String periods, Campus campusId, Grades gradesId) {
+    public void removeAllByPeriodCampusGrades(String periods, Date datedAt, Campus campusId, Grades gradesId) {
         String query = "delete courses from courses left join campus_codes on campus_codes.id = courses.campus_code_id where " +
                 "periods = '" + periods + "' and " +
                 "grades_id = '" + gradesId.getId() + "' and " +
-                "campus_id = '" + campusId.getId() + "'";
+                "campus_id = '" + campusId.getId() + "' and " +
+                "dated_at = '" + new SimpleDateFormat("yyyy-MM").format(datedAt) + "%' ";
         repository.executeNativeQuery(query);
     }
 }

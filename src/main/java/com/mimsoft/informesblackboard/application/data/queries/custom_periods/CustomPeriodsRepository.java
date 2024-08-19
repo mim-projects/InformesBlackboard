@@ -1,5 +1,9 @@
 package com.mimsoft.informesblackboard.application.data.queries.custom_periods;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheKeywords;
+import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheServices;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
@@ -10,6 +14,8 @@ import java.util.*;
 public class CustomPeriodsRepository {
     @Inject
     private EntityManager entityManager;
+    @Inject
+    private SimulateCacheServices simulateCacheServices;
 
     public String findLastString() {
         List<String> list = findAllString();
@@ -18,12 +24,17 @@ public class CustomPeriodsRepository {
     }
 
     public List<String> findAllString() {
-        Set<String> list = new HashSet<>();
-        for (CustomPeriods item: findAllForUsers()) list.add(item.getName());
-        for (CustomPeriods item: findAllForCourses()) list.add(item.getName());
-        List<String> result = new ArrayList<>(list);
-        Collections.sort(result);
-        return result;
+        String periodsCache = simulateCacheServices.get(SimulateCacheKeywords.AllPeriods.getKeyword());
+        if (periodsCache == null) {
+            Set<String> list = new HashSet<>();
+            for (CustomPeriods item: findAllForUsers()) list.add(item.getName());
+            for (CustomPeriods item: findAllForCourses()) list.add(item.getName());
+            List<String> result = new ArrayList<>(list);
+            Collections.sort(result);
+            simulateCacheServices.put(SimulateCacheKeywords.AllPeriods.getKeyword(), result);
+            periodsCache = simulateCacheServices.get(SimulateCacheKeywords.AllPeriods.getKeyword());
+        }
+        return new Gson().fromJson(periodsCache, new TypeToken<>() {});
     }
 
     public List<CustomPeriods> findAllForUsers() {

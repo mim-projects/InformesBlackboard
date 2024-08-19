@@ -1,4 +1,4 @@
-package com.mimsoft.informesblackboard.application.data.models.helper;
+package com.mimsoft.informesblackboard.application.modules.graphics.models;
 
 import java.util.*;
 

@@ -5,11 +5,15 @@ import com.mimsoft.informesblackboard.application.data.constants.RolesConstant;
 import com.mimsoft.informesblackboard.application.data.repositories.*;
 import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheKeywords;
 import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheServices;
+import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheStaticData;
 import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheStatus;
+import com.mimsoft.informesblackboard.application.modules.upload_execute.interfaces.CallbackEntity;
 import com.mimsoft.informesblackboard.domain.entities.*;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -34,8 +38,10 @@ public class ProcessUsersServices {
     private HashMap<String, Modality> modalityHasMap;
     private HashMap<String, CampusCodes> campusCodesHashMap;
     private HashMap<Integer, Roles> rolesHashMap;
+    private Date date;
 
     public void load() {
+        date = new Date();
         gradesHashMap = new LinkedHashMap<>();
         modalityHasMap = new LinkedHashMap<>();
         campusCodesHashMap = new LinkedHashMap<>();
@@ -47,7 +53,7 @@ public class ProcessUsersServices {
         for (Roles item: rolesRepository.findAll()) rolesHashMap.put(item.getId(), item);
     }
 
-    public void execute(Integer currentLine, Integer totalLine, String data) throws Exception {
+    public void execute(Integer currentLine, Integer totalLine, String data, CallbackEntity<String> callback) throws Exception {
         if (currentLine == 0 || data.contains("***FileFooter")) {
             if (currentLine == 0 && !data.replaceAll(" ", "").equalsIgnoreCase(HEADER)) throw new Exception("Failed Format File");
             return;
@@ -66,15 +72,14 @@ public class ProcessUsersServices {
         users.setGradesId(grades);
         users.setCampusCodesId(campusCodesHashMap.get(keyword[1]));
         users.setModalityId(modalityHasMap.get(keyword[keyword.length - 2]));
-        usersRepository.createIgnore(users);
+        users.setDatedAt(date);
+        callback.callback(usersRepository.createIgnoreQuery(users));
 
         // ====================================================================
         if (currentLine == 1) {
-            String keywords = SimulateCacheKeywords.CustomTableCoursesUsersRepositoryFindUsers.getKeyword() + users.getPeriods() + "_" + grades.getId();
-            simulateCacheServices.status(keywords, SimulateCacheStatus.PROCESS);
+            simulateCacheServices.status(SimulateCacheStaticData.CreateKeywordUsers(users), SimulateCacheStatus.PROCESS);
         } else if (currentLine == totalLine - 1) {
-            String keywords = SimulateCacheKeywords.CustomTableCoursesUsersRepositoryFindUsers.getKeyword() + users.getPeriods() + "_" + grades.getId();
-            simulateCacheServices.status(keywords, SimulateCacheStatus.UPDATED);
+            simulateCacheServices.status(SimulateCacheStaticData.CreateKeywordUsers(users), SimulateCacheStatus.UPDATED);
         }
     }
 }

@@ -63,6 +63,7 @@ create table courses (
     campus_code_id int not null,
     grades_id int not null,
     hash_code varchar(500) not null,
+    dated_at timestamp default current_timestamp,
     foreign key (modality_id) references modality(id),
     foreign key (campus_code_id) references campus_codes(id),
     foreign key (grades_id) references grades(id)
@@ -78,6 +79,7 @@ create table users (
     campus_code_id int not null,
     grades_id int not null,
     hash_code varchar(500) unique not null,
+    dated_at timestamp default current_timestamp,
     foreign key (roles_id) references roles(id),
     foreign key (modality_id) references modality(id),
     foreign key (campus_code_id) references campus_codes(id),
@@ -91,6 +93,13 @@ create table static_simple_data_json (
     status int not null default 0,
     created_at timestamp default current_timestamp,
     updated_at timestamp default current_timestamp
+);
+
+create table file_storage (
+    id int not null auto_increment primary key,
+    name varchar(2000) not null,
+    path varchar(500) not null,
+    created_at timestamp default current_timestamp
 );
 
 # =============================================================================

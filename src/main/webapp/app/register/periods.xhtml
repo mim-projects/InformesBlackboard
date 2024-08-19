@@ -17,6 +17,15 @@
                             paginator="true" paginatorAlwaysVisible="false" rows="12" paginatorPosition="bottom"
                             tableStyle="min-width: 60rem !important;" value="#{periodsCtrl.allCustomPeriodsGradesCampus}" var="item">
                   <p:column headerText="#{bundle.periods}" field="periods"/>
+                  <p:column headerText="#{bundle.date}" filterBy="#{periodsCtrl.getMonth(item.datedAt)}" sortBy="#{periodsCtrl.getMonth(item.datedAt)}">
+                      <f:facet name="filter">
+                          <p:selectOneMenu onchange="PF('datatable_form_data').filter()" styleClass="ui-custom-filter">
+                              <f:selectItem itemLabel="#{bundle.all}" itemValue="#{null}" noSelectionOption="true"/>
+                              <f:selectItems value="#{periodsCtrl.allMonths}" var="month" itemValue="#{month}" itemLabel="#{month}"/>
+                          </p:selectOneMenu>
+                      </f:facet>
+                      <h:outputText value="#{periodsCtrl.getMonth(item.datedAt)}"/>
+                  </p:column>
                    <p:column headerText="#{bundle.campus}" field="campusId.name">
                        <f:facet name="filter">
                            <p:selectOneMenu onchange="PF('datatable_form_data').filter()" styleClass="ui-custom-filter">

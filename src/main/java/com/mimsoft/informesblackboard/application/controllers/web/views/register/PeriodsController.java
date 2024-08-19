@@ -7,14 +7,12 @@ import com.mimsoft.informesblackboard.application.data.repositories.CoursesRepos
 import com.mimsoft.informesblackboard.application.data.repositories.UsersRepository;
 import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheKeywords;
 import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheServices;
+import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheStaticData;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Named("periodsCtrl")
 @ViewScoped
@@ -29,27 +27,24 @@ public class PeriodsController extends AbstractSessionController {
     private SimulateCacheServices simulateCacheServices;
 
     private List<CustomPeriodsGradesCampus> customPeriodsGradesCampusesList;
+    private String[] months;
 
     @Override
     public void init() {
         customPeriodsGradesCampusesList = customPeriodsGradesCampusRepository.getAll();
+        months = sessionController.getBundleMessage("months").split(",");
     }
 
     public void cleanCache(CustomPeriodsGradesCampus item) {
-        String subKeyword = item.getPeriods() + "_" + item.getGradesId().getId();
-        if (item.getTable().equalsIgnoreCase("users")) {
-            simulateCacheServices.remove(SimulateCacheKeywords.CustomTableCoursesUsersRepositoryFindUsers.getKeyword() + subKeyword);
-        } else {
-            simulateCacheServices.remove(SimulateCacheKeywords.CustomTableCoursesUsersRepositoryFindCourses.getKeyword() + subKeyword);
-        }
+        simulateCacheServices.remove(item.getKeywordCache());
     }
 
     public void remove(CustomPeriodsGradesCampus item) {
         cleanCache(item);
         if (item.getTable().equalsIgnoreCase("users")) {
-            usersRepository.removeAllByPeriodCampusGrades(item.getPeriods(), item.getCampusId(), item.getGradesId());
+            usersRepository.removeAllByPeriodCampusGrades(item.getPeriods(), item.getDatedAt(), item.getCampusId(), item.getGradesId());
         } else {
-            coursesRepository.removeAllByPeriodCampusGrades(item.getPeriods(), item.getCampusId(), item.getGradesId());
+            coursesRepository.removeAllByPeriodCampusGrades(item.getPeriods(), item.getDatedAt(), item.getCampusId(), item.getGradesId());
         }
         init();
     }
@@ -76,6 +71,14 @@ public class PeriodsController extends AbstractSessionController {
             items.add(item.getCampusId().getName());
         }
         return new ArrayList<>(items);
+    }
+
+    public String[] getAllMonths() {
+        return months;
+    }
+
+    public String getMonth(Date date) {
+        return months[date.getMonth()];
     }
 
     public List<CustomPeriodsGradesCampus> getAllCustomPeriodsGradesCampus() {

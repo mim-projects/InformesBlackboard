@@ -19,21 +19,21 @@
                     <p:commandButton styleClass="upload-ghost-btn" actionListener="#{uploadCtrl.updateSelectedTypeFile('users')}"
                                      update="form_upload" oncomplete="PF('upload_wv').show()" title="upload users"/>
                     <i class="pi pi-users" style="font-size: 5rem !important"></i>
-                    <h1>upload users</h1>
-                    <p style="text-align: center;">Estudiante y Docentes</p>
+                    <h1>#{bundle.upload_users}</h1>
+                    <p style="text-align: center;">#{bundle.student_teacher}</p>
                 </div>
                 <div class="card custom-badge-read">
                     <p:commandButton styleClass="upload-ghost-btn" actionListener="#{uploadCtrl.updateSelectedTypeFile('courses')}"
                                      update="form_upload" oncomplete="PF('upload_wv').show()" title="upload courses"/>
                     <i class="pi pi-book" style="font-size: 4rem !important"></i>
-                    <h1>upload courses</h1>
-                    <p style="text-align: center;">Licenciatura y Posgrado</p>
+                    <h1>#{bundle.upload_courses}</h1>
+                    <p style="text-align: center;">#{bundle.bachelor_postgraduate}</p>
                 </div>
             </div>
         </h:form>
 
         <h:form id="form_upload">
-            <p:dialog widgetVar="upload_wv" modal="true" styleClass="custom-dialog custom-dialog-top"
+            <p:dialog widgetVar="upload_wv" modal="true" styleClass="custom-dialog custom-dialog-top custom-dialog-title-uppercase"
                       width="calc(100% - 4rem)" style="max-width: 50rem !important;" header="uploads #{uploadCtrl.selectedTypeFile}"
                       blockScroll="true" resizable="false" draggable="false" closable="true">
                 <div style="display: grid; grid-template-rows: 1fr auto; gap: 2rem">

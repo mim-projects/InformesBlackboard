@@ -4,6 +4,9 @@ import com.mimsoft.informesblackboard.domain.entities.Campus;
 import com.mimsoft.informesblackboard.domain.entities.Grades;
 import jakarta.persistence.*;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @Entity
 @SqlResultSetMapping(
         name = "CustomPeriodsGradesCampus",
@@ -12,9 +15,11 @@ import jakarta.persistence.*;
                 columns = {
                         @ColumnResult(name = "uuid", type = String.class),
                         @ColumnResult(name = "periods", type = String.class),
+                        @ColumnResult(name = "dated_at", type = Date.class),
                         @ColumnResult(name = "gradesId", type = Grades.class),
                         @ColumnResult(name = "campusId", type = Campus.class),
-                        @ColumnResult(name = "table", type = String.class)
+                        @ColumnResult(name = "table", type = String.class),
+                        @ColumnResult(name = "keyword_cache", type = String.class)
                 }
         )
 )
@@ -27,6 +32,10 @@ public class CustomPeriodsGradesCampus {
     @Column(name = "periods")
     private String periods;
 
+    @Column(name = "dated_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date datedAt;
+
     @JoinColumn(name = "gradesId", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Grades gradesId;
@@ -37,6 +46,9 @@ public class CustomPeriodsGradesCampus {
 
     @Column(name = "table")
     private String table;
+
+    @Column(name = "keyword_cache")
+    private String keywordCache;
 
     public CustomPeriodsGradesCampus() {
     }
@@ -55,6 +67,14 @@ public class CustomPeriodsGradesCampus {
 
     public void setPeriods(String periods) {
         this.periods = periods;
+    }
+
+    public Date getDatedAt() {
+        return datedAt;
+    }
+
+    public void setDatedAt(Date datedAt) {
+        this.datedAt = datedAt;
     }
 
     public Grades getGradesId() {
@@ -79,5 +99,13 @@ public class CustomPeriodsGradesCampus {
 
     public void setTable(String table) {
         this.table = table;
+    }
+
+    public String getKeywordCache() {
+        return keywordCache;
+    }
+
+    public void setKeywordCache(String keywordCache) {
+        this.keywordCache = keywordCache;
     }
 }

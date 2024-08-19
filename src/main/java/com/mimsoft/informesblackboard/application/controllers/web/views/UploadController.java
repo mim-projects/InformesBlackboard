@@ -2,11 +2,14 @@ package com.mimsoft.informesblackboard.application.controllers.web.views;
 
 import com.mimsoft.informesblackboard.Configuration;
 import com.mimsoft.informesblackboard.application.controllers.web.common.AbstractSessionController;
+import com.mimsoft.informesblackboard.application.data.repositories.FileStorageRepository;
 import com.mimsoft.informesblackboard.application.modules.upload_execute.UploadExecuteService;
+import com.mimsoft.informesblackboard.domain.entities.FileStorage;
 import jakarta.annotation.Resource;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.UserTransaction;
 import org.apache.commons.io.FileUtils;
 import org.primefaces.PrimeFaces;
@@ -19,10 +22,14 @@ import java.util.Date;
 @Named("uploadCtrl")
 @ViewScoped
 public class UploadController extends AbstractSessionController {
+    @Inject
+    protected EntityManager entityManager;
     @Resource
     protected UserTransaction userTransaction;
     @Inject
     private UploadExecuteService uploadExecuteService;
+    @Inject
+    private FileStorageRepository fileStorageRepository;
 
     private String selectedTypeFile;
 
@@ -34,20 +41,33 @@ public class UploadController extends AbstractSessionController {
     //  > http://localhost:9990/console/index.html#undertow-server;name=default-server
     //  > Listener > HTTP > Max Post Size = 104857600 | (100 MB)
     public synchronized void handleFileUpload(FileUploadEvent event) {
+        String originalName = event.getFile().getFileName();
+        if (fileStorageRepository.exists(originalName)) {
+            commonController.FacesMessagesError("File exist", "El archivo ya fue procesado");
+            return;
+        }
+
         UploadedFile uploadedFile = event.getFile();
         String[] temp = uploadedFile.getFileName().split("\\.");
         String filename = ("FILE_" + new Date().getTime() + "." + temp[temp.length - 1]).toUpperCase();
-        new Thread(() -> executeProcess(filename, uploadedFile.getContent())).start();
+        String pathname = Configuration.PATH_FILE_UPLOADS + filename;
+
+        FileStorage fileStorage = new FileStorage();
+        fileStorage.setName(originalName);
+        fileStorage.setPath(pathname);
+        fileStorage.setCreatedAt(new Date());
+        fileStorageRepository.create(fileStorage);
+
+        new Thread(() -> executeProcess(pathname, uploadedFile.getContent())).start();
     }
 
-    private void executeProcess(String filename, byte[] data) {
+    private void executeProcess(String pathname, byte[] data) {
         try {
-            String pathname = Configuration.PATH_FILE_UPLOADS + filename;
             File file = new File(pathname);
             FileUtils.writeByteArrayToFile(file, data);
-            if (selectedTypeFile.equalsIgnoreCase("users")) uploadExecuteService.executeProcessUsers(pathname, userTransaction);
-            else if (selectedTypeFile.equalsIgnoreCase("courses")) uploadExecuteService.executeProcessCourses(pathname, userTransaction);
-            FileUtils.forceDelete(file);
+            if (selectedTypeFile.equalsIgnoreCase("users")) uploadExecuteService.executeProcessUsers(pathname, entityManager, userTransaction);
+            else if (selectedTypeFile.equalsIgnoreCase("courses")) uploadExecuteService.executeProcessCourses(pathname, entityManager, userTransaction);
+            //FileUtils.forceDelete(file);
         } catch (Exception e) {
             e.printStackTrace();
         }

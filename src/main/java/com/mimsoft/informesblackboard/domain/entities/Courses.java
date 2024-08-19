@@ -3,6 +3,8 @@ package com.mimsoft.informesblackboard.domain.entities;
 import com.mimsoft.informesblackboard.domain.core.EntityCore;
 import jakarta.persistence.*;
 
+import java.util.Date;
+
 @Entity
 @Table(name = "courses")
 public class Courses extends EntityCore {
@@ -34,6 +36,10 @@ public class Courses extends EntityCore {
 
     @Column(name = "hash_code")
     private String hashCode;
+
+    @Column(name = "dated_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date datedAt;
 
     public Courses() {
     }
@@ -104,6 +110,14 @@ public class Courses extends EntityCore {
         this.hashCode = hashCode;
     }
 
+    public Date getDatedAt() {
+        return datedAt;
+    }
+
+    public void setDatedAt(Date datedAt) {
+        this.datedAt = datedAt;
+    }
+
     @Override
     public String toString() {
         return "Courses{" +
@@ -115,6 +129,7 @@ public class Courses extends EntityCore {
                 ", campusCodesId=" + campusCodesId +
                 ", gradesId=" + gradesId +
                 ", hashCode='" + hashCode + '\'' +
+                ", datedAt=" + datedAt +
                 '}';
     }
 }

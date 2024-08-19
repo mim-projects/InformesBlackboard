@@ -1,6 +1,6 @@
 package com.mimsoft.informesblackboard.application.modules.graphics;
 
-import com.mimsoft.informesblackboard.application.data.models.helper.CustomTableCoursesUsersHelper;
+import com.mimsoft.informesblackboard.application.modules.graphics.models.CustomTableCoursesUsersHelper;
 import jakarta.enterprise.context.RequestScoped;
 
 @RequestScoped

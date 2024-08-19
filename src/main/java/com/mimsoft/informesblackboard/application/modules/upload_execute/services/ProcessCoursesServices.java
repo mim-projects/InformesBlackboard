@@ -2,12 +2,13 @@ package com.mimsoft.informesblackboard.application.modules.upload_execute.servic
 
 import com.mimsoft.informesblackboard.application.data.constants.GradesConstant;
 import com.mimsoft.informesblackboard.application.data.repositories.CampusCodesRepository;
-import com.mimsoft.informesblackboard.application.data.repositories.CoursesRepository;
 import com.mimsoft.informesblackboard.application.data.repositories.GradesRepository;
 import com.mimsoft.informesblackboard.application.data.repositories.ModalityRepository;
 import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheKeywords;
 import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheServices;
+import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheStaticData;
 import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheStatus;
+import com.mimsoft.informesblackboard.application.modules.upload_execute.interfaces.CallbackEntity;
 import com.mimsoft.informesblackboard.application.utils.others.StringHelper;
 import com.mimsoft.informesblackboard.domain.entities.CampusCodes;
 import com.mimsoft.informesblackboard.domain.entities.Courses;
@@ -16,6 +17,8 @@ import com.mimsoft.informesblackboard.domain.entities.Modality;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -30,15 +33,15 @@ public class ProcessCoursesServices {
     @Inject
     private ModalityRepository modalityRepository;
     @Inject
-    private CoursesRepository coursesRepository;
-    @Inject
     private SimulateCacheServices simulateCacheServices;
 
     private HashMap<Integer, Grades> gradesHashMap;
     private HashMap<String, Modality> modalityHasMap;
     private HashMap<String, CampusCodes> campusCodesHashMap;
+    private Date date;
 
     public void load() {
+        date = new Date();
         gradesHashMap = new LinkedHashMap<>();
         modalityHasMap = new LinkedHashMap<>();
         campusCodesHashMap = new LinkedHashMap<>();
@@ -48,7 +51,7 @@ public class ProcessCoursesServices {
         for (CampusCodes item: campusCodesRepository.findAll()) campusCodesHashMap.put(item.getCode(), item);
     }
 
-    public void execute(Integer currentLine, Integer totalLine, String data) throws Exception {
+    public void execute(Integer currentLine, Integer totalLine, String data, CallbackEntity<Courses> callback) throws Exception {
         if (currentLine == 0 || data.contains("***FileFooter")) {
             if (currentLine == 0 && !data.replaceAll(" ", "").equalsIgnoreCase(HEADER)) throw new Exception("Failed Format File");
             return;
@@ -66,15 +69,14 @@ public class ProcessCoursesServices {
         courses.setCampusCodesId(campusCodesHashMap.get(keyword[1]));
         courses.setGradesId(grades);
         courses.setHashCode(parts[0]);
-        coursesRepository.create(courses);
+        courses.setDatedAt(date);
+        callback.callback(courses);
 
         // ====================================================================
         if (currentLine == 1) {
-            String keywords = SimulateCacheKeywords.CustomTableCoursesUsersRepositoryFindUsers.getKeyword() + courses.getPeriods() + "_" + grades.getId();
-            simulateCacheServices.status(keywords, SimulateCacheStatus.PROCESS);
+            simulateCacheServices.status(SimulateCacheStaticData.CreateKeywordCourses(courses), SimulateCacheStatus.PROCESS);
         } else if (currentLine == totalLine - 1) {
-            String keywords = SimulateCacheKeywords.CustomTableCoursesUsersRepositoryFindUsers.getKeyword() + courses.getPeriods() + "_" + grades.getId();
-            simulateCacheServices.status(keywords, SimulateCacheStatus.UPDATED);
+            simulateCacheServices.status(SimulateCacheStaticData.CreateKeywordCourses(courses), SimulateCacheStatus.UPDATED);
         }
     }
 }
