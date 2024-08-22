@@ -173,4 +173,8 @@ public class CommonController {
     public String getColor(int index) {
         return COLORS[index % COLORS.length];
     }
+
+    public String[] createArrayString(String... data) {
+        return data;
+    }
 }

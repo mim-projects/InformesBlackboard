@@ -119,4 +119,8 @@ public class GraphicTableCoursesUsersHelper {
             return result == null ? graphicEmpty : result;
         }
     }
+
+    public boolean containsData() {
+        return !usersAllData.isEmpty() || !coursesAllData.isEmpty();
+    }
 }

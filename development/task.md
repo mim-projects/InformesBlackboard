@@ -1,3 +1,2 @@
 - [ ] Crear reporte pdf
-- [ ] Ajustar tabla en el dashboard
 - [ ] Verificar datos en dashboard con reporte

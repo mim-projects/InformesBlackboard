@@ -11,22 +11,20 @@ import com.mimsoft.informesblackboard.application.data.repositories.RolesReposit
 import com.mimsoft.informesblackboard.application.data.repositories.StorageHistoryRepository;
 import com.mimsoft.informesblackboard.application.modules.graphics.ChartsServices;
 import com.mimsoft.informesblackboard.application.modules.graphics.TablesServices;
-import com.mimsoft.informesblackboard.application.utils.http.responses.ResponseHelper;
+import com.mimsoft.informesblackboard.application.modules.reports.dashboard.DashboardReport;
 import com.mimsoft.informesblackboard.domain.entities.Grades;
 import com.mimsoft.informesblackboard.domain.entities.Modality;
 import com.mimsoft.informesblackboard.domain.entities.Roles;
 import com.mimsoft.informesblackboard.domain.entities.StorageHistory;
+import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.context.FacesContext;
-import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 @Named("homeCtrl")
-@ViewScoped
+@SessionScoped
 public class HomeController extends AbstractSessionController {
     @Inject
     private GradesRepository gradesRepository;
@@ -85,7 +83,6 @@ public class HomeController extends AbstractSessionController {
     }
 
     public void clearFilter() {
-        allPeriods = customPeriodsRepository.findAllString();
         modalityMultiSelectorBooleanListHelper = new MultiSelectorBooleanListHelper<>();
         rolesMultiSelectorBooleanListHelper = new MultiSelectorBooleanListHelper<>();
 
@@ -102,6 +99,7 @@ public class HomeController extends AbstractSessionController {
 
     public void clearTablesGraphic() {
         List<Grades> grades = gradesRepository.findAll();
+        allPeriods = customPeriodsRepository.findAllString();
         graphicTableCoursesUsersHelper = new GraphicTableCoursesUsersHelper(sessionController, tablesServices, chartsServices, grades);
     }
 
@@ -113,19 +111,20 @@ public class HomeController extends AbstractSessionController {
 
     public void createReport() {
         try {
-            File file = File.createTempFile("tempo", ".pdf");
-            ResponseHelper.DownloadFile(FacesContext.getCurrentInstance(), file, "report.pdf");
-        } catch (IOException e) {
-            commonController.FacesMessagesError("Failed", "Error download file");
+            String filename = "FILE_" + System.currentTimeMillis();
+            DashboardReport.Download(graphicTableCoursesUsersHelper, FacesContext.getCurrentInstance(), filename);
+        } catch (Exception e) {
+            commonController.FacesMessagesError(sessionController.getBundleMessage("failed"), sessionController.getBundleMessage("try_again"));
         }
     }
 
-    public String getUsersTableOrGraphic(String type, Integer gradeId) {
-        return graphicTableCoursesUsersHelper.getUserDataFormatString(type, gradeId);
+    public boolean disabledButtonReport() {
+        return invalidateFilters() || !graphicTableCoursesUsersHelper.containsData();
     }
 
-    public String getCoursesTableOrGraphic(String type, Integer gradeId) {
-        return graphicTableCoursesUsersHelper.getCourseDataFormatString(type, gradeId);
+    public String getTableOrGraphic(String userOrCourse, String type, Integer gradeId) {
+        if (userOrCourse.equalsIgnoreCase("users")) return graphicTableCoursesUsersHelper.getUserDataFormatString(type, gradeId);
+        else return graphicTableCoursesUsersHelper.getCourseDataFormatString(type, gradeId);
     }
 
     public String getStorageHistory() {

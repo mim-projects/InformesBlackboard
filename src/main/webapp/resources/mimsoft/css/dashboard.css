@@ -42,8 +42,13 @@
 
 .card .content-card {
     display: grid;
-    grid-template-rows: var(--table-height) var(--graphic-height);
+    /*grid-template-rows: var(--table-height) var(--graphic-height);*/
+    grid-template-rows: var(--graphic-height) auto;
     gap: 1rem;
+}
+
+.card .content-card .table {
+    min-height: 4rem;
 }
 
 #tables {
@@ -56,6 +61,12 @@
     background: var(--uabc-yellow) !important;
     border: 1px solid var(--uabc-yellow) !important;
     color: white !important;
+}
+
+table, th, td {
+    border: 1px solid var(--text-color);
+    border-collapse: collapse;
+    padding: 2px 8px;
 }
 
 @media screen and (max-width: 650px) {

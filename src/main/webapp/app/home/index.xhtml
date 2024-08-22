@@ -63,52 +63,36 @@
                 </h:form>
                 <h:form id="controls">
                     <div style="display: flex; flex-wrap: wrap; gap: 1rem">
+                        <p:commandButton value="#{bundle.clean}" icon="pi pi-sync" actionListener="#{homeCtrl.clearTablesGraphic()}"
+                                         update="@all" styleClass="ui-button-secondary ui-button-flat"/>
                         <p:commandButton value="#{bundle.run}" icon="pi pi-arrow-circle-right" actionListener="#{homeCtrl.applyFilters()}"
-                                         disabled="#{homeCtrl.invalidateFilters()}" update="tables"/>
+                                         disabled="#{homeCtrl.invalidateFilters()}" update="tables @next"/>
                         <p:commandButton value="#{bundle.report}" icon="pi pi-file-pdf" styleClass="ui-button-warning"
-                                         actionListener="#{homeCtrl.createReport()}" ajax="false"
-                                         disabled="#{homeCtrl.invalidateFilters()}"/>
+                                         actionListener="#{homeCtrl.createReport()}" ajax="false"/>
                     </div>
                 </h:form>
             </div>
 
             <h:form id="tables">
-                <ui:repeat value="#{homeCtrl.allGradesForUI}" var="gradeForUI">
-                    <div class="card">
-                        <div class="title-card">
-                            <div class="title-card-icon-text">
-                                <i class="pi pi-users" style="font-size: 1rem !important;"></i>
-                                <h1 style="font-size: 1rem !important;">#{bundle.users}. #{gradeForUI.name}</h1>
+                <ui:repeat value="#{commonCtrl.createArrayString('users', 'book')}" var="sectionType">
+                    <ui:repeat value="#{homeCtrl.allGradesForUI}" var="gradeForUI">
+                        <div class="card">
+                            <div class="title-card">
+                                <div class="title-card-icon-text">
+                                    <i class="pi pi-#{sectionType}" style="font-size: 1rem !important;"></i>
+                                    <h1 style="font-size: 1rem !important;">#{sectionType eq 'users' ? bundle.users : bundle.courses}. #{gradeForUI.name}</h1>
+                                </div>
+                            </div>
+                            <div class="content-card">
+                                <div class="graphic">
+                                    <m:eChartCustom canvasId="cg#{sectionType}#{gradeForUI.id}" data="#{homeCtrl.getTableOrGraphic(sectionType, 'graphic', gradeForUI.id)}" height="100%"/>
+                                </div>
+                                <div class="table">
+                                    <h:outputText escape="false" value="#{homeCtrl.getTableOrGraphic(sectionType, 'table', gradeForUI.id)}"/>
+                                </div>
                             </div>
                         </div>
-                        <div class="content-card">
-                            <div class="table">
-                                <h:outputText escape="false" value="#{homeCtrl.getUsersTableOrGraphic('table', gradeForUI.id)}"/>
-                            </div>
-                            <div class="graphic">
-                                <m:eChartCustom canvasId="cgu#{gradeForUI.id}" data="#{homeCtrl.getUsersTableOrGraphic('graphic', gradeForUI.id)}" height="100%"/>
-                            </div>
-                        </div>
-                    </div>
-                </ui:repeat>
-
-                <ui:repeat value="#{homeCtrl.allGradesForUI}" var="gradeForUI">
-                    <div class="card">
-                        <div class="title-card">
-                            <div class="title-card-icon-text">
-                                <i class="pi pi-book" style="font-size: 1rem !important;"></i>
-                                <h1 style="font-size: 1rem !important;">#{bundle.courses}. #{gradeForUI.name}</h1>
-                            </div>
-                        </div>
-                        <div class="content-card">
-                            <div class="table">
-                                <h:outputText escape="false" value="#{homeCtrl.getCoursesTableOrGraphic('table', gradeForUI.id)}"/>
-                            </div>
-                            <div class="graphic">
-                                <m:eChartCustom canvasId="cgc#{gradeForUI.id}" data="#{homeCtrl.getCoursesTableOrGraphic('graphic', gradeForUI.id)}" height="100%"/>
-                            </div>
-                        </div>
-                    </div>
+                    </ui:repeat>
                 </ui:repeat>
             </h:form>
 

@@ -2,7 +2,7 @@ package com.mimsoft.informesblackboard.application.controllers.web.views.platfor
 
 import com.mimsoft.informesblackboard.application.controllers.web.common.AbstractSessionController;
 import com.mimsoft.informesblackboard.application.data.repositories.FileStorageRepository;
-import com.mimsoft.informesblackboard.application.utils.http.responses.ResponseHelper;
+import com.mimsoft.informesblackboard.application.utils.http.ResponseHelper;
 import com.mimsoft.informesblackboard.domain.entities.FileStorage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
@@ -26,7 +26,7 @@ public class FilesPlatformController extends AbstractSessionController {
 
     public void download(FileStorage fileStorage) {
         File file = new File(fileStorage.getPath());
-        try { ResponseHelper.DownloadFile(FacesContext.getCurrentInstance(), file, fileStorage.getName()); }
+        try { ResponseHelper.DownloadFile(FacesContext.getCurrentInstance(), fileStorage.getName(), file); }
         catch (IOException ignore) { commonController.FacesMessagesError("Failed", "Download Failed"); }
     }
 

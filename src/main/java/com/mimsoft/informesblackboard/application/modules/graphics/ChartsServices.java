@@ -1,5 +1,6 @@
 package com.mimsoft.informesblackboard.application.modules.graphics;
 
+import com.mimsoft.informesblackboard.application.data.constants.Colors;
 import com.mimsoft.informesblackboard.application.data.queries.custom_table_courses_users.CustomTableCoursesUsersHelper;
 import com.mimsoft.informesblackboard.domain.entities.StorageHistory;
 import jakarta.enterprise.context.RequestScoped;
@@ -10,7 +11,7 @@ import java.util.List;
 @RequestScoped
 public class ChartsServices {
     private static final String[] COLORS = new String[] {
-            "var(--uabc-yellow)", "var(--uabc-green)", "var(--uabc-blue)",
+            Colors.UABC_YELLOW.getValue(), Colors.UABC_GREEN.getValue(), Colors.UABC_BLUE.getValue(),
             "#c23531", "#2f4554", "#61a0a8", "#d48265", "#91c7ae", "#749f83", "#ca8622", "#bda29a", "#6e7074", "#546570", "#c4ccd3"
     };
 
