@@ -60,6 +60,7 @@
                                 <p:commandButton onstart="createGlobalLoader('#{bundle.loading}')" actionListener="#{routerCtrl.navigate('platform_roles')}" value="#{bundle.roles}" icon="pi pi-id-card" styleClass="ui-button-flat"/>
                                 <p:commandButton onstart="createGlobalLoader('#{bundle.loading}')" actionListener="#{routerCtrl.navigate('platform_users')}" value="#{bundle.users}" icon="pi pi-users" styleClass="ui-button-flat"/>
                                 <p:commandButton onstart="createGlobalLoader('#{bundle.loading}')" actionListener="#{routerCtrl.navigate('platform_cache')}" value="#{bundle.cache}" icon="pi pi-database" styleClass="ui-button-flat"/>
+                                <p:commandButton onstart="createGlobalLoader('#{bundle.loading}')" actionListener="#{routerCtrl.navigate('platform_files')}" value="#{bundle.files}" icon="pi pi-file" styleClass="ui-button-flat"/>
                             </p:tab>
                         </p:accordionPanel>
                     </ui:insert>
@@ -92,6 +93,7 @@
                                 <p:menuitem onstart="createGlobalLoader('#{bundle.loading}')" actionListener="#{routerCtrl.navigate('platform_roles')}" value="#{bundle.roles}" icon="pi pi-id-card"/>
                                 <p:menuitem onstart="createGlobalLoader('#{bundle.loading}')" actionListener="#{routerCtrl.navigate('platform_users')}" value="#{bundle.users}" icon="pi pi-users"/>
                                 <p:menuitem onstart="createGlobalLoader('#{bundle.loading}')" actionListener="#{routerCtrl.navigate('platform_cache')}" value="#{bundle.cache}" icon="pi pi-database"/>
+                                <p:menuitem onstart="createGlobalLoader('#{bundle.loading}')" actionListener="#{routerCtrl.navigate('platform_files')}" value="#{bundle.files}" icon="pi pi-file"/>
                             </p:menuButton>
                         </ui:insert>
                     </div>
@@ -137,5 +139,9 @@
             </div>
         </div>
         <ui:insert name="end_body"/>
+        <script>
+            // Container - Footer Size
+            document.querySelector(':root').style.setProperty('--height-footer', document.querySelector("footer").getBoundingClientRect().height + "px");
+        </script>
     </ui:define>
 </ui:composition>

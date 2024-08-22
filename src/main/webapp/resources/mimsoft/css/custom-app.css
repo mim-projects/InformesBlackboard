@@ -3,6 +3,11 @@
     --uabc-yellow: #DD971A;
     --uabc-blue: #20419A;
     --uabc-black: #000000;
+    --height-footer: 0px;
+}
+
+.container {
+    min-height: calc(100% - 8rem - var(--height-footer));
 }
 
 .toolbar {
@@ -40,12 +45,6 @@
     box-shadow: none !important;
 }
 
-.ui-button-warning {
-    background: var(--uabc-yellow) !important;
-    border: 1px solid var(--uabc-yellow) !important;
-    color: white !important;
-}
-
 footer {
     margin: 3rem 2rem;
     display: grid;
@@ -75,6 +74,35 @@ footer .logos img:first-child {
 
 footer .logos img:last-child {
     object-position: left;
+}
+
+.section-text p {
+    margin: 0;
+}
+
+.section-text h1 {
+    font-size: 1.5rem !important;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.section-text-code {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.section-text-code span {
+    font-weight: bold;
+}
+
+.section-code {
+    padding: 1rem;
+    background: var(--surface-border);
+    border-radius: 5px;
+    overflow-x: auto;
+    display: flex;
+    letter-spacing: 1px;
+    font-weight: bold;
 }
 
 @media screen and (max-width: 450px) {

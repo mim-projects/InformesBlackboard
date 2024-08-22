@@ -12,7 +12,7 @@ public class SimulateCacheStaticData {
     }
 
     public static String CreateKeywordCourses(String periods, Date date, int grade) {
-        return SimulateCacheKeywords.CustomTableCoursesUsersRepositoryFindCourses.getKeyword() + periods + "_" + new SimpleDateFormat("yyyy_MM").format(date) + "_" + grade;
+        return SimulateCacheKeywords.CustomTableCourses.getKeyword() + periods + "_" + new SimpleDateFormat("yyyy_MM").format(date) + "_" + grade;
     }
 
     public static String CreateKeywordCoursesCampusTable(String periods, Date date, int grade, int campus, String table) {
@@ -24,10 +24,24 @@ public class SimulateCacheStaticData {
     }
 
     public static String CreateKeywordUsers(String periods, Date date, int grade) {
-        return SimulateCacheKeywords.CustomTableCoursesUsersRepositoryFindUsers.getKeyword() + periods + "_" + new SimpleDateFormat("yyyy_MM").format(date) + "_" + grade;
+        return SimulateCacheKeywords.CustomTableUsers.getKeyword() + periods + "_" + new SimpleDateFormat("yyyy_MM").format(date) + "_" + grade;
     }
 
     public static String CreateKeywordUsersCampusTable(String periods, Date date, int grade, int campus, String table) {
         return CreateKeywordUsers(periods, date, grade) + "_" + campus + "_" + table;
+    }
+
+    public static String CreateKeywordCoursesFilters(String period, int month, int[] modality, Integer gradesId) {
+        StringBuilder modalities = new StringBuilder();
+        for (Integer integer : modality) modalities.append(integer).append("_");
+        if (!modalities.toString().isEmpty()) modalities = new StringBuilder(modalities.substring(0, modalities.length() - 1));
+        return SimulateCacheKeywords.CustomTableCourses.getKeyword() + period + "_" + month + "_g" + gradesId + "_m" + modalities;
+    }
+
+    public static String CreateKeywordUsersFilters(String period, int month, int[] roles, Integer gradesId) {
+        StringBuilder rol = new StringBuilder();
+        for (Integer integer : roles) rol.append(integer).append("_");
+        if (!rol.toString().isEmpty()) rol = new StringBuilder(rol.substring(0, rol.length() - 1));
+        return SimulateCacheKeywords.CustomTableUsers.getKeyword() + period + "_" + month + "_g" + gradesId + "_r" + rol;
     }
 }

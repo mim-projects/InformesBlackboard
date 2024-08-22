@@ -1,4 +1,4 @@
-package com.mimsoft.informesblackboard.application.modules.graphics.models;
+package com.mimsoft.informesblackboard.application.data.queries.custom_table_courses_users;
 
 import java.util.*;
 
@@ -59,6 +59,26 @@ public class CustomTableCoursesUsersHelper {
             total += getValue(key1, key2);
         }
         return total;
+    }
+
+    public Integer[] getColumnValues(String row) {
+        Integer[] values = new Integer[rows.size()];
+        int k = 0;
+        for (String column: getAllColumns()) {
+            values[k] = getValue(column, row);
+            k++;
+        }
+        return values;
+    }
+
+    public Integer[] getRowValues(String column) {
+        Integer[] values = new Integer[columns.size()];
+        int k = 0;
+        for (String row: getAllRows()) {
+            values[k] = getValue(column, row);
+            k++;
+        }
+        return values;
     }
 
     public Integer getTotal() {

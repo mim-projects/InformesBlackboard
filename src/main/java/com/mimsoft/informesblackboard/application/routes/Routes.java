@@ -16,6 +16,7 @@ public enum Routes {
     PLATFORM_ROLES(new Route("platform_roles", "/app/platform/roles.xhtml")),
     PLATFORM_USERS(new Route("platform_users", "/app/platform/users.xhtml")),
     PLATFORM_CACHE(new Route("platform_cache", "/app/platform/cache.xhtml")),
+    PLATFORM_FILES(new Route("platform_files", "/app/platform/files.xhtml")),
     PROFILE(new Route("profile", "/app/profile.xhtml")),
     ;
     private final Route route;

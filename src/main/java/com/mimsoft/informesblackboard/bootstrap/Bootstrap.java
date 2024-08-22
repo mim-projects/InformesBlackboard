@@ -1,6 +1,5 @@
 package com.mimsoft.informesblackboard.bootstrap;
 
-import com.mimsoft.informesblackboard.application.controllers.api.HelloWorldAPI;
 import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.Application;
 
@@ -17,7 +16,6 @@ public class Bootstrap extends Application {
     }
 
     private void addApiResourceClasses(Set<Class<?>> resources) {
-        resources.add(HelloWorldAPI.class);
     }
 
     private void addWebResourceClasses(Set<Class<?>> resources) {

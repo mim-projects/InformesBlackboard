@@ -16,6 +16,8 @@ import java.util.*;
 @Named("commonCtrl")
 @RequestScoped
 public class CommonController {
+    private static final String[] COLORS = new String[] { "#2f4554", "#61a0a8", "#d48265", "#91c7ae", "#749f83", "#ca8622", "#bda29a", "#6e7074", "#546570", "#c4ccd3" };
+
     @Inject
     private RequestController requestController;
 
@@ -166,5 +168,9 @@ public class CommonController {
         if (add == null) return String.valueOf(year);
         year += add;
         return String.valueOf(year);
+    }
+
+    public String getColor(int index) {
+        return COLORS[index % COLORS.length];
     }
 }

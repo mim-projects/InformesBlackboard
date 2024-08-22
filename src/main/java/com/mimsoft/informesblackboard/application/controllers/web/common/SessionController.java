@@ -2,6 +2,7 @@ package com.mimsoft.informesblackboard.application.controllers.web.common;
 
 import com.mimsoft.informesblackboard.Configuration;
 import com.mimsoft.informesblackboard.application.controllers.shared.RequestController;
+import com.mimsoft.informesblackboard.application.data.interfaces.BundleLanguage;
 import com.mimsoft.informesblackboard.application.data.repositories.UserPlatformRepository;
 import com.mimsoft.informesblackboard.application.routes.Routes;
 import com.mimsoft.informesblackboard.domain.entities.UserPlatform;
@@ -19,7 +20,7 @@ import java.util.ResourceBundle;
 
 @Named("sessionCtrl")
 @SessionScoped
-public class SessionController implements Serializable {
+public class SessionController implements BundleLanguage, Serializable {
     @Inject
     private RequestController requestController;
     @Inject
@@ -100,6 +101,7 @@ public class SessionController implements Serializable {
         return currentTheme;
     }
 
+    @Override
     public String getBundleMessage(String key) {
         ResourceBundle resourceBundle = ResourceBundle.getBundle("bundle_" + currentLang.toLowerCase());
         return resourceBundle.getString(key);

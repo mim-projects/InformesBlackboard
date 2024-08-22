@@ -25,6 +25,14 @@ public class MultiSelectorBooleanListHelper<T> {
         return false;
     }
 
+    public List<T> getSelected() {
+        List<T> selected = new ArrayList<>();
+        for (MultiSelectorBooleanHelper<T> current: list) {
+            if (current.isValue()) selected.add(current.getModel());
+        }
+        return selected;
+    }
+
     public List<MultiSelectorBooleanHelper<T>> getList() {
         return list;
     }

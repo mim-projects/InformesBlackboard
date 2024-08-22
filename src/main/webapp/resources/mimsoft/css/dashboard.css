@@ -46,14 +46,16 @@
     gap: 1rem;
 }
 
-.content-card .table {
-    background-color: red;
-}
-
 #tables {
     display: grid;
     grid-template-columns: repeat(var(--columns), 1fr);
     gap: 2rem;
+}
+
+.ui-button-warning {
+    background: var(--uabc-yellow) !important;
+    border: 1px solid var(--uabc-yellow) !important;
+    color: white !important;
 }
 
 @media screen and (max-width: 650px) {

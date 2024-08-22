@@ -1,5 +1,6 @@
 package com.mimsoft.informesblackboard.application.modules.graphics;
 
+import com.mimsoft.informesblackboard.application.data.queries.custom_table_courses_users.CustomTableCoursesUsersHelper;
 import com.mimsoft.informesblackboard.domain.entities.StorageHistory;
 import jakarta.enterprise.context.RequestScoped;
 
@@ -8,6 +9,11 @@ import java.util.List;
 
 @RequestScoped
 public class ChartsServices {
+    private static final String[] COLORS = new String[] {
+            "var(--uabc-yellow)", "var(--uabc-green)", "var(--uabc-blue)",
+            "#c23531", "#2f4554", "#61a0a8", "#d48265", "#91c7ae", "#749f83", "#ca8622", "#bda29a", "#6e7074", "#546570", "#c4ccd3"
+    };
+
     public String getEmptyShowMessage(String message) {
         return "{ grid: { left: '2%', right: '2%', top: '2%', bottom: '2%' }, title: { text: \"" + message + "\", show: true, left: \"center\", top: \"center\", textStyle: { fontWeight: \"normal\", color: \"var(--text-color)\" } } }";
     }
@@ -50,6 +56,27 @@ public class ChartsServices {
                 "}";
     }
 
+    public String getCustomBarChart(CustomTableCoursesUsersHelper customTableCoursesUsersHelper) {
+        String[] columns = customTableCoursesUsersHelper.getAllColumns().toArray(new String[0]);
+        String[] rows = customTableCoursesUsersHelper.getAllRows().toArray(new String[0]);
+        String[] values = new String[columns.length];
+        String[] colors = new String[columns.length];
+
+        int index = 0;
+        for (String current: columns) {
+            colors[index] = COLORS[index];
+
+            Integer[] valArr = customTableCoursesUsersHelper.getRowValues(current);
+            StringBuilder valuesStr = new StringBuilder();
+            for (Integer integer : valArr) valuesStr.append(integer).append(",");
+            if (valuesStr.length() > 0) values[index] = valuesStr.substring(0, valuesStr.length() - 1);
+            values[index] = valuesStr.toString();
+            index++;
+        }
+
+        return getCustomBarChart(columns, colors, rows, values);
+    }
+
     public String getCustomBarChart(String[] campus, String[] color, String[] modalities, String[] values) {
         StringBuilder modalityHelper = new StringBuilder();
         for (String modality: modalities) modalityHelper.append("'").append(modality).append("',");
@@ -62,14 +89,14 @@ public class ChartsServices {
         return "{ " +
                 "  tooltip: { trigger: 'axis' }, " +
                 "  legend: { data: ['" + campus[0] + "', '" + campus[1] + "', '" + campus[2] + "'], textStyle: { color: \"var(--text-color)\" } }, " +
-                "  grid: { containLabel: true, left: 0, right: 0, top: \"10%\", bottom: 0 }, " +
+                "  grid: { containLabel: true, left: 0, right: 0, top: \"15%\", bottom: 0 }, " +
                 "  toolbox: { show: true, orient: 'vertical', left: 'right', top: 'top', " +
                 "    feature: { " +
                 "      mark: { show: true }, " +
                 "      magicType: { show: true, type: ['stack'] } " +
                 "    } " +
                 "  }, " +
-                "  xAxis: [ { type: 'category', data: [" + modalityHelper + "] } ], " +
+                "  xAxis: [ { type: 'category', data: [" + modalityHelper + "], axisLabel: { interval: 0 } } ], " +
                 "  yAxis: [ { splitLine: { lineStyle: { color: \"var(--surface-ground)\" } } }, ], " +
                 "  series: [" + seriesHelper + "] " +
                 "}";

@@ -1,8 +1,8 @@
 package com.mimsoft.informesblackboard.application.modules.simulate_cache;
 
 public enum SimulateCacheKeywords {
-    CustomTableCoursesUsersRepositoryFindCourses("custom_table_courses_users_repository_find_courses_"),
-    CustomTableCoursesUsersRepositoryFindUsers("custom_table_courses_users_repository_find_users_"),
+    CustomTableCourses("custom_table_courses_"),
+    CustomTableUsers("custom_table_users_"),
     AllPeriods("all_periods"),
     ;
 

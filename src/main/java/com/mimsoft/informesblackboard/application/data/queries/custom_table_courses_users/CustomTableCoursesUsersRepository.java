@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mimsoft.informesblackboard.application.data.queries.QueryRepository;
 import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheCallback;
-import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheKeywords;
 import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheServices;
+import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheStaticData;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 
@@ -19,16 +19,20 @@ public class CustomTableCoursesUsersRepository extends QueryRepository {
 
     private List<CustomTableCoursesUsers> getCacheList(String keyword, SimulateCacheCallback<CustomTableCoursesUsers> simulateCacheCallback) {
         List<CustomTableCoursesUsers> cache = new Gson().fromJson(simulateCacheServices.get(keyword), new TypeToken<>() {});
-        if (cache == null) {
+        if (cache == null || cache.isEmpty()) {
             cache = simulateCacheCallback.execute();
             simulateCacheServices.put(keyword, cache);
         }
         return cache;
     }
 
-    public List<CustomTableCoursesUsers> findCourses(String period, Integer gradesId) {
-        String keyword = SimulateCacheKeywords.CustomTableCoursesUsersRepositoryFindCourses.getKeyword() + period + "_" + gradesId;
+    public List<CustomTableCoursesUsers> findCourses(String period, Integer month, int[] modality, Integer gradesId) {
+        String keyword = SimulateCacheStaticData.CreateKeywordCoursesFilters(period, month, modality, gradesId);
         return getCacheList(keyword, () -> {
+            String helper = "";
+            for (int current: modality) helper += "modality_id = '" + current + "' or ";
+            if (!helper.isEmpty()) helper = " and (" + helper.substring(0, helper.length() - 3) + ") ";
+
             String query = "select " +
                     "    uuid() as uuid, " +
                     "    modality_id as modalityId, " +
@@ -37,8 +41,12 @@ public class CustomTableCoursesUsersRepository extends QueryRepository {
                     "    count(distinct hash_code) as value " +
                     "from courses " +
                     "left join campus_codes on campus_codes.id = courses.campus_code_id " +
-                    "where courses.periods = '" + period + "' and courses.grades_id = '" + gradesId + "' " +
-                    "group by campus_id, modality_id " +
+                    "where " +
+                    "    courses.periods = '" + period + "' and " +
+                    "    courses.grades_id = '" + gradesId + "' and " +
+                    "    courses.periods like concat(date_format(courses.dated_at, '%Y'), '%') and " +
+                    "    month(courses.dated_at) = '" + month + "' " + helper +
+                    "group by campus_id, grades_id, modality_id, month(courses.dated_at) " +
                     "order by value desc;";
             try {
                 return entityManager.createNativeQuery(query, CustomTableCoursesUsers.class).getResultList();
@@ -48,9 +56,13 @@ public class CustomTableCoursesUsersRepository extends QueryRepository {
         });
     }
 
-    public List<CustomTableCoursesUsers> findUsers(String period, Integer gradesId) {
-        String keyword = SimulateCacheKeywords.CustomTableCoursesUsersRepositoryFindUsers.getKeyword() + period + "_" + gradesId;
+    public List<CustomTableCoursesUsers> findUsers(String period, Integer month, int[] roles, Integer gradesId) {
+        String keyword = SimulateCacheStaticData.CreateKeywordUsersFilters(period, month, roles, gradesId);
         return getCacheList(keyword, () -> {
+            String helper = "";
+            for (int current: roles) helper += "roles_id = '" + current + "' or ";
+            if (!helper.isEmpty()) helper = " and (" + helper.substring(0, helper.length() - 3) + ") ";
+
             String query = "select " +
                     "    uuid() as uuid, " +
                     "    null as modalityId, " +
@@ -59,7 +71,11 @@ public class CustomTableCoursesUsersRepository extends QueryRepository {
                     "    count(distinct keyword) as value " +
                     "from users " +
                     "left join campus_codes on campus_codes.id = users.campus_code_id " +
-                    "where users.periods = '" + period + "' and users.grades_id = '" + gradesId + "' " +
+                    "where " +
+                    "    users.periods = '" + period + "' and " +
+                    "    users.grades_id = '" + gradesId + "' and " +
+                    "    users.periods like concat(date_format(users.dated_at, '%Y'), '%') and " +
+                    "    month(users.dated_at) = '" + month + "' " + helper +
                     "group by campus_id, grades_id, roles_id " +
                     "order by value desc;";
             try {

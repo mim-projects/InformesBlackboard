@@ -1,6 +1,5 @@
 package com.mimsoft.informesblackboard.application.data.queries.custom_periods_grades_campus;
 
-import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheStaticData;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;

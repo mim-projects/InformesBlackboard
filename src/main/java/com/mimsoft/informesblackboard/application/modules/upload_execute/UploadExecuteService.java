@@ -1,6 +1,5 @@
 package com.mimsoft.informesblackboard.application.modules.upload_execute;
 
-import com.mimsoft.informesblackboard.Configuration;
 import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheKeywords;
 import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheServices;
 import com.mimsoft.informesblackboard.application.modules.upload_execute.interfaces.ProcessLineCSV;

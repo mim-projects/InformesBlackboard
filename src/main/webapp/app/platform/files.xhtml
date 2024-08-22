@@ -1,0 +1,34 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                template="/templates/template_app.xhtml">
+    <ui:define name="container_body">
+        <div class="container">
+            <h:form id="form_data" styleClass="card">
+                <div class="title-card">
+                    <div class="title-card-icon-text">
+                        <i class="pi pi-file"></i>
+                        <h1>#{bundle.files}</h1>
+                    </div>
+                </div>
+                <div class="content-card">
+                    <p:dataTable widgetVar="datatable_form_data" styleClass="custom-table"
+                                 paginator="true" paginatorAlwaysVisible="false" rows="12" paginatorPosition="bottom"
+                                 tableStyle="min-width: 60rem !important;" value="#{filesPlatformCtrl.allFiles}" var="item">
+                        <p:column headerText="#{bundle.name}" field="name"/>
+                        <p:column headerText="#{bundle.date}" field="createdAt"/>
+                        <p:column headerText="#{bundle.options}" width="15rem">
+                            <p:commandButton actionListener="#{filesPlatformCtrl.remove(item)}" update="@form"
+                                             value="#{bundle.remove}" styleClass="ui-button-flat ui-button-danger">
+                                <p:confirm header="#{bundle.confirmation}" message="#{bundle.remove_item}" icon="pi pi-info-circle"/>
+                            </p:commandButton>
+                            <p:commandButton value="#{bundle.download}" styleClass="ui-button-flat ui-button-secondary"
+                                             actionListener="#{filesPlatformCtrl.download(item)}" ajax="false"/>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>

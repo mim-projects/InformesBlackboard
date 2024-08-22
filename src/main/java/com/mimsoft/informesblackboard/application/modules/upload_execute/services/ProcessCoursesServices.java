@@ -4,7 +4,6 @@ import com.mimsoft.informesblackboard.application.data.constants.GradesConstant;
 import com.mimsoft.informesblackboard.application.data.repositories.CampusCodesRepository;
 import com.mimsoft.informesblackboard.application.data.repositories.GradesRepository;
 import com.mimsoft.informesblackboard.application.data.repositories.ModalityRepository;
-import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheKeywords;
 import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheServices;
 import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheStaticData;
 import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheStatus;
@@ -17,7 +16,6 @@ import com.mimsoft.informesblackboard.domain.entities.Modality;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;

@@ -30,6 +30,67 @@
                     <p style="text-align: center;">#{bundle.bachelor_postgraduate}</p>
                 </div>
             </div>
+
+            <div class="section-text section-text-code" style="margin-top: 4rem">
+                <h1>#{bundle.important}</h1>
+                <p>#{bundle.upload_pattern_file}: </p>
+                <p class="section-code">
+                    <span style="color: #{commonCtrl.getColor(1)}">$YEAR</span>
+                    <span style="color: #{commonCtrl.getColor(2)}">$PERIOD</span>_
+                    <span style="color: #{commonCtrl.getColor(3)}">$GRADE</span>_
+                    <span style="color: #{commonCtrl.getColor(4)}; padding-right: 0.5rem">$ANY</span>(
+                    <span style="color: #{commonCtrl.getColor(5)}">$MONTH</span>-
+                    <span style="color: #{commonCtrl.getColor(6)}">$DAY</span>-
+                    <span style="color: #{commonCtrl.getColor(7)}">$HOUR</span>)
+                </p>
+                <div style="padding-left: 1rem">
+                    <p><span style="color: #{commonCtrl.getColor(1)}">$YEAR</span>. #{bundle.upload_pattern_year}.</p>
+                    <p><span style="color: #{commonCtrl.getColor(2)}">$PERIOD</span>. #{bundle.upload_pattern_period}.</p>
+                    <p><span style="color: #{commonCtrl.getColor(3)}">$GRADE</span>. #{bundle.upload_pattern_grade}.</p>
+                    <p><span style="color: #{commonCtrl.getColor(4)}">$ANY</span>. #{bundle.upload_pattern_any}.</p>
+                    <p><span style="color: #{commonCtrl.getColor(5)}">$MONTH</span>. #{bundle.upload_pattern_month}.</p>
+                    <p><span style="color: #{commonCtrl.getColor(6)}">$DAY</span>. #{bundle.upload_pattern_day}.</p>
+                    <p><span style="color: #{commonCtrl.getColor(7)}">$HOUR</span>. #{bundle.upload_pattern_hour}.</p>
+                </div>
+                <p>#{bundle.example}:</p>
+                <p class="section-code">
+                    <span style="color: #{commonCtrl.getColor(1)}">2024</span>
+                    <span style="color: #{commonCtrl.getColor(2)}">1</span>_
+                    <span style="color: #{commonCtrl.getColor(3)}">POS</span>_
+                    <span style="color: #{commonCtrl.getColor(4)}; padding-right: 0.5rem">GRUPOS</span> (
+                    <span style="color: #{commonCtrl.getColor(5)}">02</span>-
+                    <span style="color: #{commonCtrl.getColor(6)}">27</span>-
+                    <span style="color: #{commonCtrl.getColor(7)}">17</span>)
+                </p>
+
+                <hr style="margin: 2rem 0"/>
+
+                <p style="font-weight: bold; text-transform: uppercase;">#{bundle.upload_format_files}</p>
+                <p>#{bundle.upload_users}</p>
+                <p class="section-code">
+                    <span style="color: #{commonCtrl.getColor(1)}">EXTERNAL_COURSE_KEY</span>
+                    <span style="margin: 0 0.5rem">|</span>
+                    <span style="color: #{commonCtrl.getColor(2)}">EXTERNAL_PERSON_KEY</span>
+                    <span style="margin: 0 0.5rem">|</span>
+                    <span style="color: #{commonCtrl.getColor(3)}">ROLE</span>
+                    <span style="margin: 0 0.5rem">|</span>
+                    <span style="color: #{commonCtrl.getColor(4)}">AVAILABLE_IND</span>
+                </p>
+                <p>#{bundle.upload_courses}</p>
+                <p class="section-code">
+                    <span style="color: #{commonCtrl.getColor(1)}">EXTERNAL_COURSE_KEY</span>
+                    <span style="margin: 0 0.5rem">|</span>
+                    <span style="color: #{commonCtrl.getColor(2)}">COURSE_ID</span>
+                    <span style="margin: 0 0.5rem">|</span>
+                    <span style="color: #{commonCtrl.getColor(3)}">COURSE_NAME</span>
+                    <span style="margin: 0 0.5rem">|</span>
+                    <span style="color: #{commonCtrl.getColor(4)}">AVAILABLE_IND</span>
+                    <span style="margin: 0 0.5rem">|</span>
+                    <span style="color: #{commonCtrl.getColor(5)}">CATALOG_IND</span>
+                    <span style="margin: 0 0.5rem">|</span>
+                    <span style="color: #{commonCtrl.getColor(6)}">TEMPLATE_COURSE_KEY</span>
+                </p>
+            </div>
         </h:form>
 
         <h:form id="form_upload">

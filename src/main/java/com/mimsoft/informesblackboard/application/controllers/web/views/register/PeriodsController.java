@@ -5,9 +5,7 @@ import com.mimsoft.informesblackboard.application.data.queries.custom_periods_gr
 import com.mimsoft.informesblackboard.application.data.queries.custom_periods_grades_campus.CustomPeriodsGradesCampusRepository;
 import com.mimsoft.informesblackboard.application.data.repositories.CoursesRepository;
 import com.mimsoft.informesblackboard.application.data.repositories.UsersRepository;
-import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheKeywords;
 import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheServices;
-import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheStaticData;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;

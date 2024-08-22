@@ -17,6 +17,8 @@ import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.file.UploadedFile;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Named("uploadCtrl")
@@ -43,7 +45,7 @@ public class UploadController extends AbstractSessionController {
     public synchronized void handleFileUpload(FileUploadEvent event) {
         String originalName = event.getFile().getFileName();
         if (fileStorageRepository.exists(originalName)) {
-            commonController.FacesMessagesError("File exist", "El archivo ya fue procesado");
+            commonController.FacesMessagesError("FAiled", "File exist");
             return;
         }
 
@@ -52,12 +54,21 @@ public class UploadController extends AbstractSessionController {
         String filename = ("FILE_" + new Date().getTime() + "." + temp[temp.length - 1]).toUpperCase();
         String pathname = Configuration.PATH_FILE_UPLOADS + filename;
 
+        Date date = new Date();
+        String[] parts = originalName.split(" ");
+        if (parts.length > 1) {
+            String year = parts[0].substring(0, 4);
+            String monthDay = parts[1].substring(1, 9);
+            String format = year + "-" + monthDay;
+            try { date = new SimpleDateFormat("yyyy-MM-dd-HH").parse(format); }
+            catch (ParseException ignore) { }
+        }
+
         FileStorage fileStorage = new FileStorage();
         fileStorage.setName(originalName);
         fileStorage.setPath(pathname);
-        fileStorage.setCreatedAt(new Date());
+        fileStorage.setCreatedAt(date);
         fileStorageRepository.create(fileStorage);
-
         new Thread(() -> executeProcess(pathname, uploadedFile.getContent())).start();
     }
 

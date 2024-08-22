@@ -1,28 +1,35 @@
 package com.mimsoft.informesblackboard.application.controllers.web.views;
 
 import com.mimsoft.informesblackboard.application.controllers.web.common.AbstractSessionController;
+import com.mimsoft.informesblackboard.application.data.models.helper.graphic_table_courses_users.GraphicTableCoursesUsersHelper;
 import com.mimsoft.informesblackboard.application.data.models.helper.multi_selector_boolean.MultiSelectorBooleanListHelper;
 import com.mimsoft.informesblackboard.application.data.queries.custom_periods.CustomPeriodsRepository;
 import com.mimsoft.informesblackboard.application.data.queries.custom_table_courses_users.CustomTableCoursesUsersRepository;
+import com.mimsoft.informesblackboard.application.data.repositories.GradesRepository;
 import com.mimsoft.informesblackboard.application.data.repositories.ModalityRepository;
+import com.mimsoft.informesblackboard.application.data.repositories.RolesRepository;
 import com.mimsoft.informesblackboard.application.data.repositories.StorageHistoryRepository;
 import com.mimsoft.informesblackboard.application.modules.graphics.ChartsServices;
 import com.mimsoft.informesblackboard.application.modules.graphics.TablesServices;
+import com.mimsoft.informesblackboard.application.utils.http.responses.ResponseHelper;
+import com.mimsoft.informesblackboard.domain.entities.Grades;
 import com.mimsoft.informesblackboard.domain.entities.Modality;
+import com.mimsoft.informesblackboard.domain.entities.Roles;
 import com.mimsoft.informesblackboard.domain.entities.StorageHistory;
+import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @Named("homeCtrl")
 @ViewScoped
 public class HomeController extends AbstractSessionController {
     @Inject
-    private ChartsServices chartsServices;
-    @Inject
-    private TablesServices tablesServices;
+    private GradesRepository gradesRepository;
     @Inject
     private CustomPeriodsRepository customPeriodsRepository;
     @Inject
@@ -31,72 +38,95 @@ public class HomeController extends AbstractSessionController {
     private CustomTableCoursesUsersRepository customTableCoursesUsersRepository;
     @Inject
     private ModalityRepository modalityRepository;
+    @Inject
+    private RolesRepository rolesRepository;
+    @Inject
+    private TablesServices tablesServices;
+    @Inject
+    private ChartsServices chartsServices;
 
     private String[] allMonths;
     private List<String> allPeriods;
     private String selectedPeriod;
     private String selectedMonth;
     private MultiSelectorBooleanListHelper<Modality> modalityMultiSelectorBooleanListHelper;
+    private MultiSelectorBooleanListHelper<Roles> rolesMultiSelectorBooleanListHelper;
+    private GraphicTableCoursesUsersHelper graphicTableCoursesUsersHelper;
 
     @Override
     public void init() {
         allMonths = sessionController.getBundleMessage("months").split(",");
-        applyFilters();
+        clearFilter();
     }
 
     public void applyFilters() {
+        List<Modality> modalitiesSelected = modalityMultiSelectorBooleanListHelper.getSelected();
+        int[] modalities = new int[modalitiesSelected.size()];
+        for (int i = 0; i < modalitiesSelected.size(); i++) modalities[i] = modalitiesSelected.get(i).getId();
+
+        List<Roles> rolesSelected = rolesMultiSelectorBooleanListHelper.getSelected();
+        int[] roles = new int[rolesSelected.size()];
+        for (int i = 0; i < rolesSelected.size(); i++) roles[i] = rolesSelected.get(i).getId();
+
+        int indexMonth = -1;
+        for (int i = 0; i < allMonths.length; i++) {
+            if (allMonths[i].equals(selectedMonth)) {
+                indexMonth = i + 1;
+                break;
+            }
+        }
+
+        clearTablesGraphic();
+        for (Grades grade: gradesRepository.findAll()) {
+            graphicTableCoursesUsersHelper.addDataUsers(grade, customTableCoursesUsersRepository.findUsers(selectedPeriod, indexMonth, roles, grade.getId()));
+            graphicTableCoursesUsersHelper.addDataCourses(grade, customTableCoursesUsersRepository.findCourses(selectedPeriod, indexMonth, modalities, grade.getId()));
+        }
+        graphicTableCoursesUsersHelper.createTableAll();
+    }
+
+    public void clearFilter() {
         allPeriods = customPeriodsRepository.findAllString();
         modalityMultiSelectorBooleanListHelper = new MultiSelectorBooleanListHelper<>();
+        rolesMultiSelectorBooleanListHelper = new MultiSelectorBooleanListHelper<>();
+
         for (Modality modality: modalityRepository.findAll()) {
             modalityMultiSelectorBooleanListHelper.add(modality);
         }
+
+        for (Roles roles: rolesRepository.findAll()) {
+            rolesMultiSelectorBooleanListHelper.add(roles);
+        }
+
+        clearTablesGraphic();
+    }
+
+    public void clearTablesGraphic() {
+        List<Grades> grades = gradesRepository.findAll();
+        graphicTableCoursesUsersHelper = new GraphicTableCoursesUsersHelper(sessionController, tablesServices, chartsServices, grades);
     }
 
     public boolean invalidateFilters() {
-        return selectedPeriod == null || selectedMonth == null || !modalityMultiSelectorBooleanListHelper.containTrue();
+        return selectedPeriod == null || selectedMonth == null
+                || !modalityMultiSelectorBooleanListHelper.containTrue()
+                || !rolesMultiSelectorBooleanListHelper.containTrue();
     }
 
-    public String getUsersChart(String type) {
-//        if (invalidateFilters()) return chartsServices.getEmptyShowMessage(sessionController.getBundleMessage("empty_graphic"));
-        return chartsServices.getCustomBarChart(
-                new String[] {"Mexicali", "Tijuana", "Ensenada"},
-                new String[] {"var(--uabc-green)", "var(--uabc-yellow)", "var(--uabc-blue)"},
-                new String[] {"Distancia", "Semipresencial", "Presencial"},
-                new String[] {"549, 1372, 10612", "903, 2093, 10808", "233, 616, 5624"}
-        );
+    public void createReport() {
+        try {
+            File file = File.createTempFile("tempo", ".pdf");
+            ResponseHelper.DownloadFile(FacesContext.getCurrentInstance(), file, "report.pdf");
+        } catch (IOException e) {
+            commonController.FacesMessagesError("Failed", "Error download file");
+        }
     }
 
-    public String getCoursesChart(String type) {
-//        if (invalidateFilters()) return chartsServices.getEmptyShowMessage(sessionController.getBundleMessage("empty_graphic"));
-        return chartsServices.getCustomBarChart(
-                new String[] {"Mexicali", "Tijuana", "Ensenada"},
-                new String[] {"var(--uabc-green)", "var(--uabc-yellow)", "var(--uabc-blue)"},
-                new String[] {"Distancia", "Semipresencial", "Presencial"},
-                new String[] {"549, 1372, 10612", "903, 2093, 10808", "233, 616, 5624"}
-        );
+    public String getUsersTableOrGraphic(String type, Integer gradeId) {
+        return graphicTableCoursesUsersHelper.getUserDataFormatString(type, gradeId);
     }
 
-//    public String getCustomTableCourses(String period, Grades grades) {
-//        String defaultTableStr = "<div style='text-align: center; font-size: 1.35rem; margin: 2rem;'>" + sessionController.getBundleMessage("empty_table") + "</div>";
-//        if (period == null || period.isEmpty() || grades == null) return defaultTableStr;
-//        CustomTableCoursesUsersHelper customTableCoursesUsersHelper = new CustomTableCoursesUsersHelper();
-//        for (CustomTableCoursesUsers item: customTableCoursesUsersRepository.findCourses(period, grades.getId())) {
-//            customTableCoursesUsersHelper.add(item.getCampusId().getName(), item.getModalityId().getDescription() + " (" + item.getModalityId().getName() + ")", item.getValue());
-//        }
-//        if (!customTableCoursesUsersHelper.render()) return defaultTableStr;
-//        return tablesServices.getCustomPeriodTable(customTableCoursesUsersHelper);
-//    }
-//
-//    public String getCustomTableUsers(String period, Grades grades) {
-//        String defaultTableStr = "<div style='text-align: center; font-size: 1.35rem; margin: 2rem;'>" + sessionController.getBundleMessage("empty_table") + "</div>";
-//        if (period == null || period.isEmpty() || grades == null) return defaultTableStr;
-//        CustomTableCoursesUsersHelper customTableCoursesUsersHelper = new CustomTableCoursesUsersHelper();
-//        for (CustomTableCoursesUsers item: customTableCoursesUsersRepository.findUsers(period, grades.getId())) {
-//            customTableCoursesUsersHelper.add(item.getCampusId().getName(), item.getRolesId().getName(), item.getValue());
-//        }
-//        if (!customTableCoursesUsersHelper.render()) return defaultTableStr;
-//        return tablesServices.getCustomPeriodTable(customTableCoursesUsersHelper);
-//    }
+    public String getCoursesTableOrGraphic(String type, Integer gradeId) {
+        return graphicTableCoursesUsersHelper.getCourseDataFormatString(type, gradeId);
+    }
 
     public String getStorageHistory() {
         List<StorageHistory> list = storageHistoryRepository.findAll();
@@ -106,6 +136,15 @@ public class HomeController extends AbstractSessionController {
 
     public List<String> getAllPeriods() {
         return allPeriods;
+    }
+
+    public List<Grades> getAllGradesForUI() {
+        List<Grades> grades = gradesRepository.findAll();
+        Grades all = new Grades();
+        all.setId(0);
+        all.setName(sessionController.getBundleMessage("all"));
+        grades.add(all);
+        return grades;
     }
 
     public String getSelectedPeriod() {
@@ -134,5 +173,13 @@ public class HomeController extends AbstractSessionController {
 
     public void setModalityMultiSelectorBooleanListHelper(MultiSelectorBooleanListHelper<Modality> modalityMultiSelectorBooleanListHelper) {
         this.modalityMultiSelectorBooleanListHelper = modalityMultiSelectorBooleanListHelper;
+    }
+
+    public MultiSelectorBooleanListHelper<Roles> getRolesMultiSelectorBooleanListHelper() {
+        return rolesMultiSelectorBooleanListHelper;
+    }
+
+    public void setRolesMultiSelectorBooleanListHelper(MultiSelectorBooleanListHelper<Roles> rolesMultiSelectorBooleanListHelper) {
+        this.rolesMultiSelectorBooleanListHelper = rolesMultiSelectorBooleanListHelper;
     }
 }

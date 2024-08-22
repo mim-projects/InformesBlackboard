@@ -4,7 +4,6 @@ import com.mimsoft.informesblackboard.domain.entities.Campus;
 import com.mimsoft.informesblackboard.domain.entities.Grades;
 import jakarta.persistence.*;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity

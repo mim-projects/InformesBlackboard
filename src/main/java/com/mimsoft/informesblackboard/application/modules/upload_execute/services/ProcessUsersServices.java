@@ -3,7 +3,6 @@ package com.mimsoft.informesblackboard.application.modules.upload_execute.servic
 import com.mimsoft.informesblackboard.application.data.constants.GradesConstant;
 import com.mimsoft.informesblackboard.application.data.constants.RolesConstant;
 import com.mimsoft.informesblackboard.application.data.repositories.*;
-import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheKeywords;
 import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheServices;
 import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheStaticData;
 import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheStatus;
@@ -12,7 +11,6 @@ import com.mimsoft.informesblackboard.domain.entities.*;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
