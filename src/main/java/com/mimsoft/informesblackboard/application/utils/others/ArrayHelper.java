@@ -1,9 +1,19 @@
 package com.mimsoft.informesblackboard.application.utils.others;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class ArrayHelper<T> {
+    public T[] added(T[] arr, T... items) {
+        HashMap<Integer, T> list = new LinkedHashMap<>();
+        int index = 0;
+        for (T t : arr) { list.put(index, t); index++; }
+        for (T item : items) { list.put(index, item); index++; }
+        return list.values().toArray(arr);
+    }
+
     public boolean contains(T item, T[] list) {
         for (T current: list) if (current.equals(item)) return true;
         return false;

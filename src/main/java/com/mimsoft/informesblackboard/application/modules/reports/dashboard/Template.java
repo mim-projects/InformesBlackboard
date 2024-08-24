@@ -4,86 +4,128 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.mimsoft.informesblackboard.application.data.constants.Colors;
+import com.mimsoft.informesblackboard.application.data.interfaces.BundleLanguage;
+import com.mimsoft.informesblackboard.application.data.models.helper.graphic_table_courses_users.GraphicTableCoursesUsersHelper;
+import com.mimsoft.informesblackboard.application.data.queries.custom_table_courses_users.CustomTableCoursesUsersHelper;
+import com.mimsoft.informesblackboard.application.utils.others.ArrayHelper;
+import com.mimsoft.informesblackboard.domain.entities.Grades;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 class Template {
-    public static Template Instance(Document document) {
-        return new Template(document);
+    public static Template Instance(Document document, GraphicTableCoursesUsersHelper data, BundleLanguage bundleLanguage) {
+        return new Template(document, data, bundleLanguage);
     }
 
     private static final int PADDING = 4;
+    private final GraphicTableCoursesUsersHelper data;
+    private final BundleLanguage bundleLanguage;
     private final Document document;
 
-    public Template(Document document) {
+    public Template(Document document, GraphicTableCoursesUsersHelper data, BundleLanguage bundleLanguage) {
         this.document = document;
+        this.data = data;
+        this.bundleLanguage = bundleLanguage;
     }
 
     public void render() throws DocumentException, IOException {
         PdfPTable table = new PdfPTable(1);
         table.setWidthPercentage(100);
 
-        for (int k = 0; k < 6; k++) {
-            createTableAndGraphic(table);
-            table.addCell(emptyHeight(40));
+        HashMap<SectionTypes, String> types = new LinkedHashMap<>();
+        types.put(SectionTypes.USERS, bundleLanguage.getBundleMessage("users"));
+        types.put(SectionTypes.COURSES, bundleLanguage.getBundleMessage("courses"));
+
+        for (SectionTypes type: types.keySet()) {
+            for (Grades grade: data.getAllGradesForType(type.getValue())) {
+                String title = types.get(type) + ". " + grade.getName();
+                createTableAndGraphic(table, title, type, grade);
+                table.addCell(emptyHeight(40));
+            }
         }
 
         document.add(table);
     }
 
     // Data for section
-    private void createTableAndGraphic(PdfPTable parent) throws BadElementException, IOException {
+    private void createTableAndGraphic(PdfPTable parent, String title, SectionTypes type, Grades grade) throws BadElementException, IOException {
+        if (!data.renderHelper(type.getValue(), grade)) return;
+
+        // Data
+        CustomTableCoursesUsersHelper result = data.getCustomTableGraphicDataHelper(type.getValue(), grade);
+        String[] dataHeader = result.getAllColumns().toArray(new String[0]);
+        String[] dataKeyword = result.getAllRows().toArray(new String[0]);
+        Integer[][] values = new Integer[dataKeyword.length][dataHeader.length];
+        Integer[] subTotalHorizontal = new Integer[dataHeader.length];
+        Integer[] subTotalVertical = new Integer[dataKeyword.length];
+        Integer total = result.getTotal();
+
+        for (int i = 0; i < dataHeader.length; i++) subTotalHorizontal[i] = result.getTotalColumn(dataHeader[i]);
+        for (int j = 0; j < dataKeyword.length; j++) subTotalVertical[j] = result.getTotalRow(dataKeyword[j]);
+        for (int j = 0; j < dataKeyword.length; j++) {
+            for (int i = 0; i < dataHeader.length; i++) {
+                values[j][i] = result.getValue(dataHeader[i], dataKeyword[j]);
+            }
+        }
+
         PdfPTable table = new PdfPTable(1);
+        PdfPTable customTable = createTable(dataHeader, dataKeyword, values, subTotalVertical, subTotalHorizontal, total);
+        PdfPCell customGraphic = createBarChartGraphic(dataHeader, dataKeyword, values);
 
-        table.addCell(cellBorder(createText("Licenciatura", 12), 0));
+        table.addCell(cellBorder(createText(title.toUpperCase(), 11, true), 0));
         table.addCell(emptyHeight(20));
-        table.addCell(cellBorder(createTable(), 0));
+        table.addCell(cellBorder(customTable, 0));
         table.addCell(emptyHeight(20));
-        table.addCell(createGraphic());
-
+        table.addCell(customGraphic);
         parent.addCell(cellBorder(table, 0));
     }
 
-    private PdfPTable createTable() {
-        PdfPTable table = new PdfPTable(5);
+    private PdfPTable createTable(String[] dataHeader, String[] dataKeyword, Integer[][] values, Integer[] subtotalVertical, Integer[] subtotalHorizontal, Integer total) {
+        int columns = dataHeader.length + 2;
+        PdfPTable table = new PdfPTable(columns);
 
         // Header
         table.addCell(valueCell("", null, null, false));
-        table.addCell(headerCell("Tijuana"));
-        table.addCell(headerCell("Mexicali"));
-        table.addCell(headerCell("Ensenada"));
+        for (String current: dataHeader) table.addCell(headerCell(current));
         table.addCell(valueCell("", null, null, false));
 
         // Rows
-        table.addCell(keywordCell("Docentes", convertColorRGBArr(Colors.UABC_YELLOW_2), BaseColor.BLACK));
-        table.addCell(valueCell("423", null, null, false));
-        table.addCell(valueCell("32", null, null, false));
-        table.addCell(valueCell("14", null, null, false));
-        table.addCell(valueCell("469", convertColorRGBArr(Colors.UABC_YELLOW_2), BaseColor.BLACK, false));
+        int TOTAL = 0;
+        int SUBTOTAL = 1;
+        String[] dataKeywordAdded = new ArrayHelper<String>().added(
+                dataKeyword,
+                bundleLanguage.getBundleMessage("subtotal").toUpperCase(),
+                bundleLanguage.getBundleMessage("total").toUpperCase()
+        );
 
-        table.addCell(keywordCell("Estudiantes", convertColorRGBArr(Colors.UABC_YELLOW_2), BaseColor.BLACK));
-        table.addCell(valueCell("423", null, null, false));
-        table.addCell(valueCell("32", null, null, false));
-        table.addCell(valueCell("14", null, null, false));
-        table.addCell(valueCell("469", convertColorRGBArr(Colors.UABC_YELLOW_2), BaseColor.BLACK, false));
-
-        table.addCell(keywordCell("SUBTOTAL", convertColorRGBArr(Colors.UABC_YELLOW_1), BaseColor.BLACK));
-        table.addCell(valueCell("423", convertColorRGBArr(Colors.UABC_YELLOW_1), BaseColor.BLACK, false));
-        table.addCell(valueCell("32", convertColorRGBArr(Colors.UABC_YELLOW_1), BaseColor.BLACK, false));
-        table.addCell(valueCell("14", convertColorRGBArr(Colors.UABC_YELLOW_1), BaseColor.BLACK, false));
-        table.addCell(valueCell("469", convertColorRGBArr(Colors.UABC_YELLOW), BaseColor.BLACK, false));
-
-        table.addCell(keywordCell("TOTAL", convertColorRGBArr(Colors.UABC_YELLOW), BaseColor.BLACK));
-        table.addCell(valueCell("", convertColorRGBArr(Colors.UABC_YELLOW), BaseColor.BLACK, false));
-        table.addCell(valueCell("", convertColorRGBArr(Colors.UABC_YELLOW), BaseColor.BLACK, false));
-        table.addCell(valueCell("14", convertColorRGBArr(Colors.UABC_YELLOW), BaseColor.BLACK, false));
-        table.addCell(valueCell("", null, null, false));
+        int partialRow = 0;
+        int incrementRow = 0;
+        for (int row = dataKeywordAdded.length - 1; row >= 0; row--) {
+            if (row == TOTAL) {
+                table.addCell(keywordCell(dataKeywordAdded[incrementRow], convertColorRGBArr(Colors.UABC_YELLOW), BaseColor.BLACK));
+                for (int k = 0; k < dataHeader.length - 1; k++) table.addCell(valueCell("", convertColorRGBArr(Colors.UABC_YELLOW), BaseColor.BLACK, false));
+                table.addCell(valueCell(String.valueOf(total), convertColorRGBArr(Colors.UABC_YELLOW), BaseColor.BLACK, false));
+                table.addCell(valueCell("", null, null, false));
+            } else if (row == SUBTOTAL) {
+                table.addCell(keywordCell(dataKeywordAdded[incrementRow], convertColorRGBArr(Colors.UABC_YELLOW_1), BaseColor.BLACK));
+                for (int k = 0; k < dataHeader.length; k++) table.addCell(valueCell(String.valueOf(subtotalHorizontal[k]), convertColorRGBArr(Colors.UABC_YELLOW_1), BaseColor.BLACK, false));
+                table.addCell(valueCell(String.valueOf(total), convertColorRGBArr(Colors.UABC_YELLOW), BaseColor.BLACK, false));
+            } else {
+                table.addCell(keywordCell(dataKeywordAdded[incrementRow], convertColorRGBArr(Colors.UABC_YELLOW_2), BaseColor.BLACK));
+                for (int k = 0; k < dataHeader.length; k++) table.addCell(valueCell(String.valueOf(values[partialRow][k]), null, null, false));
+                table.addCell(valueCell(String.valueOf(subtotalVertical[partialRow]), convertColorRGBArr(Colors.UABC_YELLOW_2), BaseColor.BLACK, false));
+                partialRow++;
+            }
+            incrementRow++;
+        }
 
         return table;
     }
 
-    private PdfPCell createGraphic() throws BadElementException, IOException {
-        Image image = new BarCharts(750, 200).getImage();
+    private PdfPCell createBarChartGraphic(String[] dataHeader, String[] dataKeyword, Integer[][] values) throws BadElementException, IOException {
+        Image image = new BarCharts(750, 200).setDataset(dataHeader, dataKeyword, values).build().getImage();
         PdfPCell graphic = new PdfPCell(image, true);
         graphic.setBorder(0);
         return graphic;
@@ -155,6 +197,12 @@ class Template {
     private Phrase createText(String text, int size) {
         Phrase phrase = new Phrase(text);
         phrase.getFont().setSize(size);
+        return phrase;
+    }
+
+    private Phrase createText(String text, int size, boolean bold) {
+        Phrase phrase = createText(text, size);
+        if (bold) phrase.getFont().setStyle(Font.BOLD);
         return phrase;
     }
 }

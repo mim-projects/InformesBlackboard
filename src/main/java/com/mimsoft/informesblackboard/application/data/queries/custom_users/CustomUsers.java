@@ -9,7 +9,7 @@ import java.util.List;
 
 @Entity
 @SqlResultSetMapping(
-        name = "CustomWorkers",
+        name = "CustomUsers",
         classes = @ConstructorResult(
                 targetClass = CustomUsers.class,
                 columns = {

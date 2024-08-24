@@ -26,12 +26,16 @@ import java.io.IOException;
 class BarCharts {
     private final int width;
     private final int height;
-    private final JFreeChart chart;
+    private JFreeChart chart;
+    private DefaultCategoryDataset dataset;
 
     public BarCharts(int width, int height) {
         this.width = width;
         this.height = height;
-        chart = createChart(createDataset());
+    }
+
+    public BarCharts build() {
+        chart = createChart(dataset);
         ChartPanel chartPanel = new ChartPanel(chart, false);
         chartPanel.setFillZoomRectangle(true);
         chartPanel.setMouseWheelEnabled(true);
@@ -40,6 +44,17 @@ class BarCharts {
         chartPanel.setMinimumDrawWidth(0);
         chartPanel.setMaximumDrawHeight(Integer.MAX_VALUE);
         chartPanel.setMaximumDrawWidth(Integer.MAX_VALUE);
+        return this;
+    }
+
+    public BarCharts setDataset(String[] rows, String[] columns, Integer[][] values) {
+        dataset = new DefaultCategoryDataset();
+        for (int row = 0; row < rows.length; row++) {
+            for (int column = 0; column < columns.length; column++) {
+                dataset.addValue(values[column][row], rows[row], columns[column]);
+            }
+        }
+        return this;
     }
 
     public Image getImage() throws IOException, BadElementException {
@@ -47,17 +62,6 @@ class BarCharts {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         ImageIO.write(bufferedImage, "png", byteArrayOutputStream);
         return Image.getInstance(byteArrayOutputStream.toByteArray());
-    }
-
-    private static CategoryDataset createDataset() {
-        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        dataset.addValue(7445, "Tijuana", "Docentes");
-        dataset.addValue(24448, "Mexicali", "Docentes");
-        dataset.addValue(4297, "Ensenada", "Docentes");
-        dataset.addValue(7445, "Tijuana", "Estudiantes");
-        dataset.addValue(24448, "Mexicali", "Estudiantes");
-        dataset.addValue(4297, "Ensenada", "Estudiantes");
-        return dataset;
     }
 
     private static JFreeChart createChart(CategoryDataset dataset) {
@@ -69,7 +73,7 @@ class BarCharts {
         chart.setBackgroundPaint(Color.WHITE);
 
         CategoryPlot plot = (CategoryPlot) chart.getPlot();
-        Paint[] colors = new Paint[]{ ConvertColor(Colors.UABC_YELLOW), ConvertColor(Colors.UABC_GREEN), ConvertColor(Colors.UABC_BLUE) };
+        Paint[] colors = new Paint[]{ ConvertColor(Colors.UABC_YELLOW), ConvertColor(Colors.UABC_GREEN), ConvertColor(Colors.UABC_BLUE), ConvertColor(Colors.UABC_YELLOW_2), ConvertColor(Colors.UABC_GREEN_2), ConvertColor(Colors.UABC_BLUE_2) };
         plot.setDrawingSupplier(new DefaultDrawingSupplier(colors, colors, DefaultDrawingSupplier.DEFAULT_STROKE_SEQUENCE, DefaultDrawingSupplier.DEFAULT_OUTLINE_STROKE_SEQUENCE, DefaultDrawingSupplier.DEFAULT_SHAPE_SEQUENCE));
         plot.setBackgroundPaint(Color.WHITE);
         plot.setOutlinePaint(Color.WHITE);

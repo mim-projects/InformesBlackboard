@@ -112,7 +112,7 @@ public class HomeController extends AbstractSessionController {
     public void createReport() {
         try {
             String filename = "FILE_" + System.currentTimeMillis();
-            DashboardReport.Download(graphicTableCoursesUsersHelper, FacesContext.getCurrentInstance(), filename);
+            DashboardReport.Download(graphicTableCoursesUsersHelper, FacesContext.getCurrentInstance(), filename, sessionController);
         } catch (Exception e) {
             commonController.FacesMessagesError(sessionController.getBundleMessage("failed"), sessionController.getBundleMessage("try_again"));
         }

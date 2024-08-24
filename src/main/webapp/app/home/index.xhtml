@@ -18,7 +18,7 @@
                             <span>#{bundle.periods}</span>
                         </p>
                         <p:selectOneMenu value="#{homeCtrl.selectedPeriod}" style="min-width: 8rem !important">
-                            <f:selectItem itemValue="#{null}" itemLabel="#{homeCtrl.selectedMonth}" noSelectionOption="true"/>
+                            <f:selectItem itemValue="#{null}" itemLabel="#{null}"/>
                             <f:selectItems value="#{homeCtrl.allPeriods}" var="period" itemLabel="#{period}" itemValue="#{period}"/>
                             <p:ajax event="change" update="controls"/>
                         </p:selectOneMenu>
@@ -29,7 +29,7 @@
                             <span>#{bundle.date}</span>
                         </p>
                         <p:selectOneMenu value="#{homeCtrl.selectedMonth}" style="min-width: 8rem !important">
-                            <f:selectItem itemValue="#{null}" itemLabel="#{homeCtrl.selectedMonth}" noSelectionOption="true"/>
+                            <f:selectItem itemValue="#{null}" itemLabel="#{null}"/>
                             <f:selectItems value="#{homeCtrl.allMonths}" var="month" itemLabel="#{month}" itemValue="#{month}"/>
                             <p:ajax event="change" update="controls"/>
                         </p:selectOneMenu>
@@ -64,11 +64,14 @@
                 <h:form id="controls">
                     <div style="display: flex; flex-wrap: wrap; gap: 1rem">
                         <p:commandButton value="#{bundle.clean}" icon="pi pi-sync" actionListener="#{homeCtrl.clearTablesGraphic()}"
-                                         update="@all" styleClass="ui-button-secondary ui-button-flat"/>
+                                         update="@all" styleClass="ui-button-secondary ui-button-flat"
+                                         onstart="createGlobalLoader('#{bundle.loading}')" oncomplete="removeGlobalLoader()"/>
                         <p:commandButton value="#{bundle.run}" icon="pi pi-arrow-circle-right" actionListener="#{homeCtrl.applyFilters()}"
-                                         disabled="#{homeCtrl.invalidateFilters()}" update="tables @next"/>
+                                         disabled="#{homeCtrl.invalidateFilters()}" update="tables @next"
+                                         onstart="createGlobalLoader('#{bundle.loading}')" oncomplete="removeGlobalLoader()"/>
                         <p:commandButton value="#{bundle.report}" icon="pi pi-file-pdf" styleClass="ui-button-warning"
-                                         actionListener="#{homeCtrl.createReport()}" ajax="false"/>
+                                         actionListener="#{homeCtrl.createReport()}" ajax="false"
+                                         disabled="#{homeCtrl.disabledButtonReport()}"/>
                     </div>
                 </h:form>
             </div>

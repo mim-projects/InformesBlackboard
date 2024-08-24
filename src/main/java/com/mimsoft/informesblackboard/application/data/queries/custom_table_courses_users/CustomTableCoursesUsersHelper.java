@@ -61,6 +61,24 @@ public class CustomTableCoursesUsersHelper {
         return total;
     }
 
+    public Integer[] getTotalAllColumn() {
+        List<String> columns = getAllColumns();
+        Integer[] total = new Integer[columns.size()];
+        for (int i = 0; i < total.length; i++) {
+            total[i] = getTotalColumn(columns.get(i));
+        }
+        return total;
+    }
+
+    public Integer[] getTotalAllRow() {
+        List<String> rows = getAllRows();
+        Integer[] total = new Integer[rows.size()];
+        for (int i = 0; i < total.length; i++) {
+            total[i] = getTotalRow(rows.get(i));
+        }
+        return total;
+    }
+
     public Integer[] getColumnValues(String row) {
         Integer[] values = new Integer[rows.size()];
         int k = 0;
@@ -77,6 +95,18 @@ public class CustomTableCoursesUsersHelper {
         for (String row: getAllRows()) {
             values[k] = getValue(column, row);
             k++;
+        }
+        return values;
+    }
+
+    public Integer[][] getValuesColRow() {
+        Integer[][] values = new Integer[columns.size()][rows.size()];
+        List<String> rows = getAllRows();
+        List<String> columns = getAllColumns();
+        for (int col = 0; col < columns.size(); col++) {
+            for (int row = 0; row < rows.size(); row++) {
+                values[col][row] = getValue(columns.get(col), rows.get(row));
+            }
         }
         return values;
     }

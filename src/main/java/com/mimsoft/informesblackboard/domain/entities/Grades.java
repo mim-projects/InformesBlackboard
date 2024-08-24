@@ -17,6 +17,11 @@ public class Grades extends EntityCore {
     public Grades() {
     }
 
+    public Grades(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     @Override
     public Integer getId() {
         return id;

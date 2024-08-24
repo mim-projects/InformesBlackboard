@@ -7,10 +7,7 @@ import com.mimsoft.informesblackboard.application.modules.graphics.ChartsService
 import com.mimsoft.informesblackboard.application.modules.graphics.TablesServices;
 import com.mimsoft.informesblackboard.domain.entities.Grades;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 public class GraphicTableCoursesUsersHelper {
     private final TablesServices tablesServices;
@@ -21,8 +18,11 @@ public class GraphicTableCoursesUsersHelper {
     private final HashMap<Integer, String> tableCourses;
     private final HashMap<Integer, String> graphicCourses;
 
-    List<CustomTableCoursesUsers> usersAllData;
-    List<CustomTableCoursesUsers> coursesAllData;
+    private final HashMap<Integer, Grades> gradesList;
+    private final List<CustomTableCoursesUsers> usersAllData;
+    private final List<CustomTableCoursesUsers> coursesAllData;
+    private final HashMap<Grades, CustomTableCoursesUsersHelper> usersAllDataHelper;
+    private final HashMap<Grades, CustomTableCoursesUsersHelper> coursesAllDataHelper;
 
     private final String tableEmpty;
     private final String graphicEmpty;
@@ -36,7 +36,11 @@ public class GraphicTableCoursesUsersHelper {
         tableCourses = new HashMap<>();
         graphicCourses = new HashMap<>();
 
+        gradesList = new LinkedHashMap<>();
+        gradesList.put(0, new Grades(0, bundleLanguage.getBundleMessage("all")));
+
         for (Grades grade : grades) {
+            gradesList.put(grade.getId(), grade);
             tableUsers.put(grade.getId(), null);
             graphicUsers.put(grade.getId(), null);
             tableCourses.put(grade.getId(), null);
@@ -51,6 +55,13 @@ public class GraphicTableCoursesUsersHelper {
 
         usersAllData = new ArrayList<>();
         coursesAllData = new ArrayList<>();
+        usersAllDataHelper = new LinkedHashMap<>();
+        coursesAllDataHelper = new LinkedHashMap<>();
+
+        for (Grades grade : gradesList.values()) {
+            usersAllDataHelper.put(grade, null);
+            coursesAllDataHelper.put(grade, null);
+        }
 
         this.tableEmpty = "<div style='height: 100%; width: 100%; display: flex; align-items: center; justify-content: center; font-size: 1.35rem;'>" + bundleLanguage.getBundleMessage("empty_table") + "</div>";
         this.graphicEmpty = "{ grid: { left: '2%', right: '2%', top: '2%', bottom: '2%' }, title: { text: \"" + bundleLanguage.getBundleMessage("empty_graphic") + "\", show: true, left: \"center\", top: \"center\", textStyle: { fontWeight: \"normal\", color: \"var(--text-color)\" } } }";
@@ -65,7 +76,7 @@ public class GraphicTableCoursesUsersHelper {
             if (exist == null) usersHashMap.put(keyword, item);
             else exist.setValue(exist.getValue() + item.getValue());
         }
-        createTableAndGraphic(null, new ArrayList<>(usersHashMap.values()), tableUsers, graphicUsers);
+        createTableAndGraphic(null, new ArrayList<>(usersHashMap.values()), tableUsers, graphicUsers, usersAllDataHelper);
 
         // Courses
         HashMap<String, CustomTableCoursesUsers> coursesHashMap = new LinkedHashMap<>();
@@ -75,16 +86,16 @@ public class GraphicTableCoursesUsersHelper {
             if (exist == null) coursesHashMap.put(keyword, item);
             else exist.setValue(exist.getValue() + item.getValue());
         }
-        createTableAndGraphic(null, new ArrayList<>(coursesHashMap.values()), tableCourses, graphicCourses);
+        createTableAndGraphic(null, new ArrayList<>(coursesHashMap.values()), tableCourses, graphicCourses, coursesAllDataHelper);
     }
 
     public void addDataUsers(Grades grades, List<CustomTableCoursesUsers> data) {
-        createTableAndGraphic(grades, data, tableUsers, graphicUsers);
+        createTableAndGraphic(grades, data, tableUsers, graphicUsers, usersAllDataHelper);
         usersAllData.addAll(data);
     }
 
     public void addDataCourses(Grades grades, List<CustomTableCoursesUsers> data) {
-        createTableAndGraphic(grades, data, tableCourses, graphicCourses);
+        createTableAndGraphic(grades, data, tableCourses, graphicCourses, coursesAllDataHelper);
         coursesAllData.addAll(data);
     }
 
@@ -96,7 +107,7 @@ public class GraphicTableCoursesUsersHelper {
         return getString(type, gradeId, tableCourses, graphicCourses);
     }
 
-    private void createTableAndGraphic(Grades grade, List<CustomTableCoursesUsers> data, HashMap<Integer, String> tableMap, HashMap<Integer, String> graphicMap) {
+    private void createTableAndGraphic(Grades grade, List<CustomTableCoursesUsers> data, HashMap<Integer, String> tableMap, HashMap<Integer, String> graphicMap, HashMap<Grades, CustomTableCoursesUsersHelper> helperMap) {
         if (data.isEmpty()) return;
         CustomTableCoursesUsersHelper table = new CustomTableCoursesUsersHelper();
         for (CustomTableCoursesUsers current : data) {
@@ -108,6 +119,14 @@ public class GraphicTableCoursesUsersHelper {
         }
         tableMap.replace(grade == null ? 0 : grade.getId(), tablesServices.getCustomPeriodTable(table));
         graphicMap.replace(grade == null ? 0 : grade.getId(), chartsServices.getCustomBarChart(table));
+        // All Helper
+        Grades gradeHelper = grade == null ? gradesList.get(0) : grade;
+        for (Grades item : helperMap.keySet()) {
+            if (item.getId().equals(gradeHelper.getId())) {
+                helperMap.put(item, table);
+                break;
+            }
+        }
     }
 
     private String getString(String type, Integer gradeId, HashMap<Integer, String> table, HashMap<Integer, String> graphic) {
@@ -122,5 +141,37 @@ public class GraphicTableCoursesUsersHelper {
 
     public boolean containsData() {
         return !usersAllData.isEmpty() || !coursesAllData.isEmpty();
+    }
+
+    public boolean renderHelper(String type, Grades grades) {
+        Grades helperGrade = grades == null ? gradesList.get(0) : grades;
+        return getCustomTableGraphicDataHelper(type, helperGrade) != null;
+    }
+
+    public CustomTableCoursesUsersHelper getCustomTableGraphicDataHelper(String type, Grades grades) {
+        if (type.equalsIgnoreCase("users")) {
+            for (Grades current : usersAllDataHelper.keySet()) {
+                if (current.getId().equals(grades.getId())) {
+                    return usersAllDataHelper.get(current);
+                }
+            }
+        } else {
+            for (Grades current : coursesAllDataHelper.keySet()) {
+                if (current.getId().equals(grades.getId())) {
+                    return coursesAllDataHelper.get(current);
+                }
+            }
+        }
+        return null;
+    }
+
+    public List<Grades> getAllGradesForType(String type) {
+        Set<Grades> grades = new LinkedHashSet<>();
+        for (Integer item : type.equalsIgnoreCase("users") ? tableUsers.keySet() : tableCourses.keySet()) {
+            grades.add(gradesList.get(item));
+        }
+        List<Grades> list = new ArrayList<>(grades);
+        Collections.reverse(list);
+        return list;
     }
 }
