@@ -46,7 +46,7 @@ public class CustomTableCoursesUsersRepository extends QueryRepository {
                     "    courses.grades_id = '" + gradesId + "' and " +
                     "    courses.periods like concat(date_format(courses.dated_at, '%Y'), '%') and " +
                     "    month(courses.dated_at) = '" + month + "' " + helper +
-                    "group by campus_id, grades_id, modality_id, month(courses.dated_at) " +
+                    "group by campus_id, grades_id, modality_id " +
                     "order by value desc;";
             try {
                 return entityManager.createNativeQuery(query, CustomTableCoursesUsers.class).getResultList();

@@ -37,4 +37,8 @@ public class FileStorageRepository {
             e.printStackTrace();
         }
     }
+
+    public void removeFromPathname(String pathname) {
+        remove(repository.findOne("path", "'" + pathname + "'"));
+    }
 }

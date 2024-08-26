@@ -16,6 +16,7 @@ import com.mimsoft.informesblackboard.domain.entities.Modality;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -38,8 +39,8 @@ public class ProcessCoursesServices {
     private HashMap<String, CampusCodes> campusCodesHashMap;
     private Date date;
 
-    public void load() {
-        date = new Date();
+    public void load(Date date) {
+        this.date = date;
         gradesHashMap = new LinkedHashMap<>();
         modalityHasMap = new LinkedHashMap<>();
         campusCodesHashMap = new LinkedHashMap<>();
@@ -66,7 +67,7 @@ public class ProcessCoursesServices {
         courses.setModalityId(modalityHasMap.get(keyword[keyword.length - 2]));
         courses.setCampusCodesId(campusCodesHashMap.get(keyword[1]));
         courses.setGradesId(grades);
-        courses.setHashCode(parts[0]);
+        courses.setHashCode(parts[0] + new SimpleDateFormat("yyyy-MM-dd").format(date));
         courses.setDatedAt(date);
         callback.callback(courses);
 

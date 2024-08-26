@@ -53,7 +53,7 @@ public class CoursesRepository {
                 "periods = '" + periods + "' and " +
                 "grades_id = '" + gradesId.getId() + "' and " +
                 "campus_id = '" + campusId.getId() + "' and " +
-                "dated_at = '" + new SimpleDateFormat("yyyy-MM").format(datedAt) + "%' ";
+                "date_format(dated_at, '%Y-%m') = '" + new SimpleDateFormat("yyyy-MM").format(datedAt) + "' ";
         repository.executeNativeQuery(query);
     }
 }

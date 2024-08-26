@@ -19,6 +19,7 @@ public class UsersRepository {
     private Repository<Users> repository;
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static final SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
 
     public Users findById(String id) {
         return repository.findOne("id", "'" + id + "'");
@@ -29,7 +30,9 @@ public class UsersRepository {
     }
 
     public String createIgnoreQuery(Users users) {
-        String hashCode = users.getKeyword() + users.getPeriods() + users.getKeywordCourse() + + users.getRolesId().getId() + users.getModalityId().getId() + users.getCampusCodesId().getId() + users.getGradesId().getId();
+        String hashCode = users.getKeyword() + users.getPeriods() + users.getKeywordCourse() +
+                users.getRolesId().getId() + users.getModalityId().getId() + users.getCampusCodesId().getId() +
+                users.getGradesId().getId() + sdf2.format(users.getDatedAt());
         hashCode = hashCode.trim().replaceAll("_", "").replaceAll(" ", "");
         return  "insert ignore into users (" +
                 "keyword, periods, keyword_course, roles_id, modality_id, campus_code_id, grades_id, hash_code, dated_at " +
@@ -55,7 +58,7 @@ public class UsersRepository {
                 "periods = '" + periods + "' and " +
                 "grades_id = '" + gradesId.getId() + "' and " +
                 "campus_id = '" + campusId.getId() + "' and " +
-                "dated_at like '" +  new SimpleDateFormat("yyyy-MM").format(datedAt) + "%' ";
+                "date_format(dated_at, '%Y-%m') = '" + new SimpleDateFormat("yyyy-MM").format(datedAt) + "' ";
         repository.executeNativeQuery(query);
     }
 }

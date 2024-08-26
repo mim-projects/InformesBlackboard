@@ -17,9 +17,12 @@ import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.file.UploadedFile;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Named("uploadCtrl")
 @ViewScoped
@@ -40,10 +43,22 @@ public class UploadController extends AbstractSessionController {
         selectedTypeFile = "users";
     }
 
+    private boolean validateFileFormatName(String filename) {
+        String regex = "[0-9]{5}_[A-Za-z]+_[A-Za-z]+ \\([0-9]{2}-[0-9]{2}-[0-9]{2}\\).(txt|csv|tsv)";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(filename);
+        return matcher.matches();
+    }
+
     public synchronized void handleFileUpload(FileUploadEvent event) {
         String originalName = event.getFile().getFileName();
         if (fileStorageRepository.exists(originalName)) {
             commonController.FacesMessagesError("Failed", "File exist");
+            return;
+        }
+
+        if (!validateFileFormatName(originalName)) {
+            commonController.FacesMessagesError("Failed", "File name invalid format");
             return;
         }
 
@@ -67,18 +82,24 @@ public class UploadController extends AbstractSessionController {
         fileStorage.setPath(pathname);
         fileStorage.setCreatedAt(date);
         fileStorageRepository.create(fileStorage);
-        new Thread(() -> executeProcess(pathname, uploadedFile.getContent())).start();
+        new Thread(() -> executeProcess(pathname, fileStorage.getCreatedAt(), uploadedFile.getContent())).start();
     }
 
-    private void executeProcess(String pathname, byte[] data) {
+    private void executeProcess(String pathname, Date date, byte[] data) {
+        File file = new File(pathname);
         try {
-            File file = new File(pathname);
             FileUtils.writeByteArrayToFile(file, data);
-            if (selectedTypeFile.equalsIgnoreCase("users")) uploadExecuteService.executeProcessUsers(pathname, entityManager, userTransaction);
-            else if (selectedTypeFile.equalsIgnoreCase("courses")) uploadExecuteService.executeProcessCourses(pathname, entityManager, userTransaction);
+            if (selectedTypeFile.equalsIgnoreCase("users")) uploadExecuteService.executeProcessUsers(pathname, date, entityManager, userTransaction);
+            else if (selectedTypeFile.equalsIgnoreCase("courses")) uploadExecuteService.executeProcessCourses(pathname, date, entityManager, userTransaction);
             //FileUtils.forceDelete(file);
         } catch (Exception e) {
             e.printStackTrace();
+            try {
+                FileUtils.forceDeleteOnExit(file);
+                fileStorageRepository.removeFromPathname(pathname);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 

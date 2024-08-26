@@ -18,6 +18,7 @@ import jakarta.transaction.UserTransaction;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Date;
 
 @Singleton
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
@@ -79,8 +80,8 @@ public class UploadExecuteService {
     }
 
     @Lock(LockType.READ)
-    public void executeProcessUsers(String path, EntityManager entityManager, UserTransaction userTransaction) throws Exception {
-        processUsersServices.load();
+    public void executeProcessUsers(String path, Date date, EntityManager entityManager, UserTransaction userTransaction) throws Exception {
+        processUsersServices.load(date);
         ProcessMassiveServices<Users> processMassiveServices = new ProcessMassiveServices<>(entityManager, userTransaction);
         process(path, (currentLine, totalLine, data) -> processUsersServices.execute(currentLine, totalLine, data, processMassiveServices::addQueryString));
         processMassiveServices.executeString();
@@ -88,8 +89,8 @@ public class UploadExecuteService {
     }
 
     @Lock(LockType.READ)
-    public void executeProcessCourses(String path, EntityManager entityManager, UserTransaction userTransaction) throws Exception {
-        processCoursesServices.load();
+    public void executeProcessCourses(String path, Date date, EntityManager entityManager, UserTransaction userTransaction) throws Exception {
+        processCoursesServices.load(date);
         ProcessMassiveServices<Courses> processMassiveServices = new ProcessMassiveServices<>(entityManager, userTransaction);
         process(path, (currentLine, totalLine, data) -> processCoursesServices.execute(currentLine, totalLine, data, processMassiveServices::add));
         processMassiveServices.execute();

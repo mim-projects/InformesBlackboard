@@ -38,8 +38,8 @@ public class ProcessUsersServices {
     private HashMap<Integer, Roles> rolesHashMap;
     private Date date;
 
-    public void load() {
-        date = new Date();
+    public void load(Date date) {
+        this.date = date;
         gradesHashMap = new LinkedHashMap<>();
         modalityHasMap = new LinkedHashMap<>();
         campusCodesHashMap = new LinkedHashMap<>();

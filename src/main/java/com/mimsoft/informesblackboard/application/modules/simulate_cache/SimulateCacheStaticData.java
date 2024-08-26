@@ -35,13 +35,13 @@ public class SimulateCacheStaticData {
         StringBuilder modalities = new StringBuilder();
         for (Integer integer : modality) modalities.append(integer).append("_");
         if (!modalities.toString().isEmpty()) modalities = new StringBuilder(modalities.substring(0, modalities.length() - 1));
-        return SimulateCacheKeywords.CustomTableCourses.getKeyword() + period + "_" + month + "_g" + gradesId + "_m" + modalities;
+        return SimulateCacheKeywords.CustomTableCourses.getKeyword() + period + "_mt" + month + "_g" + gradesId + "_m" + modalities;
     }
 
     public static String CreateKeywordUsersFilters(String period, int month, int[] roles, Integer gradesId) {
         StringBuilder rol = new StringBuilder();
         for (Integer integer : roles) rol.append(integer).append("_");
         if (!rol.toString().isEmpty()) rol = new StringBuilder(rol.substring(0, rol.length() - 1));
-        return SimulateCacheKeywords.CustomTableUsers.getKeyword() + period + "_" + month + "_g" + gradesId + "_r" + rol;
+        return SimulateCacheKeywords.CustomTableUsers.getKeyword() + period + "_mt" + month + "_g" + gradesId + "_r" + rol;
     }
 }
