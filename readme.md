@@ -18,7 +18,7 @@ El contexto depende de la base de datos.
   - http://localhost:9990/console/index.html#undertow-server;name=default-server
   - Listener 
   - HTTP 
-  - Max Post Size = 104857600 | (100 MB)
+  - Max Post Size = 1048576000
 
 ## Base de datos
 ![database_v2.png](development/database/database_v2.png)

@@ -34,6 +34,7 @@ mvnw.cmd
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
+faces-config.NavData
 
 ### VS Code ###
 .vscode/

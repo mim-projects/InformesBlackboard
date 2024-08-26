@@ -1,2 +1,0 @@
-- [ ] Crear reporte pdf
-- [ ] Verificar datos en dashboard con reporte

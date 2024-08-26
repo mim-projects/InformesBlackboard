@@ -40,12 +40,10 @@ public class UploadController extends AbstractSessionController {
         selectedTypeFile = "users";
     }
 
-    //  > http://localhost:9990/console/index.html#undertow-server;name=default-server
-    //  > Listener > HTTP > Max Post Size = 104857600 | (100 MB)
     public synchronized void handleFileUpload(FileUploadEvent event) {
         String originalName = event.getFile().getFileName();
         if (fileStorageRepository.exists(originalName)) {
-            commonController.FacesMessagesError("FAiled", "File exist");
+            commonController.FacesMessagesError("Failed", "File exist");
             return;
         }
 
