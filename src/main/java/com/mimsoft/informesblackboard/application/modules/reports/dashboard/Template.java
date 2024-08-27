@@ -41,8 +41,9 @@ class Template {
         for (SectionTypes type: types.keySet()) {
             for (Grades grade: data.getAllGradesForType(type.getValue())) {
                 String title = types.get(type) + ". " + grade.getName();
-                createTableAndGraphic(table, title, type, grade);
-                table.addCell(emptyHeight(40));
+                if (createTableAndGraphic(table, title, type, grade)) {
+                    table.addCell(emptyHeight(40));
+                }
             }
         }
 
@@ -50,8 +51,8 @@ class Template {
     }
 
     // Data for section
-    private void createTableAndGraphic(PdfPTable parent, String title, SectionTypes type, Grades grade) throws BadElementException, IOException {
-        if (!data.renderHelper(type.getValue(), grade)) return;
+    private boolean createTableAndGraphic(PdfPTable parent, String title, SectionTypes type, Grades grade) throws BadElementException, IOException {
+        if (!data.renderHelper(type.getValue(), grade)) return false;
 
         // Data
         CustomTableCoursesUsersHelper result = data.getCustomTableGraphicDataHelper(type.getValue(), grade);
@@ -80,6 +81,7 @@ class Template {
         table.addCell(emptyHeight(20));
         table.addCell(customGraphic);
         parent.addCell(cellBorder(table, 0));
+        return true;
     }
 
     private PdfPTable createTable(String[] dataHeader, String[] dataKeyword, Integer[][] values, Integer[] subtotalVertical, Integer[] subtotalHorizontal, Integer total) {

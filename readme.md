@@ -20,6 +20,9 @@ El contexto depende de la base de datos.
   - HTTP 
   - Max Post Size = 1048576000
 
+## Paquetes requeridos en linux
+- Instalar los paquetes: `Freetype`  `fontconfig` `dejavu-sans-fonts`
+
 ## Base de datos
 ![database_v2.png](development/database/database_v2.png)
 
