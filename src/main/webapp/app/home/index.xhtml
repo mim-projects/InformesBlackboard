@@ -69,9 +69,14 @@
                         <p:commandButton value="#{bundle.run}" icon="pi pi-arrow-circle-right" actionListener="#{homeCtrl.applyFilters()}"
                                          disabled="#{homeCtrl.invalidateFilters()}" update="tables @next"
                                          onstart="createGlobalLoader('#{bundle.loading}')" oncomplete="removeGlobalLoader()"/>
-                        <p:commandButton value="#{bundle.report}" icon="pi pi-file-pdf" styleClass="ui-button-warning"
-                                         actionListener="#{homeCtrl.createReport()}" ajax="false"
-                                         disabled="#{homeCtrl.disabledButtonReport()}"/>
+
+                        <p:menuButton value="#{bundle.download}" icon="pi pi-cloud-download" buttonStyleClass="ui-button-warning"
+                                      disabled="#{homeCtrl.disabledButtonReport()}">
+                            <p:menuitem value="#{bundle.report_pdf}" icon="pi pi-file-pdf" disabled="#{homeCtrl.disabledButtonReport()}"
+                                        actionListener="#{homeCtrl.createReportPDF()}" ajax="false"/>
+                            <p:menuitem value="#{bundle.report_xlsx}" icon="pi pi-file-excel" disabled="#{homeCtrl.disabledButtonReport()}"
+                                        actionListener="#{homeCtrl.createReportSpreadSheet()}" ajax="false"/>
+                        </p:menuButton>
                     </div>
                 </h:form>
             </div>

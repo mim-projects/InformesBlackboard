@@ -51,7 +51,12 @@ public class RouterController implements Serializable {
             }
         }
 
-        if (routeCurrent == null) return;
+        if (routeCurrent == null || (routeCurrent.getRoles() != null && !sessionController.getCurrentUser().getUserPlatformRolesId().getId().equals(routeCurrent.getRoles().getValue()))) {
+            String url = requestController.getContext() + Routes.ERROR_404.getRoute().getUrl();
+            try { FacesContext.getCurrentInstance().getExternalContext().redirect(url); }
+            catch (IOException e) { e.printStackTrace(); }
+            return;
+        }
 
         String url = requestController.getContext() + routeCurrent.getUrl() + (params != null ?"?" + params : "");
         try { FacesContext.getCurrentInstance().getExternalContext().redirect(url); }

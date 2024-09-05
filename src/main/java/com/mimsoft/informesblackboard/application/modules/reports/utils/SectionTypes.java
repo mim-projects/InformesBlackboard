@@ -1,11 +1,11 @@
-package com.mimsoft.informesblackboard.application.modules.reports.dashboard;
+package com.mimsoft.informesblackboard.application.modules.reports.utils;
 
 public enum SectionTypes {
     USERS("users"),
     COURSES("courses"),
     ;
 
-    private String value;
+    private final String value;
 
     SectionTypes(String value) {
         this.value = value;

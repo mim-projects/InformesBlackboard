@@ -1,6 +1,5 @@
 package com.mimsoft.informesblackboard.application.utils.http;
 
-import com.itextpdf.text.DocumentException;
 import jakarta.faces.context.FacesContext;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -11,7 +10,7 @@ import java.io.OutputStream;
 
 public class ResponseHelper {
     public interface OutputStreamHelper {
-        void stream(OutputStream outputStream) throws DocumentException, IOException;
+        void stream(OutputStream outputStream) throws IOException;
     }
 
     public static void DownloadFile(FacesContext context, String filename, File file) throws IOException {
@@ -29,7 +28,7 @@ public class ResponseHelper {
         context.responseComplete();
     }
 
-    public static void DownloadOutputStream(FacesContext context, String filename, OutputStreamHelper outputStreamHelper) throws IOException, DocumentException {
+    public static void DownloadOutputStream(FacesContext context, String filename, OutputStreamHelper outputStreamHelper) throws IOException {
         HttpServletResponse response = GetHttpServletResponse(context, filename);
 
         OutputStream outputStream = response.getOutputStream();

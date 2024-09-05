@@ -31,7 +31,8 @@ public class FileStorageRepository {
 
     public void remove(FileStorage fileStorage) {
         try {
-            FileUtils.forceDelete(new File(fileStorage.getPath()));
+            File file = new File(fileStorage.getPath());
+            if (file.exists()) FileUtils.forceDelete(file);
             repository.delete(fileStorage);
         } catch (IOException e) {
             e.printStackTrace();

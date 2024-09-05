@@ -1,53 +1,79 @@
-package com.mimsoft.informesblackboard.application.modules.reports.dashboard;
+package com.mimsoft.informesblackboard.application.modules.reports.dashboad_pdf;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.mimsoft.informesblackboard.application.controllers.shared.RequestController;
 import com.mimsoft.informesblackboard.application.data.constants.Colors;
 import com.mimsoft.informesblackboard.application.data.interfaces.BundleLanguage;
 import com.mimsoft.informesblackboard.application.data.models.helper.graphic_table_courses_users.GraphicTableCoursesUsersHelper;
 import com.mimsoft.informesblackboard.application.data.queries.custom_table_courses_users.CustomTableCoursesUsersHelper;
+import com.mimsoft.informesblackboard.application.modules.reports.dashboad_pdf.components.BarCharts;
+import com.mimsoft.informesblackboard.application.modules.reports.dashboad_pdf.components.HeaderAndFooter;
+import com.mimsoft.informesblackboard.application.modules.reports.utils.SectionTypes;
+import com.mimsoft.informesblackboard.application.modules.reports.utils.TemplateInstance;
 import com.mimsoft.informesblackboard.application.utils.others.ArrayHelper;
 import com.mimsoft.informesblackboard.domain.entities.Grades;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-class Template {
-    public static Template Instance(Document document, GraphicTableCoursesUsersHelper data, BundleLanguage bundleLanguage) {
-        return new Template(document, data, bundleLanguage);
-    }
+import static com.itextpdf.text.PageSize.LETTER;
 
+public class DashboardPdfTemplate implements TemplateInstance {
+    public static float INCH_TO_POINTS(float inch) { return inch * 72; }
+    public static final float[] MARGIN_LRTB = new float[] {
+            INCH_TO_POINTS(0.79f), // LEFT
+            INCH_TO_POINTS(0.79f), // RIGHT
+            INCH_TO_POINTS(0.49f), // TOP
+            INCH_TO_POINTS(0.49f), // BOTTOM
+    };
     private static final int PADDING = 4;
+    private final RequestController requestController;
     private final GraphicTableCoursesUsersHelper data;
     private final BundleLanguage bundleLanguage;
     private final Document document;
+    private final String periodLegend;
 
-    public Template(Document document, GraphicTableCoursesUsersHelper data, BundleLanguage bundleLanguage) {
-        this.document = document;
+    public DashboardPdfTemplate(RequestController requestController, GraphicTableCoursesUsersHelper data, BundleLanguage bundleLanguage, String periodLegend) {
         this.data = data;
         this.bundleLanguage = bundleLanguage;
+        this.requestController = requestController;
+        this.document = new Document(LETTER, MARGIN_LRTB[0], MARGIN_LRTB[1], HeaderAndFooter.TOTAL_HEIGHT, MARGIN_LRTB[3]);
+        this.periodLegend = periodLegend;
     }
 
-    public void render() throws DocumentException, IOException {
-        PdfPTable table = new PdfPTable(1);
-        table.setWidthPercentage(100);
+    @Override
+    public void render(OutputStream outputStream) {
+        try {
+            PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+            writer.setPageEvent(new HeaderAndFooter(requestController, bundleLanguage, periodLegend));
+            document.open();
 
-        HashMap<SectionTypes, String> types = new LinkedHashMap<>();
-        types.put(SectionTypes.USERS, bundleLanguage.getBundleMessage("users"));
-        types.put(SectionTypes.COURSES, bundleLanguage.getBundleMessage("courses"));
+            PdfPTable table = new PdfPTable(1);
+            table.setWidthPercentage(100);
 
-        for (SectionTypes type: types.keySet()) {
-            for (Grades grade: data.getAllGradesForType(type.getValue())) {
-                String title = types.get(type) + ". " + grade.getName();
-                if (createTableAndGraphic(table, title, type, grade)) {
-                    table.addCell(emptyHeight(40));
+            HashMap<SectionTypes, String> types = new LinkedHashMap<>();
+            types.put(SectionTypes.USERS, bundleLanguage.getBundleMessage("users"));
+            types.put(SectionTypes.COURSES, bundleLanguage.getBundleMessage("courses"));
+
+            for (SectionTypes type: types.keySet()) {
+                for (Grades grade: data.getAllGradesForType(type.getValue())) {
+                    String title = types.get(type) + ". " + grade.getName();
+                    if (createTableAndGraphic(table, title, type, grade)) {
+                        table.addCell(emptyHeight(25));
+                    }
                 }
             }
-        }
 
-        document.add(table);
+            document.add(table);
+            document.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // Data for section
@@ -76,9 +102,9 @@ class Template {
         PdfPCell customGraphic = createBarChartGraphic(dataHeader, dataKeyword, values);
 
         table.addCell(cellBorder(createText(title.toUpperCase(), 11, true), 0));
-        table.addCell(emptyHeight(20));
+        table.addCell(emptyHeight(11));
         table.addCell(cellBorder(customTable, 0));
-        table.addCell(emptyHeight(20));
+        table.addCell(emptyHeight(11));
         table.addCell(customGraphic);
         parent.addCell(cellBorder(table, 0));
         return true;
@@ -127,7 +153,7 @@ class Template {
     }
 
     private PdfPCell createBarChartGraphic(String[] dataHeader, String[] dataKeyword, Integer[][] values) throws BadElementException, IOException {
-        Image image = new BarCharts(750, 200).setDataset(dataHeader, dataKeyword, values).build().getImage();
+        Image image = new BarCharts(750, 180).setDataset(dataHeader, dataKeyword, values).build().getImage();
         PdfPCell graphic = new PdfPCell(image, true);
         graphic.setBorder(0);
         return graphic;
@@ -193,7 +219,7 @@ class Template {
     private Phrase createText(String text, BaseColor color, int size) {
         Phrase phrase = createText(text, size);
        if (color != null) phrase.getFont().setColor(color);
-        return phrase;
+       return phrase;
     }
 
     private Phrase createText(String text, int size) {

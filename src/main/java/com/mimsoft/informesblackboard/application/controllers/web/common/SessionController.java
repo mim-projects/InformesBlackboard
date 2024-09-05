@@ -4,6 +4,7 @@ import com.mimsoft.informesblackboard.Configuration;
 import com.mimsoft.informesblackboard.application.controllers.shared.RequestController;
 import com.mimsoft.informesblackboard.application.data.interfaces.BundleLanguage;
 import com.mimsoft.informesblackboard.application.data.repositories.UserPlatformRepository;
+import com.mimsoft.informesblackboard.application.routes.Route;
 import com.mimsoft.informesblackboard.application.routes.Routes;
 import com.mimsoft.informesblackboard.domain.entities.UserPlatform;
 import jakarta.enterprise.context.SessionScoped;
@@ -34,6 +35,7 @@ public class SessionController implements BundleLanguage, Serializable {
         updateTheme(currentTheme);
         updateLanguage(currentLang);
         if (!isActive()) logout();
+        validateRoute();
     }
 
     public boolean isActive() {
@@ -105,5 +107,52 @@ public class SessionController implements BundleLanguage, Serializable {
     public String getBundleMessage(String key) {
         ResourceBundle resourceBundle = ResourceBundle.getBundle("bundle_" + currentLang.toLowerCase());
         return resourceBundle.getString(key);
+    }
+
+    public boolean isRol(String... rol) {
+        for (String currentRol: rol) {
+            if (currentUser.getUserPlatformRolesId().getName().equalsIgnoreCase(currentRol)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void validateRoute() {
+        String url = requestController.getURL();
+        String[] parts = url.split("/app/");
+
+        if (parts.length < 2) logout();
+        String[] subParts = parts[1].split("\\.xhtml");
+
+        if (subParts.length < 1) logout();
+        String route = "/app/" + subParts[0] + ".xhtml";
+
+        Route currentRoute = null;
+        for (Routes current: Routes.values()) {
+            if (current.getRoute().getUrl().equals(route)) {
+                currentRoute = current.getRoute();
+                break;
+            }
+        }
+
+        if (currentRoute == null) {
+            redirectErrorPage();
+            return;
+        }
+        if (currentRoute.getRoles() == null) {
+            return;
+        }
+        if (currentRoute.getRoles().getValue() != currentUser.getUserPlatformRolesId().getId()) {
+            redirectErrorPage();
+        }
+    }
+
+    private void redirectErrorPage() {
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect(requestController.getContext() + Routes.ERROR_404.getRoute().getUrl());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -5,7 +5,7 @@ use informes_blackboard;
 create table user_platform_roles (
     id int not null auto_increment primary key,
     name varchar(50) unique not null,
-    description varchar(255)
+    description text
 );
 
 create table user_platform (
@@ -106,7 +106,8 @@ create table file_storage (
 # === Default Data
 # =============================================================================
 
-insert into user_platform_roles (id, name, description) VALUES (1, 'Admin', 'Administrator');
+insert into user_platform_roles (id, name, description) VALUES (1, 'Admin', 'El administrador es el rol con control total sobre la gestión de contenido en el sistema, así como sobre el acceso a la información detallada. Es responsable de mantener el sistema organizado y asegurarse de que la información cargada al sistema sea correcta y esté actualizada.');
+insert into user_platform_roles (id, name, description) VALUES (2, 'Lector', 'El lector tiene un rol centrado en la visualización y exportación de informes. La capacidad de seleccionar parámetros antes de generar un informe permite al lector ajustar los datos presentados para enfocarse en el contenido más pertinente, sin necesidad de intervenir en la gestión del sistema.');
 insert into user_platform (name, username, password, user_platform_roles_id) values ('Administrator', 'admin', 'password', 1);
 
 insert into campus (id, name) VALUES (1, 'Mexicali');

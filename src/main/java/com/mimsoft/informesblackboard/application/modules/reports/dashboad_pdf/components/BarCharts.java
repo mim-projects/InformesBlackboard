@@ -1,4 +1,4 @@
-package com.mimsoft.informesblackboard.application.modules.reports.dashboard;
+package com.mimsoft.informesblackboard.application.modules.reports.dashboad_pdf.components;
 
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.Image;
@@ -23,7 +23,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-class BarCharts {
+public class BarCharts {
     private final int width;
     private final int height;
     private JFreeChart chart;

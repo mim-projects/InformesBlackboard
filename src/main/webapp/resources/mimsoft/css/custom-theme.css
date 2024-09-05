@@ -405,7 +405,7 @@
     padding-left: 1rem;
 }
 
-.navigator-drawer-options span button {
+.navigator-drawer-options .span button {
     width: 100% !important;
     text-align: left !important;
     padding: 0.5rem !important;

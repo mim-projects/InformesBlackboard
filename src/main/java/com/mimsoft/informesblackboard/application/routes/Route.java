@@ -1,25 +1,28 @@
 package com.mimsoft.informesblackboard.application.routes;
 
+import com.mimsoft.informesblackboard.application.data.constants.RolesPlatform;
+
 public class Route {
     private String name;
     private String url;
-    private String roles;
+    private RolesPlatform roles;
 
     public Route(String name) {
         this.name = name;
         this.url = "";
-        this.roles = "";
+        this.roles = null;
     }
 
     public Route(String name, String url) {
         this.name = name;
         this.url = url;
-        this.roles = "";
+        this.roles = null;
     }
 
-    public Route(String name, String url, String roles) {
+    public Route(String name, String url, RolesPlatform roles) {
         this.name = name;
         this.url = url;
+        this.roles = roles;
     }
 
     public String getName() {
@@ -38,11 +41,11 @@ public class Route {
         this.url = url;
     }
 
-    public String getRoles() {
+    public RolesPlatform getRoles() {
         return roles;
     }
 
-    public void setRoles(String roles) {
+    public void setRoles(RolesPlatform roles) {
         this.roles = roles;
     }
 
@@ -51,6 +54,7 @@ public class Route {
         return "Route{" +
                 "name='" + name + '\'' +
                 ", url='" + url + '\'' +
+                ", roles=" + roles +
                 '}';
     }
 }

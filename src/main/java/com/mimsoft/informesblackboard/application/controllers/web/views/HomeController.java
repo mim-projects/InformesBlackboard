@@ -1,5 +1,6 @@
 package com.mimsoft.informesblackboard.application.controllers.web.views;
 
+import com.mimsoft.informesblackboard.application.controllers.shared.RequestController;
 import com.mimsoft.informesblackboard.application.controllers.web.common.AbstractSessionController;
 import com.mimsoft.informesblackboard.application.data.models.helper.graphic_table_courses_users.GraphicTableCoursesUsersHelper;
 import com.mimsoft.informesblackboard.application.data.models.helper.multi_selector_boolean.MultiSelectorBooleanListHelper;
@@ -11,7 +12,7 @@ import com.mimsoft.informesblackboard.application.data.repositories.RolesReposit
 import com.mimsoft.informesblackboard.application.data.repositories.StorageHistoryRepository;
 import com.mimsoft.informesblackboard.application.modules.graphics.ChartsServices;
 import com.mimsoft.informesblackboard.application.modules.graphics.TablesServices;
-import com.mimsoft.informesblackboard.application.modules.reports.dashboard.DashboardReport;
+import com.mimsoft.informesblackboard.application.modules.reports.DashboardReport;
 import com.mimsoft.informesblackboard.domain.entities.Grades;
 import com.mimsoft.informesblackboard.domain.entities.Modality;
 import com.mimsoft.informesblackboard.domain.entities.Roles;
@@ -21,11 +22,15 @@ import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Named("homeCtrl")
 @SessionScoped
 public class HomeController extends AbstractSessionController {
+    @Inject
+    private RequestController requestController;
     @Inject
     private GradesRepository gradesRepository;
     @Inject
@@ -101,6 +106,16 @@ public class HomeController extends AbstractSessionController {
         List<Grades> grades = gradesRepository.findAll();
         allPeriods = customPeriodsRepository.findAllString();
         graphicTableCoursesUsersHelper = new GraphicTableCoursesUsersHelper(sessionController, tablesServices, chartsServices, grades);
+
+        int indexMonth = -1;
+        for (int i = 0; i < allMonths.length; i++) {
+            if (allMonths[i].equals(selectedMonth)) {
+                indexMonth = i;
+                break;
+            }
+        }
+        allMonths = sessionController.getBundleMessage("months").split(",");
+        selectedMonth = indexMonth == -1 ? null : allMonths[indexMonth];
     }
 
     public boolean invalidateFilters() {
@@ -109,10 +124,42 @@ public class HomeController extends AbstractSessionController {
                 || !rolesMultiSelectorBooleanListHelper.containTrue();
     }
 
-    public void createReport() {
+    private String createFilename() {
+        int indexMonth = 0;
+        for (int i = 0; i < allMonths.length; i++) {
+            if (allMonths[i].equals(selectedMonth)) {
+                indexMonth = i + 1;
+                break;
+            }
+        }
+        String month = indexMonth < 10 ? "0" + indexMonth : "" + indexMonth;
+        month = selectedPeriod.substring(0, 4) + "-" + month;
+        return month + " - IGUPBB - " + new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+    }
+
+    public void createReportPDF() {
         try {
-            String filename = "FILE_" + System.currentTimeMillis();
-            DashboardReport.Download(graphicTableCoursesUsersHelper, FacesContext.getCurrentInstance(), filename, sessionController);
+            String periodLegend = selectedPeriod.length() > 4
+                    ? (selectedPeriod.substring(0, 4) + "-" + selectedPeriod.substring(4))
+                    : selectedPeriod;
+            periodLegend += " | " + selectedMonth;
+            DashboardReport.DownloadPDF(
+                    requestController, FacesContext.getCurrentInstance(), sessionController,
+                    graphicTableCoursesUsersHelper, createFilename(), periodLegend
+            );
+        } catch (Exception e) {
+            commonController.FacesMessagesError(sessionController.getBundleMessage("failed"), sessionController.getBundleMessage("try_again"));
+        }
+    }
+
+    public void createReportSpreadSheet() {
+        try {
+            DashboardReport.DownloadSpreadsheet(
+                    graphicTableCoursesUsersHelper,
+                    FacesContext.getCurrentInstance(),
+                    createFilename(),
+                    sessionController
+            );
         } catch (Exception e) {
             commonController.FacesMessagesError(sessionController.getBundleMessage("failed"), sessionController.getBundleMessage("try_again"));
         }

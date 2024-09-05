@@ -3,6 +3,7 @@ package com.mimsoft.informesblackboard.application.controllers.shared;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Named;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.Map;
 
@@ -36,5 +37,10 @@ public class RequestController {
 
     public String getResourcesForUrl(String name, String lib) {
         return getResourcesUrl() + "/" + name + ".xhtml?ln=" + lib;
+    }
+
+    public String getURL() {
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        return request.getRequestURL().toString();
     }
 }
