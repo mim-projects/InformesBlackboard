@@ -21,10 +21,11 @@ public class DashboardReport {
         instance.downloadPDF();
     }
 
-    public static void DownloadSpreadsheet(GraphicTableCoursesUsersHelper data, FacesContext context, String filename, BundleLanguage bundleLanguage) throws Exception {
+    public static void DownloadSpreadsheet(GraphicTableCoursesUsersHelper data, FacesContext context, String filename, BundleLanguage bundleLanguage, String periodLegend) throws Exception {
         DashboardReport instance = new DashboardReport(data, bundleLanguage);
         instance.setFacesContext(context);
         instance.setFilename(filename);
+        instance.setPeriodLegend(periodLegend);
         instance.downloadSpreadSheet();
     }
 
@@ -47,7 +48,7 @@ public class DashboardReport {
     }
 
     public void downloadSpreadSheet() throws Exception {
-        download(new DashboardSpreadsheetTemplate(), filename + ".xlsx");
+        download(new DashboardSpreadsheetTemplate(requestController, data, bundleLanguage, periodLegend), filename + ".xlsx");
     }
 
     private void download(TemplateInstance instance, String exportFilename) throws IOException {

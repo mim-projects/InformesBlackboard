@@ -19,7 +19,6 @@ public class HeaderAndFooter extends PdfPageEventHelper {
     private final RequestController requestController;
     private final String periodLegend;
 
-
     float multi = (float) (CustomFonts.FONT_P.getSize() * 0.69);
     private PdfTemplate t;
     private Image total;

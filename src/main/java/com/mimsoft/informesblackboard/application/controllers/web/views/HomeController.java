@@ -154,11 +154,16 @@ public class HomeController extends AbstractSessionController {
 
     public void createReportSpreadSheet() {
         try {
+            String periodLegend = selectedPeriod.length() > 4
+                    ? (selectedPeriod.substring(0, 4) + "-" + selectedPeriod.substring(4))
+                    : selectedPeriod;
+            periodLegend += " | " + selectedMonth;
             DashboardReport.DownloadSpreadsheet(
                     graphicTableCoursesUsersHelper,
                     FacesContext.getCurrentInstance(),
                     createFilename(),
-                    sessionController
+                    sessionController,
+                    periodLegend
             );
         } catch (Exception e) {
             commonController.FacesMessagesError(sessionController.getBundleMessage("failed"), sessionController.getBundleMessage("try_again"));
