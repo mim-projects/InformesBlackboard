@@ -167,8 +167,14 @@ public class GraphicTableCoursesUsersHelper {
 
     public List<Grades> getAllGradesForType(String type) {
         Set<Grades> grades = new LinkedHashSet<>();
-        for (Integer item : type.equalsIgnoreCase("users") ? tableUsers.keySet() : tableCourses.keySet()) {
-            grades.add(gradesList.get(item));
+        if (type.equalsIgnoreCase("users")) {
+            for (Integer item: tableUsers.keySet()) {
+                grades.add(gradesList.get(item));
+            }
+        } else {
+            for (Integer item: tableCourses.keySet()) {
+                grades.add(gradesList.get(item));
+            }
         }
         List<Grades> list = new ArrayList<>(grades);
         Collections.reverse(list);

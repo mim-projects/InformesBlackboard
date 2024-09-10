@@ -121,9 +121,13 @@ public class DashboardSpreadsheetTemplate implements TemplateInstance {
         for (String row: rows) {
             globalColumn = 0;
             rowSheet = sheet.getRow(++currentRow);
+            List<Grades> allGradesListValid = getAllGradesListValid(type);
+            indexTableGrade = -1;
             for (String column: header) {
+                if (column.isEmpty()) indexTableGrade++;
+
                 if (!column.isEmpty()) {
-                    rowSheet.createCell(globalColumn).setCellValue(getValue(type, row, column));
+                    rowSheet.createCell(globalColumn).setCellValue(getValue(allGradesListValid.get(indexTableGrade), type, row, column));
                 } else if (globalColumn > 0) {
                     // SUBTOTAL HORIZONTAL
                     createFormulaSubTotalHorizontal(rowSheet.createCell(globalColumn), sizeHeader - 1);
@@ -180,7 +184,7 @@ public class DashboardSpreadsheetTemplate implements TemplateInstance {
     }
 
     private int sizeHeader(SectionTypes type) {
-        Set<String> list = new LinkedHashSet<>();
+        Set<String> list = new LinkedHashSet<>();;
         for (Grades grade: data.getAllGradesForType(type.getValue())) {
             if (!data.renderHelper(type.getValue(), grade)) continue;
             list.addAll(data.getCustomTableGraphicDataHelper(type.getValue(), grade).getAllColumns());
@@ -205,6 +209,15 @@ public class DashboardSpreadsheetTemplate implements TemplateInstance {
         return list;
     }
 
+    private List<Grades> getAllGradesListValid(SectionTypes type) {
+        List<Grades> list = new ArrayList<>();
+        for (Grades grade: data.getAllGradesForType(type.getValue())) {
+            if (!data.renderHelper(type.getValue(), grade)) continue;
+            list.add(grade);
+        }
+        return list;
+    }
+
     private List<String> getAllHeader(SectionTypes type) {
         List<String> list = new ArrayList<>();
         for (Grades grade: data.getAllGradesForType(type.getValue())) {
@@ -224,12 +237,8 @@ public class DashboardSpreadsheetTemplate implements TemplateInstance {
         return new ArrayList<>(list);
     }
 
-    private Integer getValue(SectionTypes type, String row, String column) {
-        for (Grades grade: data.getAllGradesForType(type.getValue())) {
-            if (!data.renderHelper(type.getValue(), grade)) continue;
-            return data.getCustomTableGraphicDataHelper(type.getValue(), grade).getValue(column, row);
-        }
-        return 0;
+    private Integer getValue(Grades grades, SectionTypes type, String row, String column) {
+        return data.getCustomTableGraphicDataHelper(type.getValue(), grades).getValue(column, row);
     }
 
     private void createFormulaSubTotalVertical(Cell cell, int rowLength) {
