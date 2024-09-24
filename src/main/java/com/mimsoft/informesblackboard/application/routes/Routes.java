@@ -12,7 +12,7 @@ public enum Routes {
     REGISTER_CAMPUS_CODES(new Route("register_campus_codes", "/app/register/campus/codes.xhtml", RolesPlatform.ADMIN)),
     REGISTER_GRADES(new Route("register_grades", "/app/register/grades.xhtml", RolesPlatform.ADMIN)),
     REGISTER_PERIODS(new Route("register_periods", "/app/register/periods.xhtml", RolesPlatform.ADMIN)),
-    REGISTER_MODALITY(new Route("register_modality", "/app/register/modality.xhtml, RolesPlatform.ADMIN")),
+    REGISTER_MODALITY(new Route("register_modality", "/app/register/modality.xhtml", RolesPlatform.ADMIN)),
     REGISTER_COURSES(new Route("register_courses", "/app/register/courses.xhtml", RolesPlatform.ADMIN)),
     REGISTER_USERS(new Route("register_users", "/app/register/users/index.xhtml", RolesPlatform.ADMIN)),
     REGISTER_USERS_DETAILS(new Route("register_users_details", "/app/register/users/details.xhtml", RolesPlatform.ADMIN)),

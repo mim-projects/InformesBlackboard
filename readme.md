@@ -65,3 +65,11 @@ Se obtiene el Campus segun el codigo:
 - MEXICALI: 1, 2, 10, 40, 80, 90, 110, 111, 123, 124, 125, 126, 140, 160, 200, 220, 222, 260, 300, 310, 335, 337, 605, 625
 - TIJUANA: 70, 100, 120, 130, 150, 180, 190, 240, 280, 311, 313, 332, 334, 336, 336, 400, 500, 626, 790
 - ENSENADA: 20, 30, 50, 170, 290, 312, 320, 330, 615, 320, 620, 700, 795
+
+
+
+
+[//]: # (TODO:)
+[//]: # (1. Informacion de almacenamiento en PDF: grafico, tabla, ambos?)
+[//]: # (2. Informacion de almacenamiento en Excel: grafico, tabla, ambos?)
+[//]: # (Punto 7. Que se mostrara: todos los datos unidos, los diferentes?)

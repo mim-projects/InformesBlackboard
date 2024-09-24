@@ -11,6 +11,7 @@ import com.mimsoft.informesblackboard.application.data.repositories.ModalityRepo
 import com.mimsoft.informesblackboard.application.data.repositories.RolesRepository;
 import com.mimsoft.informesblackboard.application.data.repositories.StorageHistoryRepository;
 import com.mimsoft.informesblackboard.application.modules.graphics.ChartsServices;
+import com.mimsoft.informesblackboard.application.modules.graphics.OrderDataServices;
 import com.mimsoft.informesblackboard.application.modules.graphics.TablesServices;
 import com.mimsoft.informesblackboard.application.modules.reports.DashboardReport;
 import com.mimsoft.informesblackboard.domain.entities.Grades;
@@ -47,6 +48,8 @@ public class HomeController extends AbstractSessionController {
     private TablesServices tablesServices;
     @Inject
     private ChartsServices chartsServices;
+    @Inject
+    private OrderDataServices orderDataServices;
 
     private String[] allMonths;
     private List<String> allPeriods;
@@ -144,7 +147,7 @@ public class HomeController extends AbstractSessionController {
                     : selectedPeriod;
             periodLegend += " | " + selectedMonth;
             DashboardReport.DownloadPDF(
-                    requestController, FacesContext.getCurrentInstance(), sessionController,
+                    requestController, FacesContext.getCurrentInstance(), sessionController, orderDataServices,
                     graphicTableCoursesUsersHelper, createFilename(), periodLegend
             );
         } catch (Exception e) {
@@ -163,6 +166,7 @@ public class HomeController extends AbstractSessionController {
                     FacesContext.getCurrentInstance(),
                     createFilename(),
                     sessionController,
+                    orderDataServices,
                     periodLegend
             );
         } catch (Exception e) {

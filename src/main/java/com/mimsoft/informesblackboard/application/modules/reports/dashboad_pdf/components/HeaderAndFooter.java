@@ -11,6 +11,7 @@ import com.mimsoft.informesblackboard.application.modules.reports.dashboad_pdf.u
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 public class HeaderAndFooter extends PdfPageEventHelper {
     private final static float HEIGHT_CELL = 40;
@@ -38,12 +39,12 @@ public class HeaderAndFooter extends PdfPageEventHelper {
         table.setLockedWidth(true);
 
         Image imageLeft = null;
-        try { imageLeft = Image.getInstance(requestController.getResourcesForUrl("images/escudo-actualizado-2022-w1000px.png", "mimsoft")); }
-        catch (BadElementException | IOException e) { e.printStackTrace(); }
+        try { imageLeft = Image.getInstance(Objects.requireNonNull(getClass().getResource("/assets/escudo-actualizado-2022-w1000px.png"))); }
+        catch (BadElementException | IOException ignored) { }
 
         Image imageRight = null;
-        try { imageRight = Image.getInstance(requestController.getResourcesForUrl("images/EM3197430-3987.png", "mimsoft")); }
-        catch (BadElementException | IOException e) { e.printStackTrace(); }
+        try { imageRight = Image.getInstance(Objects.requireNonNull(getClass().getResource("/assets/EM3197430-3987.png"))); }
+        catch (BadElementException | IOException ignored) { }
 
         PdfPCell left = CustomElement.CellNoBorder(imageLeft == null ? new PdfPCell() : new PdfPCell(imageLeft, true));
         PdfPCell right = CustomElement.CellNoBorder(imageRight == null ? new PdfPCell() : new PdfPCell(imageRight, true));

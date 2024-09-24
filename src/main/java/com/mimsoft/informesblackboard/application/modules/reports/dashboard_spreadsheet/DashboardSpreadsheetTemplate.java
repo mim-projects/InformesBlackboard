@@ -3,6 +3,7 @@ package com.mimsoft.informesblackboard.application.modules.reports.dashboard_spr
 import com.mimsoft.informesblackboard.application.controllers.shared.RequestController;
 import com.mimsoft.informesblackboard.application.data.interfaces.BundleLanguage;
 import com.mimsoft.informesblackboard.application.data.models.helper.graphic_table_courses_users.GraphicTableCoursesUsersHelper;
+import com.mimsoft.informesblackboard.application.modules.graphics.OrderDataServices;
 import com.mimsoft.informesblackboard.application.modules.reports.utils.SectionTypes;
 import com.mimsoft.informesblackboard.application.modules.reports.utils.TemplateInstance;
 import com.mimsoft.informesblackboard.domain.entities.Grades;
@@ -23,11 +24,13 @@ import java.util.Set;
 public class DashboardSpreadsheetTemplate implements TemplateInstance {
     private final GraphicTableCoursesUsersHelper data;
     private final BundleLanguage bundleLanguage;
+    private final OrderDataServices orderDataServices;
     private final String periodLegend;
 
-    public DashboardSpreadsheetTemplate(RequestController requestController, GraphicTableCoursesUsersHelper data, BundleLanguage bundleLanguage, String periodLegend) {
+    public DashboardSpreadsheetTemplate(RequestController requestController, GraphicTableCoursesUsersHelper data, BundleLanguage bundleLanguage, OrderDataServices orderDataServices, String periodLegend) {
         this.data = data;
         this.bundleLanguage = bundleLanguage;
+        this.orderDataServices = orderDataServices;
         this.periodLegend = periodLegend;
     }
 
@@ -223,7 +226,7 @@ public class DashboardSpreadsheetTemplate implements TemplateInstance {
         for (Grades grade: data.getAllGradesForType(type.getValue())) {
             if (!data.renderHelper(type.getValue(), grade)) continue;
             list.add("");
-            list.addAll(data.getCustomTableGraphicDataHelper(type.getValue(), grade).getAllColumns());
+            list.addAll(orderDataServices.orderColumn(data.getCustomTableGraphicDataHelper(type.getValue(), grade).getAllColumns()));
         }
         return list;
     }

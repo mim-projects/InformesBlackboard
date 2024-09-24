@@ -9,6 +9,7 @@ import com.mimsoft.informesblackboard.application.data.constants.Colors;
 import com.mimsoft.informesblackboard.application.data.interfaces.BundleLanguage;
 import com.mimsoft.informesblackboard.application.data.models.helper.graphic_table_courses_users.GraphicTableCoursesUsersHelper;
 import com.mimsoft.informesblackboard.application.data.queries.custom_table_courses_users.CustomTableCoursesUsersHelper;
+import com.mimsoft.informesblackboard.application.modules.graphics.OrderDataServices;
 import com.mimsoft.informesblackboard.application.modules.reports.dashboad_pdf.components.BarCharts;
 import com.mimsoft.informesblackboard.application.modules.reports.dashboad_pdf.components.HeaderAndFooter;
 import com.mimsoft.informesblackboard.application.modules.reports.utils.SectionTypes;
@@ -33,15 +34,17 @@ public class DashboardPdfTemplate implements TemplateInstance {
     };
     private static final int PADDING = 4;
     private final RequestController requestController;
+    private final OrderDataServices orderDataServices;
     private final GraphicTableCoursesUsersHelper data;
     private final BundleLanguage bundleLanguage;
     private final Document document;
     private final String periodLegend;
 
-    public DashboardPdfTemplate(RequestController requestController, GraphicTableCoursesUsersHelper data, BundleLanguage bundleLanguage, String periodLegend) {
+    public DashboardPdfTemplate(RequestController requestController, GraphicTableCoursesUsersHelper data, BundleLanguage bundleLanguage, OrderDataServices orderDataServices, String periodLegend) {
         this.data = data;
         this.bundleLanguage = bundleLanguage;
         this.requestController = requestController;
+        this.orderDataServices = orderDataServices;
         this.document = new Document(LETTER, MARGIN_LRTB[0], MARGIN_LRTB[1], HeaderAndFooter.TOTAL_HEIGHT, MARGIN_LRTB[3]);
         this.periodLegend = periodLegend;
     }
@@ -82,8 +85,8 @@ public class DashboardPdfTemplate implements TemplateInstance {
 
         // Data
         CustomTableCoursesUsersHelper result = data.getCustomTableGraphicDataHelper(type.getValue(), grade);
-        String[] dataHeader = result.getAllColumns().toArray(new String[0]);
-        String[] dataKeyword = result.getAllRows().toArray(new String[0]);
+        String[] dataHeader = orderDataServices.orderColumn(result.getAllColumns()).toArray(new String[0]);
+        String[] dataKeyword = orderDataServices.orderRow(result.getAllRows()).toArray(new String[0]);
         Integer[][] values = new Integer[dataKeyword.length][dataHeader.length];
         Integer[] subTotalHorizontal = new Integer[dataHeader.length];
         Integer[] subTotalVertical = new Integer[dataKeyword.length];

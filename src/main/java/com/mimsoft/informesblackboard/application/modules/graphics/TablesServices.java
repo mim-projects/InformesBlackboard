@@ -1,20 +1,37 @@
 package com.mimsoft.informesblackboard.application.modules.graphics;
 
 import com.mimsoft.informesblackboard.application.data.queries.custom_table_courses_users.CustomTableCoursesUsersHelper;
+import com.mimsoft.informesblackboard.application.data.repositories.CampusRepository;
+import com.mimsoft.informesblackboard.application.data.repositories.ModalityRepository;
+import com.mimsoft.informesblackboard.application.data.repositories.RolesRepository;
+import com.mimsoft.informesblackboard.domain.entities.Campus;
+import com.mimsoft.informesblackboard.domain.entities.Modality;
+import com.mimsoft.informesblackboard.domain.entities.Roles;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 @RequestScoped
 public class TablesServices {
+    @Inject
+    private OrderDataServices orderDataServices;
+
     public String getCustomPeriodTable(CustomTableCoursesUsersHelper customTableCoursesUsersHelper) {
+        List<String> orderColumns = orderDataServices.orderColumn(customTableCoursesUsersHelper.getAllColumns());
+
         String head = "<tr><th></th>";
-        for (String column: customTableCoursesUsersHelper.getAllColumns()) head += "<th>" + column + "</th>";
+        for (String column: orderColumns) head += "<th>" + column + "</th>";
         head += "<th></th></tr>";
 
         String body = "";
-        for (String row: customTableCoursesUsersHelper.getAllRows()) {
+        for (String row: orderDataServices.orderRow(customTableCoursesUsersHelper.getAllRows())) {
             body += "<tr>";
             body += "<td>" + row + "</td>";
-            for (String column: customTableCoursesUsersHelper.getAllColumns()) {
+            for (String column: orderColumns) {
                 body += "<td style='text-align: center'>" + customTableCoursesUsersHelper.getValue(column, row) + "</td>";
             }
             body += "<td style='text-align: center;'>" + customTableCoursesUsersHelper.getTotalRow(row) + "</td></tr>";
@@ -22,7 +39,7 @@ public class TablesServices {
 
         // SubTotal
         body += "<tr><td></td>";
-        for (String column: customTableCoursesUsersHelper.getAllColumns()) {
+        for (String column: orderColumns) {
             body += "<td style='text-align: center;'>" + customTableCoursesUsersHelper.getTotalColumn(column) + "</td>";
         }
         body += "<td style='text-align: center; background: var(--text-color); color: var(--surface-ground)'>" + customTableCoursesUsersHelper.getTotal() + "</td></tr>";

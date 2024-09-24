@@ -4,12 +4,17 @@ import com.mimsoft.informesblackboard.application.data.constants.Colors;
 import com.mimsoft.informesblackboard.application.data.queries.custom_table_courses_users.CustomTableCoursesUsersHelper;
 import com.mimsoft.informesblackboard.domain.entities.StorageHistory;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.List;
 
 @RequestScoped
 public class ChartsServices {
+    @Inject
+    private OrderDataServices orderDataServices;
+
     private static final String[] COLORS = new String[] {
             Colors.UABC_YELLOW.getValue(), Colors.UABC_GREEN.getValue(), Colors.UABC_BLUE.getValue(),
             "#c23531", "#2f4554", "#61a0a8", "#d48265", "#91c7ae", "#749f83", "#ca8622", "#bda29a", "#6e7074", "#546570", "#c4ccd3"
@@ -58,8 +63,9 @@ public class ChartsServices {
     }
 
     public String getCustomBarChart(CustomTableCoursesUsersHelper customTableCoursesUsersHelper) {
-        String[] columns = customTableCoursesUsersHelper.getAllColumns().toArray(new String[0]);
-        String[] rows = customTableCoursesUsersHelper.getAllRows().toArray(new String[0]);
+        List<String> unOrderRows = customTableCoursesUsersHelper.getAllRows();
+        String[] columns = orderDataServices.orderColumn(customTableCoursesUsersHelper.getAllColumns()).toArray(new String[0]);
+        String[] rows = orderDataServices.orderRow(unOrderRows).toArray(new String[0]);
         String[] values = new String[columns.length];
         String[] colors = new String[columns.length];
 
@@ -67,7 +73,7 @@ public class ChartsServices {
         for (String current: columns) {
             colors[index] = COLORS[index];
 
-            Integer[] valArr = customTableCoursesUsersHelper.getRowValues(current);
+            Integer[] valArr = orderDataServices.orderValueForRow(unOrderRows, customTableCoursesUsersHelper.getRowValues(current)).toArray(new Integer[0]);
             StringBuilder valuesStr = new StringBuilder();
             for (Integer integer : valArr) valuesStr.append(integer).append(",");
             if (valuesStr.length() > 0) values[index] = valuesStr.substring(0, valuesStr.length() - 1);

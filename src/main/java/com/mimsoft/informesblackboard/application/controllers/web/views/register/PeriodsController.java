@@ -5,7 +5,6 @@ import com.mimsoft.informesblackboard.application.data.queries.custom_periods_gr
 import com.mimsoft.informesblackboard.application.data.queries.custom_periods_grades_campus.CustomPeriodsGradesCampusRepository;
 import com.mimsoft.informesblackboard.application.data.repositories.CoursesRepository;
 import com.mimsoft.informesblackboard.application.data.repositories.UsersRepository;
-import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheServices;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -21,8 +20,8 @@ public class PeriodsController extends AbstractSessionController {
     private CoursesRepository coursesRepository;
     @Inject
     private UsersRepository usersRepository;
-    @Inject
-    private SimulateCacheServices simulateCacheServices;
+//    @Inject
+//    private SimulateCacheServices simulateCacheServices;
 
     private List<CustomPeriodsGradesCampus> customPeriodsGradesCampusesList;
     private String[] months;
@@ -33,12 +32,12 @@ public class PeriodsController extends AbstractSessionController {
         months = sessionController.getBundleMessage("months").split(",");
     }
 
-    public void cleanCache(CustomPeriodsGradesCampus item) {
-        simulateCacheServices.remove(item.getKeywordCache());
-    }
+//    public void cleanCache(CustomPeriodsGradesCampus item) {
+//        simulateCacheServices.remove(item.getKeywordCache());
+//    }
 
     public void remove(CustomPeriodsGradesCampus item) {
-        cleanCache(item);
+//        cleanCache(item);
         if (item.getTable().equalsIgnoreCase("users")) {
             usersRepository.removeAllByPeriodCampusGrades(item.getPeriods(), item.getDatedAt(), item.getCampusId(), item.getGradesId());
         } else {

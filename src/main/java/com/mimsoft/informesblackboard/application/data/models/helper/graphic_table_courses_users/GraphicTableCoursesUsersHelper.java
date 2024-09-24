@@ -176,8 +176,23 @@ public class GraphicTableCoursesUsersHelper {
                 grades.add(gradesList.get(item));
             }
         }
-        List<Grades> list = new ArrayList<>(grades);
-        Collections.reverse(list);
+
+        // Order Grades
+        Set<Grades> order = new LinkedHashSet<>();
+        for (Grades current: grades) {
+            if (current.getId() > 0) order.add(current);
+        }
+        order.add(gradesList.get(0));
+
+        List<Grades> list = new ArrayList<>();
+        for (Grades curren: order) {
+            for (Grades itemList: grades) {
+                if (curren.getId().equals(itemList.getId())) {
+                    list.add(curren);
+                    break;
+                }
+            }
+        }
         return list;
     }
 }

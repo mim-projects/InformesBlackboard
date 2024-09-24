@@ -6,6 +6,7 @@ import com.mimsoft.informesblackboard.domain.entities.Modality;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 
+import java.util.Collections;
 import java.util.List;
 
 @RequestScoped
@@ -15,6 +16,8 @@ public class ModalityRepository {
     private Repository<Modality> repository;
 
     public List<Modality> findAll() {
-        return repository.findAll();
+        List<Modality> list = repository.findAll();
+        Collections.reverse(list);
+        return list;
     }
 }
