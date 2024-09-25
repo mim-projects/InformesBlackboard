@@ -2,6 +2,8 @@ package com.mimsoft.informesblackboard.application.controllers.web.views;
 
 import com.mimsoft.informesblackboard.application.controllers.shared.RequestController;
 import com.mimsoft.informesblackboard.application.controllers.web.common.AbstractSessionController;
+import com.mimsoft.informesblackboard.application.data.interfaces.BundleLanguage;
+import com.mimsoft.informesblackboard.application.data.interfaces.DataResourceReports;
 import com.mimsoft.informesblackboard.application.data.models.helper.graphic_table_courses_users.GraphicTableCoursesUsersHelper;
 import com.mimsoft.informesblackboard.application.data.models.helper.multi_selector_boolean.MultiSelectorBooleanListHelper;
 import com.mimsoft.informesblackboard.application.data.queries.custom_periods.CustomPeriodsRepository;
@@ -24,12 +26,14 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 @Named("homeCtrl")
 @SessionScoped
-public class HomeController extends AbstractSessionController {
+public class HomeController extends AbstractSessionController implements DataResourceReports {
     @Inject
     private RequestController requestController;
     @Inject
@@ -146,10 +150,7 @@ public class HomeController extends AbstractSessionController {
                     ? (selectedPeriod.substring(0, 4) + "-" + selectedPeriod.substring(4))
                     : selectedPeriod;
             periodLegend += " | " + selectedMonth;
-            DashboardReport.DownloadPDF(
-                    requestController, FacesContext.getCurrentInstance(), sessionController, orderDataServices,
-                    graphicTableCoursesUsersHelper, createFilename(), periodLegend
-            );
+            DashboardReport.DownloadPDF(this, createFilename(), periodLegend);
         } catch (Exception e) {
             commonController.FacesMessagesError(sessionController.getBundleMessage("failed"), sessionController.getBundleMessage("try_again"));
         }
@@ -161,14 +162,7 @@ public class HomeController extends AbstractSessionController {
                     ? (selectedPeriod.substring(0, 4) + "-" + selectedPeriod.substring(4))
                     : selectedPeriod;
             periodLegend += " | " + selectedMonth;
-            DashboardReport.DownloadSpreadsheet(
-                    graphicTableCoursesUsersHelper,
-                    FacesContext.getCurrentInstance(),
-                    createFilename(),
-                    sessionController,
-                    orderDataServices,
-                    periodLegend
-            );
+            DashboardReport.DownloadSpreadsheet(this, createFilename(), periodLegend);
         } catch (Exception e) {
             commonController.FacesMessagesError(sessionController.getBundleMessage("failed"), sessionController.getBundleMessage("try_again"));
         }
@@ -184,7 +178,8 @@ public class HomeController extends AbstractSessionController {
     }
 
     public String getStorageHistory() {
-        List<StorageHistory> list = storageHistoryRepository.findAll();
+        List<StorageHistory> list = new ArrayList<>(getAllStorageHistory());
+        Collections.reverse(list);
         if (list.isEmpty()) return chartsServices.getEmptyShowMessage(sessionController.getBundleMessage("empty_graphic"));
         return chartsServices.getStorageHistory(list);
     }
@@ -236,5 +231,39 @@ public class HomeController extends AbstractSessionController {
 
     public void setRolesMultiSelectorBooleanListHelper(MultiSelectorBooleanListHelper<Roles> rolesMultiSelectorBooleanListHelper) {
         this.rolesMultiSelectorBooleanListHelper = rolesMultiSelectorBooleanListHelper;
+    }
+
+    // ========================================================================
+    // DataResourceReports
+    // ========================================================================
+
+    @Override
+    public RequestController getRequestController() {
+        return requestController;
+    }
+
+    @Override
+    public FacesContext getFacesContext() {
+        return FacesContext.getCurrentInstance();
+    }
+
+    @Override
+    public BundleLanguage getBundleLanguage() {
+        return sessionController;
+    }
+
+    @Override
+    public OrderDataServices getOrderDataServices() {
+        return orderDataServices;
+    }
+
+    @Override
+    public GraphicTableCoursesUsersHelper getGraphicTableCoursesUsersHelper() {
+        return graphicTableCoursesUsersHelper;
+    }
+
+    @Override
+    public List<StorageHistory> getAllStorageHistory() {
+        return storageHistoryRepository.findAllDesc();
     }
 }

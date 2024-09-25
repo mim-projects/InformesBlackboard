@@ -7,7 +7,6 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.List;
 
 @RequestScoped

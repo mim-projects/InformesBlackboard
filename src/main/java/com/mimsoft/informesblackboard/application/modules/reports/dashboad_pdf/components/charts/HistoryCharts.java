@@ -1,4 +1,4 @@
-package com.mimsoft.informesblackboard.application.modules.reports.dashboad_pdf.components;
+package com.mimsoft.informesblackboard.application.modules.reports.dashboad_pdf.components.charts;
 
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.Image;
@@ -6,16 +6,16 @@ import com.mimsoft.informesblackboard.application.data.constants.Colors;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.DefaultDrawingSupplier;
-import org.jfree.chart.renderer.category.BarRenderer;
-import org.jfree.chart.renderer.category.StandardBarPainter;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.AreaRendererEndType;
+import org.jfree.chart.renderer.category.AreaRenderer;
 import org.jfree.chart.ui.RectangleEdge;
 import org.jfree.chart.ui.RectangleInsets;
 import org.jfree.data.category.CategoryDataset;
-import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.DatasetUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -23,19 +23,19 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-public class BarCharts {
+public class HistoryCharts {
     private final int width;
     private final int height;
     private JFreeChart chart;
-    private DefaultCategoryDataset dataset;
+    private CategoryDataset dataset;
 
-    public BarCharts(int width, int height) {
+    public HistoryCharts(int width, int height) {
         this.width = width;
         this.height = height;
     }
 
-    public BarCharts build() {
-        chart = createChart(dataset);
+    public HistoryCharts build(String x, String y) {
+        chart = createChart(dataset, x, y);
         ChartPanel chartPanel = new ChartPanel(chart, false);
         chartPanel.setFillZoomRectangle(true);
         chartPanel.setMouseWheelEnabled(true);
@@ -47,13 +47,12 @@ public class BarCharts {
         return this;
     }
 
-    public BarCharts setDataset(String[] rows, String[] columns, Integer[][] values) {
-        dataset = new DefaultCategoryDataset();
-        for (int row = 0; row < rows.length; row++) {
-            for (int column = 0; column < columns.length; column++) {
-                dataset.addValue(values[column][row], rows[row], columns[column]);
-            }
+    public HistoryCharts setDataset(String[] keyword, Double[] values) {
+        double[][] vals = new double[1][values.length];
+        for (int k = 0; k < values.length; k++) {
+            vals[0][k] = values[k];
         }
+        dataset = DatasetUtils.createCategoryDataset(new String[]{"Date"}, keyword, vals);
         return this;
     }
 
@@ -64,28 +63,30 @@ public class BarCharts {
         return Image.getInstance(byteArrayOutputStream.toByteArray());
     }
 
-    private static JFreeChart createChart(CategoryDataset dataset) {
-        JFreeChart chart = ChartFactory.createBarChart("", null, null, dataset);
+    private static JFreeChart createChart(CategoryDataset dataset, String x, String y) {
+        JFreeChart chart = ChartFactory.createAreaChart("", x, y, dataset, PlotOrientation.VERTICAL, false, true, true);
         chart.getTitle().setVisible(false);
-        chart.getLegend().setPosition(RectangleEdge.TOP);
-        chart.getLegend().setFrame(BlockBorder.NONE);
-        chart.getLegend().setLegendItemGraphicPadding(new RectangleInsets(0, 15, 0, 5));
-        chart.setBackgroundPaint(Color.WHITE);
+        if (chart.getLegend() != null) {
+            chart.getLegend().setPosition(RectangleEdge.TOP);
+            chart.getLegend().setFrame(BlockBorder.NONE);
+            chart.getLegend().setLegendItemGraphicPadding(new RectangleInsets(0, 15, 0, 5));
+            chart.setBackgroundPaint(Color.WHITE);
+        }
 
         CategoryPlot plot = (CategoryPlot) chart.getPlot();
-        Paint[] colors = new Paint[]{ ConvertColor(Colors.UABC_YELLOW), ConvertColor(Colors.UABC_GREEN), ConvertColor(Colors.UABC_BLUE), ConvertColor(Colors.UABC_YELLOW_2), ConvertColor(Colors.UABC_GREEN_2), ConvertColor(Colors.UABC_BLUE_2) };
+        Paint[] colors = new Paint[]{ ConvertColor(Colors.UABC_GREEN), ConvertColor(Colors.UABC_GREEN_1), ConvertColor(Colors.UABC_GREEN_2) };
         plot.setDrawingSupplier(new DefaultDrawingSupplier(colors, colors, DefaultDrawingSupplier.DEFAULT_STROKE_SEQUENCE, DefaultDrawingSupplier.DEFAULT_OUTLINE_STROKE_SEQUENCE, DefaultDrawingSupplier.DEFAULT_SHAPE_SEQUENCE));
         plot.setBackgroundPaint(Color.WHITE);
         plot.setOutlinePaint(Color.WHITE);
         plot.setDomainGridlinePaint(Color.BLACK);
         plot.setRangeGridlinePaint(Color.BLACK);
+        plot.setForegroundAlpha(0.7f);
 
-        NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-        rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+//        NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+//        rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 
-        BarRenderer renderer = (BarRenderer) plot.getRenderer();
-        renderer.setDrawBarOutline(false);
-        renderer.setBarPainter(new StandardBarPainter());
+        AreaRenderer renderer = (AreaRenderer) plot.getRenderer();
+        renderer.setEndType(AreaRendererEndType.LEVEL);
         return chart;
     }
 

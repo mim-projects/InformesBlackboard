@@ -1,12 +1,10 @@
 package com.mimsoft.informesblackboard.application.modules.reports.dashboard_spreadsheet;
 
-import com.mimsoft.informesblackboard.application.controllers.shared.RequestController;
-import com.mimsoft.informesblackboard.application.data.interfaces.BundleLanguage;
-import com.mimsoft.informesblackboard.application.data.models.helper.graphic_table_courses_users.GraphicTableCoursesUsersHelper;
-import com.mimsoft.informesblackboard.application.modules.graphics.OrderDataServices;
+import com.mimsoft.informesblackboard.application.data.interfaces.DataResourceReports;
 import com.mimsoft.informesblackboard.application.modules.reports.utils.SectionTypes;
 import com.mimsoft.informesblackboard.application.modules.reports.utils.TemplateInstance;
 import com.mimsoft.informesblackboard.domain.entities.Grades;
+import com.mimsoft.informesblackboard.domain.entities.StorageHistory;
 import org.apache.commons.io.IOUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -16,21 +14,18 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 public class DashboardSpreadsheetTemplate implements TemplateInstance {
-    private final GraphicTableCoursesUsersHelper data;
-    private final BundleLanguage bundleLanguage;
-    private final OrderDataServices orderDataServices;
+    private final DataResourceReports data;
     private final String periodLegend;
 
-    public DashboardSpreadsheetTemplate(RequestController requestController, GraphicTableCoursesUsersHelper data, BundleLanguage bundleLanguage, OrderDataServices orderDataServices, String periodLegend) {
+    public DashboardSpreadsheetTemplate(DataResourceReports data, String periodLegend) {
         this.data = data;
-        this.bundleLanguage = bundleLanguage;
-        this.orderDataServices = orderDataServices;
         this.periodLegend = periodLegend;
     }
 
@@ -38,12 +33,10 @@ public class DashboardSpreadsheetTemplate implements TemplateInstance {
     public void render(OutputStream outputStream) {
         try {
             Workbook workbook = new XSSFWorkbook();
-            Sheet sheet = workbook.createSheet();
-            int currentRow = 0;
-            currentRow = drawHeaderReturnIndexRow(currentRow, sheet);
-            for (SectionTypes type: SectionTypes.values()) {
-                currentRow = drawTableReturnIndexRow(currentRow, sheet, type);
-            }
+
+            createSheetUsersAndCourses(workbook);
+            createSheetStorageHistory(workbook);
+
             workbook.write(outputStream);
             workbook.close();
         } catch (IOException e) {
@@ -51,13 +44,47 @@ public class DashboardSpreadsheetTemplate implements TemplateInstance {
         }
     }
 
+    private void createSheetUsersAndCourses(Workbook workbook) {
+        String sheetName = data.getBundleLanguage().getBundleMessage("users") + " - " + data.getBundleLanguage().getBundleMessage("courses");
+        Sheet sheet = workbook.createSheet(sheetName.toLowerCase());
+        int currentRow = 0;
+        currentRow = drawHeaderReturnIndexRow(currentRow, sheet);
+        for (SectionTypes type: SectionTypes.values()) {
+            currentRow = drawTableReturnIndexRow(currentRow, sheet, type);
+        }
+    }
+
+    private void createSheetStorageHistory(Workbook workbook) {
+        String sheetName = data.getBundleLanguage().getBundleMessage("storage");
+        Sheet sheet = workbook.createSheet(sheetName.toLowerCase());
+        int currentRow = 0;
+        currentRow = drawHeaderReturnIndexRow(currentRow, sheet);
+
+        Row rowSheet = sheet.createRow(currentRow);
+        sheet.addMergedRegion(new CellRangeAddress(currentRow, currentRow, 1, 2));
+        rowSheet.createCell(1).setCellValue(data.getBundleLanguage().getBundleMessage("storage").toUpperCase());
+
+        // Header
+        rowSheet = sheet.createRow(++currentRow);
+        rowSheet.createCell(1).setCellValue(data.getBundleLanguage().getBundleMessage("date"));
+        rowSheet.createCell(2).setCellValue(data.getBundleLanguage().getBundleMessage("value"));
+
+        // Body
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy / MM");
+        for (StorageHistory item: data.getAllStorageHistory()) {
+            rowSheet = sheet.createRow(++currentRow);
+            rowSheet.createCell(1).setCellValue(simpleDateFormat.format(item.getCreatedAt()));
+            rowSheet.createCell(2).setCellValue(item.getValue());
+        }
+    }
+
     private int drawHeaderReturnIndexRow(int currentRow, Sheet sheet) {
         CellStyle cellStyle = sheet.getWorkbook().createCellStyle();
         cellStyle.setAlignment(HorizontalAlignment.CENTER);
         for (String str: new String[] {
-                bundleLanguage.getBundleMessage("uabc_description"),
-                bundleLanguage.getBundleMessage("ciad_description"),
-                bundleLanguage.getBundleMessage("igupb_description"),
+                data.getBundleLanguage().getBundleMessage("uabc_description"),
+                data.getBundleLanguage().getBundleMessage("ciad_description"),
+                data.getBundleLanguage().getBundleMessage("igupb_description"),
                 periodLegend
         }) {
             Cell cell = sheet.createRow(currentRow).createCell(1);
@@ -188,9 +215,9 @@ public class DashboardSpreadsheetTemplate implements TemplateInstance {
 
     private int sizeHeader(SectionTypes type) {
         Set<String> list = new LinkedHashSet<>();;
-        for (Grades grade: data.getAllGradesForType(type.getValue())) {
-            if (!data.renderHelper(type.getValue(), grade)) continue;
-            list.addAll(data.getCustomTableGraphicDataHelper(type.getValue(), grade).getAllColumns());
+        for (Grades grade: data.getGraphicTableCoursesUsersHelper().getAllGradesForType(type.getValue())) {
+            if (!data.getGraphicTableCoursesUsersHelper().renderHelper(type.getValue(), grade)) continue;
+            list.addAll(data.getGraphicTableCoursesUsersHelper().getCustomTableGraphicDataHelper(type.getValue(), grade).getAllColumns());
         }
         return list.size();
     }
@@ -205,8 +232,8 @@ public class DashboardSpreadsheetTemplate implements TemplateInstance {
 
     private List<String> getAllGradesValid(SectionTypes type) {
         List<String> list = new ArrayList<>();
-        for (Grades grade: data.getAllGradesForType(type.getValue())) {
-            if (!data.renderHelper(type.getValue(), grade)) continue;
+        for (Grades grade: data.getGraphicTableCoursesUsersHelper().getAllGradesForType(type.getValue())) {
+            if (!data.getGraphicTableCoursesUsersHelper().renderHelper(type.getValue(), grade)) continue;
             list.add(grade.getName());
         }
         return list;
@@ -214,8 +241,8 @@ public class DashboardSpreadsheetTemplate implements TemplateInstance {
 
     private List<Grades> getAllGradesListValid(SectionTypes type) {
         List<Grades> list = new ArrayList<>();
-        for (Grades grade: data.getAllGradesForType(type.getValue())) {
-            if (!data.renderHelper(type.getValue(), grade)) continue;
+        for (Grades grade: data.getGraphicTableCoursesUsersHelper().getAllGradesForType(type.getValue())) {
+            if (!data.getGraphicTableCoursesUsersHelper().renderHelper(type.getValue(), grade)) continue;
             list.add(grade);
         }
         return list;
@@ -223,25 +250,27 @@ public class DashboardSpreadsheetTemplate implements TemplateInstance {
 
     private List<String> getAllHeader(SectionTypes type) {
         List<String> list = new ArrayList<>();
-        for (Grades grade: data.getAllGradesForType(type.getValue())) {
-            if (!data.renderHelper(type.getValue(), grade)) continue;
+        for (Grades grade: data.getGraphicTableCoursesUsersHelper().getAllGradesForType(type.getValue())) {
+            if (!data.getGraphicTableCoursesUsersHelper().renderHelper(type.getValue(), grade)) continue;
             list.add("");
-            list.addAll(orderDataServices.orderColumn(data.getCustomTableGraphicDataHelper(type.getValue(), grade).getAllColumns()));
+            list.addAll(data.getOrderDataServices().orderColumn(
+                    data.getGraphicTableCoursesUsersHelper().getCustomTableGraphicDataHelper(type.getValue(), grade).getAllColumns()
+            ));
         }
         return list;
     }
 
     private List<String> getAllKeyword(SectionTypes type) {
         Set<String> list = new LinkedHashSet<>();
-        for (Grades grade: data.getAllGradesForType(type.getValue())) {
-            if (!data.renderHelper(type.getValue(), grade)) continue;
-            list.addAll(data.getCustomTableGraphicDataHelper(type.getValue(), grade).getAllRows());
+        for (Grades grade: data.getGraphicTableCoursesUsersHelper().getAllGradesForType(type.getValue())) {
+            if (!data.getGraphicTableCoursesUsersHelper().renderHelper(type.getValue(), grade)) continue;
+            list.addAll(data.getGraphicTableCoursesUsersHelper().getCustomTableGraphicDataHelper(type.getValue(), grade).getAllRows());
         }
         return new ArrayList<>(list);
     }
 
     private Integer getValue(Grades grades, SectionTypes type, String row, String column) {
-        return data.getCustomTableGraphicDataHelper(type.getValue(), grades).getValue(column, row);
+        return data.getGraphicTableCoursesUsersHelper().getCustomTableGraphicDataHelper(type.getValue(), grades).getValue(column, row);
     }
 
     private void createFormulaSubTotalVertical(Cell cell, int rowLength) {

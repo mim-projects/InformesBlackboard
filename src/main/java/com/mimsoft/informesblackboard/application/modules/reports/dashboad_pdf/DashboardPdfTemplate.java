@@ -4,23 +4,23 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.mimsoft.informesblackboard.application.controllers.shared.RequestController;
 import com.mimsoft.informesblackboard.application.data.constants.Colors;
-import com.mimsoft.informesblackboard.application.data.interfaces.BundleLanguage;
-import com.mimsoft.informesblackboard.application.data.models.helper.graphic_table_courses_users.GraphicTableCoursesUsersHelper;
+import com.mimsoft.informesblackboard.application.data.interfaces.DataResourceReports;
 import com.mimsoft.informesblackboard.application.data.queries.custom_table_courses_users.CustomTableCoursesUsersHelper;
-import com.mimsoft.informesblackboard.application.modules.graphics.OrderDataServices;
-import com.mimsoft.informesblackboard.application.modules.reports.dashboad_pdf.components.BarCharts;
 import com.mimsoft.informesblackboard.application.modules.reports.dashboad_pdf.components.HeaderAndFooter;
+import com.mimsoft.informesblackboard.application.modules.reports.dashboad_pdf.components.charts.BarCharts;
+import com.mimsoft.informesblackboard.application.modules.reports.dashboad_pdf.components.charts.HistoryCharts;
 import com.mimsoft.informesblackboard.application.modules.reports.utils.SectionTypes;
 import com.mimsoft.informesblackboard.application.modules.reports.utils.TemplateInstance;
 import com.mimsoft.informesblackboard.application.utils.others.ArrayHelper;
 import com.mimsoft.informesblackboard.domain.entities.Grades;
+import com.mimsoft.informesblackboard.domain.entities.StorageHistory;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.*;
 
 import static com.itextpdf.text.PageSize.LETTER;
 
@@ -33,18 +33,12 @@ public class DashboardPdfTemplate implements TemplateInstance {
             INCH_TO_POINTS(0.49f), // BOTTOM
     };
     private static final int PADDING = 4;
-    private final RequestController requestController;
-    private final OrderDataServices orderDataServices;
-    private final GraphicTableCoursesUsersHelper data;
-    private final BundleLanguage bundleLanguage;
+    private final DataResourceReports data;
     private final Document document;
     private final String periodLegend;
 
-    public DashboardPdfTemplate(RequestController requestController, GraphicTableCoursesUsersHelper data, BundleLanguage bundleLanguage, OrderDataServices orderDataServices, String periodLegend) {
+    public DashboardPdfTemplate(DataResourceReports data, String periodLegend) {
         this.data = data;
-        this.bundleLanguage = bundleLanguage;
-        this.requestController = requestController;
-        this.orderDataServices = orderDataServices;
         this.document = new Document(LETTER, MARGIN_LRTB[0], MARGIN_LRTB[1], HeaderAndFooter.TOTAL_HEIGHT, MARGIN_LRTB[3]);
         this.periodLegend = periodLegend;
     }
@@ -53,40 +47,95 @@ public class DashboardPdfTemplate implements TemplateInstance {
     public void render(OutputStream outputStream) {
         try {
             PdfWriter writer = PdfWriter.getInstance(document, outputStream);
-            writer.setPageEvent(new HeaderAndFooter(requestController, bundleLanguage, periodLegend));
+            writer.setPageEvent(new HeaderAndFooter(data.getBundleLanguage(), periodLegend));
             document.open();
 
-            PdfPTable table = new PdfPTable(1);
-            table.setWidthPercentage(100);
+            document.add(createUsersAndCourses());
+            document.add(createTableStorageHistory());
 
-            HashMap<SectionTypes, String> types = new LinkedHashMap<>();
-            types.put(SectionTypes.USERS, bundleLanguage.getBundleMessage("users"));
-            types.put(SectionTypes.COURSES, bundleLanguage.getBundleMessage("courses"));
-
-            for (SectionTypes type: types.keySet()) {
-                for (Grades grade: data.getAllGradesForType(type.getValue())) {
-                    String title = types.get(type) + ". " + grade.getName();
-                    if (createTableAndGraphic(table, title, type, grade)) {
-                        table.addCell(emptyHeight(25));
-                    }
-                }
-            }
-
-            document.add(table);
             document.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    // Data for section
+    // ========================================================================
+    // STORAGE HISTORY
+    // ========================================================================
+
+    private PdfPTable createTableStorageHistory() throws DocumentException, IOException {
+        PdfPTable table = new PdfPTable(1);
+        table.setWidthPercentage(100);
+        table.addCell(cellBorder(createText(data.getBundleLanguage().getBundleMessage("storage").toUpperCase(), 11, true), 0));
+        table.addCell(emptyHeight(11));
+
+        // Table
+        PdfPTable dataHistory = new PdfPTable(2);
+        dataHistory.setWidthPercentage(100);
+        dataHistory.setTotalWidth(new float[] { 50, 50 });
+
+        // Header
+        dataHistory.addCell(headerCell(data.getBundleLanguage().getBundleMessage("date")));
+        dataHistory.addCell(headerCell(data.getBundleLanguage().getBundleMessage("value")));
+
+        // Body
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy / MM");
+        for (StorageHistory item: data.getAllStorageHistory()) {
+            String keyword = simpleDateFormat.format(item.getCreatedAt());
+            Double value = Double.valueOf(item.getValue());
+            dataHistory.addCell(keywordCell(keyword, convertColorRGBArr(Colors.UABC_YELLOW_2), BaseColor.BLACK));
+            dataHistory.addCell(valueCell(String.valueOf(value), BaseColor.WHITE, BaseColor.BLACK, false));
+        }
+        table.addCell(cellBorder(dataHistory, 0));
+
+        // Graphic
+        List<String> keywords = new ArrayList<>();
+        List<Double> values = new ArrayList<>();
+        List<StorageHistory> reverseHistory = new ArrayList<>(data.getAllStorageHistory());
+        Collections.reverse(reverseHistory);
+        for (StorageHistory item: reverseHistory) {
+            String keyword = simpleDateFormat.format(item.getCreatedAt());
+            Double value = Double.valueOf(item.getValue());
+            keywords.add(keyword);
+            values.add(value);
+        }
+        PdfPCell customGraphic = createHistoryChartGraphic(keywords, values);
+        table.addCell(emptyHeight(11));
+        table.addCell(customGraphic);
+
+        return table;
+    }
+
+    // ========================================================================
+    // USERS AND COURSES
+    // ========================================================================
+
+    private PdfPTable createUsersAndCourses() throws BadElementException, IOException {
+        PdfPTable table = new PdfPTable(1);
+        table.setWidthPercentage(100);
+
+        HashMap<SectionTypes, String> types = new LinkedHashMap<>();
+        types.put(SectionTypes.USERS, data.getBundleLanguage().getBundleMessage("users"));
+        types.put(SectionTypes.COURSES, data.getBundleLanguage().getBundleMessage("courses"));
+
+        for (SectionTypes type: types.keySet()) {
+            for (Grades grade: data.getGraphicTableCoursesUsersHelper().getAllGradesForType(type.getValue())) {
+                String title = types.get(type) + ". " + grade.getName();
+                if (createTableAndGraphic(table, title, type, grade)) {
+                    table.addCell(emptyHeight(25));
+                }
+            }
+        }
+        return table;
+    }
+
     private boolean createTableAndGraphic(PdfPTable parent, String title, SectionTypes type, Grades grade) throws BadElementException, IOException {
-        if (!data.renderHelper(type.getValue(), grade)) return false;
+        if (!data.getGraphicTableCoursesUsersHelper().renderHelper(type.getValue(), grade)) return false;
 
         // Data
-        CustomTableCoursesUsersHelper result = data.getCustomTableGraphicDataHelper(type.getValue(), grade);
-        String[] dataHeader = orderDataServices.orderColumn(result.getAllColumns()).toArray(new String[0]);
-        String[] dataKeyword = orderDataServices.orderRow(result.getAllRows()).toArray(new String[0]);
+        CustomTableCoursesUsersHelper result = data.getGraphicTableCoursesUsersHelper().getCustomTableGraphicDataHelper(type.getValue(), grade);
+        String[] dataHeader = data.getOrderDataServices().orderColumn(result.getAllColumns()).toArray(new String[0]);
+        String[] dataKeyword = data.getOrderDataServices().orderRow(result.getAllRows()).toArray(new String[0]);
         Integer[][] values = new Integer[dataKeyword.length][dataHeader.length];
         Integer[] subTotalHorizontal = new Integer[dataHeader.length];
         Integer[] subTotalVertical = new Integer[dataKeyword.length];
@@ -127,8 +176,8 @@ public class DashboardPdfTemplate implements TemplateInstance {
         int SUBTOTAL = 1;
         String[] dataKeywordAdded = new ArrayHelper<String>().added(
                 dataKeyword,
-                bundleLanguage.getBundleMessage("subtotal").toUpperCase(),
-                bundleLanguage.getBundleMessage("total").toUpperCase()
+                data.getBundleLanguage().getBundleMessage("subtotal").toUpperCase(),
+                data.getBundleLanguage().getBundleMessage("total").toUpperCase()
         );
 
         int partialRow = 0;
@@ -155,6 +204,10 @@ public class DashboardPdfTemplate implements TemplateInstance {
         return table;
     }
 
+    // ========================================================================
+    // Graphics
+    // ========================================================================
+
     private PdfPCell createBarChartGraphic(String[] dataHeader, String[] dataKeyword, Integer[][] values) throws BadElementException, IOException {
         Image image = new BarCharts(750, 180).setDataset(dataHeader, dataKeyword, values).build().getImage();
         PdfPCell graphic = new PdfPCell(image, true);
@@ -162,7 +215,21 @@ public class DashboardPdfTemplate implements TemplateInstance {
         return graphic;
     }
 
+    private PdfPCell createHistoryChartGraphic(List<String> keyword, List<Double> values) throws BadElementException, IOException {
+        Image image = new HistoryCharts(750, 180).setDataset(keyword.toArray(new String[0]), values.toArray(new Double[0]))
+                .build(
+                        data.getBundleLanguage().getBundleMessage("date"),
+                        data.getBundleLanguage().getBundleMessage("value")
+                ).getImage();
+        PdfPCell graphic = new PdfPCell(image, true);
+        graphic.setBorder(0);
+        return graphic;
+    }
+
+    // ========================================================================
     // Components
+    // ========================================================================
+
     private PdfPCell headerCell(String value) {
         PdfPCell cell = new PdfPCell(createText(value.toUpperCase(), BaseColor.WHITE, 8));
         cell.setBackgroundColor(convertColorRGBArr(Colors.UABC_GREEN));
@@ -210,7 +277,10 @@ public class DashboardPdfTemplate implements TemplateInstance {
         return cell;
     }
 
+    // ========================================================================
     // Helper
+    // ========================================================================
+
     private BaseColor convertColorRGBArr(String[] rgb) {
         return new BaseColor(Integer.parseInt(rgb[0]), Integer.parseInt(rgb[1]), Integer.parseInt(rgb[2]));
     }

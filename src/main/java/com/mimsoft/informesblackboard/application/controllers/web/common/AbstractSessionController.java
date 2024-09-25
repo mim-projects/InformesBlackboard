@@ -9,8 +9,6 @@ public abstract class AbstractSessionController implements Serializable {
     @Inject
     protected SessionController sessionController;
     @Inject
-    protected RouterController routerController;
-    @Inject
     protected CommonController commonController;
 
     @PostConstruct()

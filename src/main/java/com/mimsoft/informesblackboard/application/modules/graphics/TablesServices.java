@@ -1,19 +1,10 @@
 package com.mimsoft.informesblackboard.application.modules.graphics;
 
 import com.mimsoft.informesblackboard.application.data.queries.custom_table_courses_users.CustomTableCoursesUsersHelper;
-import com.mimsoft.informesblackboard.application.data.repositories.CampusRepository;
-import com.mimsoft.informesblackboard.application.data.repositories.ModalityRepository;
-import com.mimsoft.informesblackboard.application.data.repositories.RolesRepository;
-import com.mimsoft.informesblackboard.domain.entities.Campus;
-import com.mimsoft.informesblackboard.domain.entities.Modality;
-import com.mimsoft.informesblackboard.domain.entities.Roles;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 @RequestScoped
 public class TablesServices {

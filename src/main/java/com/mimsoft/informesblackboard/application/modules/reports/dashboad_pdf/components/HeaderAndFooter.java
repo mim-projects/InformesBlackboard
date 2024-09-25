@@ -2,7 +2,6 @@ package com.mimsoft.informesblackboard.application.modules.reports.dashboad_pdf.
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
-import com.mimsoft.informesblackboard.application.controllers.shared.RequestController;
 import com.mimsoft.informesblackboard.application.data.interfaces.BundleLanguage;
 import com.mimsoft.informesblackboard.application.modules.reports.dashboad_pdf.DashboardPdfTemplate;
 import com.mimsoft.informesblackboard.application.modules.reports.dashboad_pdf.utils.CustomElement;
@@ -17,16 +16,14 @@ public class HeaderAndFooter extends PdfPageEventHelper {
     private final static float HEIGHT_CELL = 40;
     public final static float TOTAL_HEIGHT = HEIGHT_CELL * 3.25f;
     private final BundleLanguage bundleLanguage;
-    private final RequestController requestController;
     private final String periodLegend;
 
     float multi = (float) (CustomFonts.FONT_P.getSize() * 0.69);
     private PdfTemplate t;
     private Image total;
 
-    public HeaderAndFooter(RequestController requestController, BundleLanguage bundleLanguage, String periodLegend) {
+    public HeaderAndFooter(BundleLanguage bundleLanguage, String periodLegend) {
         this.bundleLanguage = bundleLanguage;
-        this.requestController = requestController;
         this.periodLegend = periodLegend;
     }
 
