@@ -2,6 +2,7 @@ sudo yum update -y
 sudo yum upgrade -y
 sudo yum install -y epel-release wget libxml2 unzip java-1.8.0-openjdk ufw firewalld
 
+
 # --- Dirs
 sudo mkdir /opt/maven/
 sudo mkdir /opt/wildfly/
@@ -11,7 +12,7 @@ sudo mkdir /etc/wildfly
 
 # --- Wildfly [1]
 sudo wget -P /opt/downloads/ https://download.jboss.org/wildfly/10.1.0.Final/wildfly-10.1.0.Final.zip
-sudo unzip /opt/downloads/wildfly-10.1.0.Final.zip /opt/downloads/
+sudo unzip /opt/downloads/wildfly-10.1.0.Final.zip -d /opt/downloads/
 sudo mv /opt/downloads/wildfly-10.1.0.Final/* /opt/wildfly/
 sudo /opt/wildfly/bin/add-user.sh -u root -p password --silent
 sudo echo -e "export WildFly_BIN=/opt/wildfly/bin/\nexport PATH=\$PATH:\$WildFly_BIN" >> ~/.bashrc
@@ -71,19 +72,22 @@ sudo sed -i "/<datasources>/a\\\t\t\t\t<datasource jta=\"true\" jndi-name=\"java
 
 
 # --- Deployment
-sudo wget -P https://github.com/mim-projects/InformesBlackboard/archive/refs/heads/main.zip
+sudo systemctl restart wildfly
+sudo wget -P /opt/downloads/ https://github.com/mim-projects/InformesBlackboard/archive/refs/heads/main.zip
 sudo unzip /opt/downloads/main.zip -d /opt/downloads/
-sudo cd /opt/downloads/InformesBlackboard/
-sudo mvn dependency:sources dependency:resolve -Dclassifier=javadoc
+sudo cd /opt/downloads/InformesBlackboard-main/InformesBlackboard-main/
+mvn dependency:sources dependency:resolve -Dclassifier=javadoc
 sudo /opt/wildfly/bin/jboss-cli.sh --connect
-# > deploy /opt/downloads/InformesBlackboard/InformesBlackboard-1.0-SNAPSHOT.war
+# >  deploy /opt/downloads/InformesBlackboard-main/deployment/InformesBlackboard-1.0-SNAPSHOT.war
 
 
 # --- PHPMyAdmin
 sudo yum install -y phpmyadmin
 sudo sed -i "s/Require local/Require all granted/g" /etc/httpd/conf.d/phpMyAdmin.conf
 # Username: root, Password: '20$_iguGb'
-sudo sed -i "s/\/\/\$cfg\['Servers'\]\[\$i\]\['host'\] = 'localhost';/\n\$cfg\['Servers'\]\[\$i\]\['host'\] = 'localhost';\n\$cfg\['Servers'\]\[\$i\]\['port'\] = '8081';\n/g" /etc/httpd/conf.d/phpMyAdmin.conf
+#sudo sed -i "s/\/\/\$cfg\['Servers'\]\[\$i\]\['host'\] = 'localhost';/\n\$cfg\['Servers'\]\[\$i\]\['host'\] = 'localhost';\n\$cfg\['Servers'\]\[\$i\]\['port'\] = '3306';\n/g" /etc/httpd/conf.d/phpMyAdmin.conf
+sudo chmod +rwx /etc/phpMyAdmin/config.inc.php
+echo -e "\n\$cfg['Servers'][\$i]['host'] = 'localhost';\n\$cfg['Servers'][\$i]['port'] = '3306';\n" | sudo tee -a /etc/phpMyAdmin/config.inc.php
 sudo systemctl restart httpd
 
 
@@ -97,3 +101,25 @@ sudo firewall-cmd --add-port=8080/tcp --permanent
 sudo firewall-cmd --add-port=80/tcp --permanent
 sudo firewall-cmd --add-port=3306/tcp --permanent
 sudo firewall-cmd --reload
+
+
+# --- Install And Create Resources for Current App
+sudo yum install -y fontconfig dejavu-sans-fonts
+sudo wget -P /opt/downloads/ https://mirror.stream.centos.org/9-stream/BaseOS/x86_64/os/Packages/freetype-2.10.4-9.el9.x86_64.rpm
+sudo yum install /opt/downloads/freetype-2.10.4-9.el9.x86_64.rpm
+sudo mkdir /opt/wildfly/informes_blackboard/storage/
+sudo mkdir /opt/wildfly/informes_blackboard/storage/upload/
+sudo /opt/wildfly/bin/jboss-cli.sh --connect
+# > /subsystem=undertow/server=default-server/http-listener=default/:write-attribute(name=max-post-size,value=1048576000)
+
+
+# =============================================================================
+# =============================================================================
+# --- Credentials
+# =============================================================================
+# + Wildfly:
+#   > username: root
+#   > password: password
+# + Mysql / PHPMyAdmin
+#   > username: root
+#   > password: 20$_iguGb
