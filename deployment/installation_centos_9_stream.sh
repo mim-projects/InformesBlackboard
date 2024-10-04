@@ -71,24 +71,29 @@ sudo sed -i "/<datasources>/a\\\t\t\t\t<datasource jta=\"true\" jndi-name=\"java
 
 
 # --- Deployment
-sudo wget -P /opt/downloads/ https://github.com/Medina1402/wildfly10-centos9stream/archive/refs/heads/main.zip
+sudo wget -P https://github.com/mim-projects/InformesBlackboard/archive/refs/heads/main.zip
 sudo unzip /opt/downloads/main.zip -d /opt/downloads/
-sudo cd /opt/downloads/wildfly10-centos9stream/
+sudo cd /opt/downloads/InformesBlackboard/
 sudo mvn dependency:sources dependency:resolve -Dclassifier=javadoc
+sudo /opt/wildfly/bin/jboss-cli.sh --connect
+# > deploy /opt/downloads/InformesBlackboard/InformesBlackboard-1.0-SNAPSHOT.war
 
 
 # --- PHPMyAdmin
+sudo yum install -y phpmyadmin
+sudo sed -i "s/Require local/Require all granted/g" /etc/httpd/conf.d/phpMyAdmin.conf
+# Username: root, Password: '20$_iguGb'
+sudo sed -i "s/\/\/\$cfg\['Servers'\]\[\$i\]\['host'\] = 'localhost';/\n\$cfg\['Servers'\]\[\$i\]\['host'\] = 'localhost';\n\$cfg\['Servers'\]\[\$i\]\['port'\] = '8081';\n/g" /etc/httpd/conf.d/phpMyAdmin.conf
+sudo systemctl restart httpd
 
 
 # --- Ports
 sudo ufw allow 9990 # CONSOLE
 sudo ufw allow 8080 # APP HOST (redirect to port 80)
-sudo ufw allow 80   #
-#sudo ufw allow 3306 # MySQL (Ignore)
-sudo ufw allow 8081 # PHPMyAdmin
+sudo ufw allow 80   # PHPMyAdmin
+sudo ufw allow 3306 # MySQL (Ignore)
 sudo firewall-cmd --add-port=9990/tcp --permanent
 sudo firewall-cmd --add-port=8080/tcp --permanent
 sudo firewall-cmd --add-port=80/tcp --permanent
-sudo firewall-cmd --add-port=8081/tcp --permanent
 sudo firewall-cmd --add-port=3306/tcp --permanent
 sudo firewall-cmd --reload
