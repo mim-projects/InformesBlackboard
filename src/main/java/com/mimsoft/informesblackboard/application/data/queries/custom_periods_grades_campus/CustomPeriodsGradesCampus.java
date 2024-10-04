@@ -2,7 +2,7 @@ package com.mimsoft.informesblackboard.application.data.queries.custom_periods_g
 
 import com.mimsoft.informesblackboard.domain.entities.Campus;
 import com.mimsoft.informesblackboard.domain.entities.Grades;
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 import java.util.Date;
 

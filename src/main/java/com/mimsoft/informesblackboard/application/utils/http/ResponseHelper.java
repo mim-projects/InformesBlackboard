@@ -1,7 +1,7 @@
 package com.mimsoft.informesblackboard.application.utils.http;
 
-import jakarta.faces.context.FacesContext;
-import jakarta.servlet.http.HttpServletResponse;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletResponse;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,14 +29,18 @@ public class ResponseHelper {
     }
 
     public static void DownloadOutputStream(FacesContext context, String filename, OutputStreamHelper outputStreamHelper) throws IOException {
-        HttpServletResponse response = GetHttpServletResponse(context, filename);
+        try {
+            HttpServletResponse response = GetHttpServletResponse(context, filename);
 
-        OutputStream outputStream = response.getOutputStream();
-        outputStreamHelper.stream(outputStream);
+            OutputStream outputStream = response.getOutputStream();
+            outputStreamHelper.stream(outputStream);
 
-        outputStream.flush();
-        outputStream.close();
-        context.responseComplete();
+            outputStream.flush();
+            outputStream.close();
+            context.responseComplete();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private static HttpServletResponse GetHttpServletResponse(FacesContext context, String filename) {

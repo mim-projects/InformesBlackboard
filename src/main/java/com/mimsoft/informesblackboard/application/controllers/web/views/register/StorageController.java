@@ -4,9 +4,9 @@ import com.mimsoft.informesblackboard.application.controllers.web.common.Abstrac
 import com.mimsoft.informesblackboard.application.data.repositories.StorageHistoryRepository;
 import com.mimsoft.informesblackboard.application.utils.others.DateHelper;
 import com.mimsoft.informesblackboard.domain.entities.StorageHistory;
-import jakarta.faces.view.ViewScoped;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 
 import java.util.List;

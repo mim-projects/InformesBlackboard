@@ -4,7 +4,7 @@ import com.mimsoft.informesblackboard.application.controllers.shared.RequestCont
 import com.mimsoft.informesblackboard.application.data.models.helper.graphic_table_courses_users.GraphicTableCoursesUsersHelper;
 import com.mimsoft.informesblackboard.application.modules.graphics.OrderDataServices;
 import com.mimsoft.informesblackboard.domain.entities.StorageHistory;
-import jakarta.faces.context.FacesContext;
+import javax.faces.context.FacesContext;
 
 import java.util.List;
 

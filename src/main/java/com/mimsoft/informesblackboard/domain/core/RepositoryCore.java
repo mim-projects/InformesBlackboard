@@ -1,9 +1,9 @@
 package com.mimsoft.informesblackboard.domain.core;
 
-import jakarta.annotation.Resource;
-import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
-import jakarta.transaction.*;
+import javax.annotation.Resource;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.transaction.*;
 
 import java.util.ArrayList;
 import java.util.List;

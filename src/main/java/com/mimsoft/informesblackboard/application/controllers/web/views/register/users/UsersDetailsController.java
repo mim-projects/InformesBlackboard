@@ -9,9 +9,9 @@ import com.mimsoft.informesblackboard.application.data.queries.custom_users.Cust
 import com.mimsoft.informesblackboard.application.data.queries.custom_users.CustomUsersRepository;
 import com.mimsoft.informesblackboard.application.data.repositories.*;
 import com.mimsoft.informesblackboard.domain.entities.*;
-import jakarta.faces.view.ViewScoped;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import org.primefaces.model.LazyDataModel;
 
 import java.util.ArrayList;

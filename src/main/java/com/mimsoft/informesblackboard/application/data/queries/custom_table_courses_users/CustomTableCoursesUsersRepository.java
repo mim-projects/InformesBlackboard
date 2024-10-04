@@ -6,8 +6,8 @@ import com.mimsoft.informesblackboard.application.data.queries.QueryRepository;
 import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheCallback;
 import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheServices;
 import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheStaticData;
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Inject;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ public class CustomTableCoursesUsersRepository extends QueryRepository {
     private SimulateCacheServices simulateCacheServices;
 
     private List<CustomTableCoursesUsers> getCacheList(String keyword, SimulateCacheCallback<CustomTableCoursesUsers> simulateCacheCallback) {
-        List<CustomTableCoursesUsers> cache = new Gson().fromJson(simulateCacheServices.get(keyword), new TypeToken<>() {});
+        List<CustomTableCoursesUsers> cache = new Gson().fromJson(simulateCacheServices.get(keyword), new TypeToken<List<CustomTableCoursesUsers>>() {});
         if (cache == null || cache.isEmpty()) {
             cache = simulateCacheCallback.execute();
             simulateCacheServices.put(keyword, cache);

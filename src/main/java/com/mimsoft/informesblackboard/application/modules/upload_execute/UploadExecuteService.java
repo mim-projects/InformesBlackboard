@@ -10,10 +10,10 @@ import com.mimsoft.informesblackboard.application.modules.upload_execute.service
 import com.mimsoft.informesblackboard.application.utils.system.FileManager;
 import com.mimsoft.informesblackboard.domain.entities.Courses;
 import com.mimsoft.informesblackboard.domain.entities.Users;
-import jakarta.ejb.*;
-import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
-import jakarta.transaction.UserTransaction;
+import javax.ejb.*;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.transaction.UserTransaction;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

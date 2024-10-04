@@ -7,10 +7,10 @@ import com.mimsoft.informesblackboard.application.data.repositories.UserPlatform
 import com.mimsoft.informesblackboard.application.routes.Route;
 import com.mimsoft.informesblackboard.application.routes.Routes;
 import com.mimsoft.informesblackboard.domain.entities.UserPlatform;
-import jakarta.enterprise.context.SessionScoped;
-import jakarta.faces.context.FacesContext;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
+import javax.enterprise.context.SessionScoped;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 
 import java.io.IOException;
@@ -109,13 +109,11 @@ public class SessionController implements BundleLanguage, Serializable {
         return resourceBundle.getString(key);
     }
 
-    public boolean isRol(String... rol) {
-        for (String currentRol: rol) {
-            if (currentUser.getUserPlatformRolesId().getName().equalsIgnoreCase(currentRol)) {
-                return true;
-            }
+    public boolean isRol(String currentRol) {
+        if (currentUser == null || currentUser.getUserPlatformRolesId() == null || currentUser.getUserPlatformRolesId().getName() == null) {
+            return false;
         }
-        return false;
+        return currentUser.getUserPlatformRolesId().getName().equalsIgnoreCase(currentRol);
     }
 
     public void validateRoute() {

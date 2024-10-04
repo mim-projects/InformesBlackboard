@@ -4,9 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheKeywords;
 import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheServices;
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
 
 import java.util.*;
 
@@ -34,7 +34,7 @@ public class CustomPeriodsRepository {
             simulateCacheServices.put(SimulateCacheKeywords.AllPeriods.getKeyword(), result);
             periodsCache = simulateCacheServices.get(SimulateCacheKeywords.AllPeriods.getKeyword());
         }
-        return new Gson().fromJson(periodsCache, new TypeToken<>() {});
+        return new Gson().fromJson(periodsCache, new TypeToken<List<String>>() {});
     }
 
     public List<CustomPeriods> findAllForUsers() {

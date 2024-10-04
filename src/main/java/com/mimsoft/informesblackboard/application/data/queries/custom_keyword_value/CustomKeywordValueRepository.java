@@ -1,7 +1,7 @@
 package com.mimsoft.informesblackboard.application.data.queries.custom_keyword_value;
 
 import com.mimsoft.informesblackboard.application.data.queries.QueryRepository;
-import jakarta.enterprise.context.RequestScoped;
+import javax.enterprise.context.RequestScoped;
 
 @RequestScoped
 public class CustomKeywordValueRepository extends QueryRepository {

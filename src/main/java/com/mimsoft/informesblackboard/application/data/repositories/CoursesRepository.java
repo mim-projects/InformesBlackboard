@@ -5,8 +5,8 @@ import com.mimsoft.informesblackboard.domain.core.RepositoryClass;
 import com.mimsoft.informesblackboard.domain.entities.Campus;
 import com.mimsoft.informesblackboard.domain.entities.Courses;
 import com.mimsoft.informesblackboard.domain.entities.Grades;
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Inject;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

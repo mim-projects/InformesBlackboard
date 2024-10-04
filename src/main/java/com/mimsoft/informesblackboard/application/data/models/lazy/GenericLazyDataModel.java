@@ -1,7 +1,7 @@
 package com.mimsoft.informesblackboard.application.data.models.lazy;
 
 import com.mimsoft.informesblackboard.domain.core.EntityCore;
-import jakarta.faces.context.FacesContext;
+import javax.faces.context.FacesContext;
 import org.apache.commons.collections4.ComparatorUtils;
 import org.primefaces.model.FilterMeta;
 import org.primefaces.model.LazyDataModel;

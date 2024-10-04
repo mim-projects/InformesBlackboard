@@ -1,8 +1,8 @@
 package com.mimsoft.informesblackboard.application.modules.upload_execute.services;
 
 import com.mimsoft.informesblackboard.Configuration;
-import jakarta.persistence.EntityManager;
-import jakarta.transaction.*;
+import javax.persistence.EntityManager;
+import javax.transaction.*;
 
 import java.util.ArrayList;
 import java.util.List;

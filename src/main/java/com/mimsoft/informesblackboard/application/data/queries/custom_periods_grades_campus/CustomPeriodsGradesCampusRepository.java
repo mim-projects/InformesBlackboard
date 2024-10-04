@@ -1,8 +1,8 @@
 package com.mimsoft.informesblackboard.application.data.queries.custom_periods_grades_campus;
 
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;

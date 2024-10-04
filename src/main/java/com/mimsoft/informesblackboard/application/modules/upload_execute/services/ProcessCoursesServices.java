@@ -13,8 +13,8 @@ import com.mimsoft.informesblackboard.domain.entities.CampusCodes;
 import com.mimsoft.informesblackboard.domain.entities.Courses;
 import com.mimsoft.informesblackboard.domain.entities.Grades;
 import com.mimsoft.informesblackboard.domain.entities.Modality;
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Inject;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

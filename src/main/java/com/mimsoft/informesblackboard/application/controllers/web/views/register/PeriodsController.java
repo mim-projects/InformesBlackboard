@@ -5,9 +5,9 @@ import com.mimsoft.informesblackboard.application.data.queries.custom_periods_gr
 import com.mimsoft.informesblackboard.application.data.queries.custom_periods_grades_campus.CustomPeriodsGradesCampusRepository;
 import com.mimsoft.informesblackboard.application.data.repositories.CoursesRepository;
 import com.mimsoft.informesblackboard.application.data.repositories.UsersRepository;
-import jakarta.faces.view.ViewScoped;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import java.util.*;
 

@@ -111,11 +111,13 @@ public class DashboardSpreadsheetTemplate implements TemplateInstance {
     }
 
     private int drawTableReturnIndexRow(int currentRow, Sheet sheet, SectionTypes type) {
+        List<String> header = getAllHeader(type);
+        List<String> rows = getAllKeyword(type);
+        if (header.isEmpty() || rows.isEmpty()) return currentRow + 1;
+
         int spaceHeader = 3;
         int globalColumn = 0;
         int sizeHeader = sizeHeader(type);
-        List<String> header = getAllHeader(type);
-        List<String> rows = getAllKeyword(type);
         List<String> allGradesValid = getAllGradesValid(type);
 
         Row rowSheet = sheet.createRow(currentRow);

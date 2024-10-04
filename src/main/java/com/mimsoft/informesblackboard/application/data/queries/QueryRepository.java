@@ -1,9 +1,9 @@
 package com.mimsoft.informesblackboard.application.data.queries;
 
-import jakarta.annotation.Resource;
-import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
-import jakarta.transaction.UserTransaction;
+import javax.annotation.Resource;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.transaction.UserTransaction;
 
 public abstract class QueryRepository {
     @Inject

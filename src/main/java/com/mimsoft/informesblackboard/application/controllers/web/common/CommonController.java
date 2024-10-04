@@ -3,11 +3,11 @@ package com.mimsoft.informesblackboard.application.controllers.web.common;
 import com.mimsoft.informesblackboard.Configuration;
 import com.mimsoft.informesblackboard.application.controllers.shared.RequestController;
 import com.mimsoft.informesblackboard.application.utils.others.ArrayHelper;
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.faces.application.FacesMessage;
-import jakarta.faces.context.FacesContext;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
+import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 
 import java.text.SimpleDateFormat;
@@ -174,7 +174,7 @@ public class CommonController {
         return COLORS[index % COLORS.length];
     }
 
-    public String[] createArrayString(String... data) {
-        return data;
+    public String[] createArrayString(String a, String b) {
+        return new String[] { a, b };
     }
 }

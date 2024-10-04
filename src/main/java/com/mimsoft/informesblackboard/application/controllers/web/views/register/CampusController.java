@@ -7,9 +7,9 @@ import com.mimsoft.informesblackboard.application.data.repositories.CoursesRepos
 import com.mimsoft.informesblackboard.application.data.repositories.UsersRepository;
 import com.mimsoft.informesblackboard.domain.entities.Campus;
 import com.mimsoft.informesblackboard.domain.entities.CampusCodes;
-import jakarta.faces.view.ViewScoped;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 
 import java.util.List;

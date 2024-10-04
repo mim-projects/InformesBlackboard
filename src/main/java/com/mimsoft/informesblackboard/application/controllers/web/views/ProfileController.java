@@ -3,9 +3,9 @@ package com.mimsoft.informesblackboard.application.controllers.web.views;
 import com.mimsoft.informesblackboard.application.controllers.web.common.AbstractSessionController;
 import com.mimsoft.informesblackboard.application.data.repositories.UserPlatformRepository;
 import com.mimsoft.informesblackboard.domain.entities.UserPlatform;
-import jakarta.faces.view.ViewScoped;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 
 @Named("profileCtrl")

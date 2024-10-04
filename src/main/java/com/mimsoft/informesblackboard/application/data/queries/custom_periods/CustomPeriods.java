@@ -1,6 +1,6 @@
 package com.mimsoft.informesblackboard.application.data.queries.custom_periods;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
 @SqlResultSetMapping(

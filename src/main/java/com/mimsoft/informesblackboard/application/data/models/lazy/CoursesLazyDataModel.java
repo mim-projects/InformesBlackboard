@@ -1,7 +1,7 @@
 package com.mimsoft.informesblackboard.application.data.models.lazy;
 
 import com.mimsoft.informesblackboard.domain.entities.Courses;
-import jakarta.faces.context.FacesContext;
+import javax.faces.context.FacesContext;
 import org.primefaces.model.FilterMeta;
 import org.primefaces.model.SortOrder;
 

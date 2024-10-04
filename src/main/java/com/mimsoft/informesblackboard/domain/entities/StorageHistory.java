@@ -1,7 +1,7 @@
 package com.mimsoft.informesblackboard.domain.entities;
 
 import com.mimsoft.informesblackboard.domain.core.EntityCore;
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 import java.util.Date;
 

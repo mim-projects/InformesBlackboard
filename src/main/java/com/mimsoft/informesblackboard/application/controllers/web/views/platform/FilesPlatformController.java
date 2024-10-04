@@ -4,10 +4,10 @@ import com.mimsoft.informesblackboard.application.controllers.web.common.Abstrac
 import com.mimsoft.informesblackboard.application.data.repositories.FileStorageRepository;
 import com.mimsoft.informesblackboard.application.utils.http.ResponseHelper;
 import com.mimsoft.informesblackboard.domain.entities.FileStorage;
-import jakarta.faces.context.FacesContext;
-import jakarta.faces.view.ViewScoped;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
+import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,9 +1,9 @@
 package com.mimsoft.informesblackboard.application.controllers.shared;
 
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.faces.context.FacesContext;
-import jakarta.inject.Named;
-import jakarta.servlet.http.HttpServletRequest;
+import javax.enterprise.context.RequestScoped;
+import javax.faces.context.FacesContext;
+import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 
 import java.util.Map;
 
@@ -32,7 +32,7 @@ public class RequestController {
     public String getResourcesUrl() {
         String host = FacesContext.getCurrentInstance().getExternalContext().getRequestHeaderMap().get("host");
         String protocol = host.contains("localhost:") ?"http://" :"https://";
-        return protocol + host + getContext() + "/jakarta.faces.resources";
+        return protocol + host + getContext() + "/javax.faces.resources";
     }
 
     public String getResourcesForUrl(String name, String lib) {

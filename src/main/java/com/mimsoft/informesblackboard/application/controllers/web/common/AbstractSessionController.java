@@ -1,7 +1,7 @@
 package com.mimsoft.informesblackboard.application.controllers.web.common;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.inject.Inject;
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
 import java.io.Serializable;
 

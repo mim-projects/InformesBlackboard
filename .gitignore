@@ -1,19 +1,14 @@
 target/
-development/storage/
-
-#!.mvn/wrapper/maven-wrapper.jar
+!.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-mvnw
-mvnw.cmd
-.mvn
+development/storage/*
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
 .idea/jarRepositories.xml
 .idea/compiler.xml
 .idea/libraries/
-.idea
 *.iws
 *.iml
 *.ipr
@@ -36,14 +31,9 @@ mvnw.cmd
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
-faces-config.NavData
 
 ### VS Code ###
 .vscode/
 
 ### Mac OS ###
 .DS_Store
-
-### - ####
-*/storage/upload/*.txt
-*/**/*.~lock*
