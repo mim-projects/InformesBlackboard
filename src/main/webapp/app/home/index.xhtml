@@ -7,6 +7,81 @@
                 template="/templates/template_app.xhtml">
     <ui:define name="end_head">
         <h:outputStylesheet library="mimsoft" name="/css/dashboard.css"/>
+        <style>
+            /* Contenedor principal del formulario */
+            form#tables {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                gap: 1.5rem;
+                padding: 1rem;
+            }
+
+            /* Estilos generales para las cards */
+            .card {
+                background-color: white;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                border-radius: 10px;
+                padding: 1rem;
+                flex-basis: calc(33.333% - 1.5rem); /* Tres tarjetas por fila */
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                transition: all 0.3s ease-in-out;
+            }
+
+            /* Estilo para pantallas medianas (tabletas, pantallas más pequeñas) */
+            @media (max-width: 768px) {
+                .card {
+                    flex-basis: calc(50% - 1.5rem); /* Dos tarjetas por fila */
+                }
+            }
+
+            /* Estilo para pantallas pequeñas (móviles) */
+            @media (max-width: 480px) {
+                .card {
+                    flex-basis: 100%; /* Una tarjeta por fila */
+                }
+            }
+
+            /* Títulos y contenido de las cards */
+            .title-card {
+                font-size: 1.2rem;
+                font-weight: bold;
+                margin-bottom: 1rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .title-card-icon-text h1 {
+                font-size: 1rem !important;
+            }
+
+            .content-card {
+                display: grid;
+                grid-template-rows: auto auto;
+                gap: 1rem;
+            }
+
+            .graphic {
+                height: 150px;
+                background-color: #f0f0f0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .table {
+                height: 150px;
+                background-color: #f9f9f9;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+        </style>
+
     </ui:define>
     <ui:define name="container_body">
         <div class="container">
@@ -88,21 +163,23 @@
                             <div class="title-card">
                                 <div class="title-card-icon-text">
                                     <i class="pi pi-#{sectionType}" style="font-size: 1rem !important;"></i>
-                                    <h1 style="font-size: 1rem !important;">#{sectionType eq 'users' ? bundle.users : bundle.courses}. #{gradeForUI.name}</h1>
+                                    <h1>#{sectionType eq 'users' ? bundle.users : bundle.courses}. #{gradeForUI.name}</h1>
                                 </div>
                             </div>
                             <div class="content-card">
                                 <div class="graphic">
-                                    <m:eChartCustom canvasId="cg#{sectionType}#{gradeForUI.id}" data="#{homeCtrl.getTableOrGraphic(sectionType, 'graphic', gradeForUI.id)}" height="100%"/>
+                                    <m:eChartCustom canvasId="cg#{sectionType}#{gradeForUI.id}"
+                                                    data="#{homeCtrl.getTableOrGraphic(sectionType, 'graphic', gradeForUI.id)}" height="100%" />
                                 </div>
                                 <div class="table">
-                                    <h:outputText escape="false" value="#{homeCtrl.getTableOrGraphic(sectionType, 'table', gradeForUI.id)}"/>
+                                    <h:outputText escape="false" value="#{homeCtrl.getTableOrGraphic(sectionType, 'table', gradeForUI.id)}" />
                                 </div>
                             </div>
                         </div>
                     </ui:repeat>
                 </ui:repeat>
             </h:form>
+
 
             <h:form id="storage">
                 <div class="card">

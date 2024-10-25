@@ -14,14 +14,18 @@ import java.util.List;
 @Named("storageCtrl")
 @ViewScoped
 public class StorageController extends AbstractSessionController {
+
     @Inject
     private StorageHistoryRepository storageHistoryRepository;
 
     private StorageHistory selectedStorageHistory;
 
+    private List<StorageHistory> storagehis;
+
     @Override
     public void init() {
         selectedStorageHistory = null;
+        storagehis = storageHistoryRepository.findAllDesc();;
     }
 
     public void preUpdateOrCreate(StorageHistory item) {
@@ -42,6 +46,10 @@ public class StorageController extends AbstractSessionController {
             commonController.FacesMessagesInfo(sessionController.getBundleMessage("successful"), sessionController.getBundleMessage("create_item"));
             PrimeFaces.current().executeScript("PF('" + modalWidgetVar + "').hide()");
             PrimeFaces.current().ajax().update(updateForm);
+            
+            //LO AGREGUE PORQUE NO SE ACTUALIZABA LA PAGINA AL AGREGAR EL NUEVO STORAGE
+            PrimeFaces.current().executeScript("setTimeout(function(){ window.location.reload(); }, 500);");
+
         }
     }
 
@@ -68,4 +76,13 @@ public class StorageController extends AbstractSessionController {
     public void setSelectedStorageHistory(StorageHistory selectedStorageHistory) {
         this.selectedStorageHistory = selectedStorageHistory;
     }
+
+    public List<StorageHistory> getStoragehis() {
+        return storagehis;
+    }
+
+    public void setStoragehis(List<StorageHistory> storagehis) {
+        this.storagehis = storagehis;
+    }
+
 }

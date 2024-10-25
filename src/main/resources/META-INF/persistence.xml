@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
-    <persistence-unit transaction-type="JTA" name="informes_blackboard">
-        <jta-data-source>java:/informes_blackboard</jta-data-source>
-    </persistence-unit>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
+  <persistence-unit name="informes_blackboard" transaction-type="JTA">
+    <jta-data-source>java:/informes_blackboard</jta-data-source>
+  </persistence-unit>
 </persistence>

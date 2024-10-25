@@ -11,12 +11,12 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
-
 import java.util.List;
 
 @Named("campusCtrl")
 @ViewScoped
 public class CampusController extends AbstractSessionController {
+
     @Inject
     private CampusRepository campusRepository;
     @Inject
@@ -29,16 +29,34 @@ public class CampusController extends AbstractSessionController {
     private Integer selectedCampusId;
     private Campus selectedCampus;
     private CampusCodes selectedCampusCodes;
+    private Integer counterFilter;
+    // Variables para almacenar el campo de orden y el orden ascendente/descendente
+    private String sortField;
+    private boolean ascending = true;
+    private List<Campus> campus;
+    private List<CampusCodes>campuscode;
 
     @Override
+
     public void init() {
         selectedCampus = null;
         selectedCampusCodes = null;
+        counterFilter = 0;
+        campus = campusRepository.findAll();
+        campuscode=campusCodesRepository.findAll();
+    }
+
+    public void updateCampusList() {
+        // Aquí puedes realizar la lógica para actualizar la lista de campus
+        // campusList = service.getCampusOrderedBy(selectedColumn);
     }
 
     public void preUpdateOrCreate(Campus item) {
-        if (item == null) selectedCampus = new Campus();
-        else selectedCampus = item;
+        if (item == null) {
+            selectedCampus = new Campus();
+        } else {
+            selectedCampus = item;
+        }
     }
 
     public void preUpdateCampusCode() {
@@ -66,8 +84,8 @@ public class CampusController extends AbstractSessionController {
     }
 
     public void removeCampusCode(CampusCodes campusCodes) {
-        if (usersRepository.findByCampusCode(campusCodes.getId()) != null ||
-                coursesRepository.findByCampusCode(campusCodes.getId()) != null) {
+        if (usersRepository.findByCampusCode(campusCodes.getId()) != null
+                || coursesRepository.findByCampusCode(campusCodes.getId()) != null) {
             commonController.FacesMessagesError(sessionController.getBundleMessage("failed"), sessionController.getBundleMessage("keyword_exist"));
         } else {
             campusCodesRepository.remove(campusCodes);
@@ -78,6 +96,7 @@ public class CampusController extends AbstractSessionController {
     public List<Campus> getAllCampus() {
         return campusRepository.findAll();
     }
+    // Método que devuelve la lista ordenada
 
     public List<CampusCodes> getAllCampusCodes() {
         return campusCodesRepository.findAllDesc();
@@ -106,4 +125,45 @@ public class CampusController extends AbstractSessionController {
     public void setSelectedCampusId(Integer selectedCampusId) {
         this.selectedCampusId = selectedCampusId;
     }
+
+    public Integer getCounterFilter() {
+        return counterFilter;
+    }
+
+    public void setCounterFilter(Integer counterFilter) {
+        this.counterFilter = counterFilter;
+    }
+
+    public String getSortField() {
+        return sortField;
+    }
+
+    public void setSortField(String sortField) {
+        this.sortField = sortField;
+    }
+
+    public boolean isAscending() {
+        return ascending;
+    }
+
+    public void setAscending(boolean ascending) {
+        this.ascending = ascending;
+    }
+
+    public List<Campus> getCampus() {
+        return campus;
+    }
+
+    public void setCampus(List<Campus> campus) {
+        this.campus = campus;
+    }
+
+    public List<CampusCodes> getCampuscode() {
+        return campuscode;
+    }
+
+    public void setCampuscode(List<CampusCodes> campuscode) {
+        this.campuscode = campuscode;
+    }
+
 }

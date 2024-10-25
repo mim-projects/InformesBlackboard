@@ -16,18 +16,26 @@ import java.util.List;
 @Named("filesPlatformCtrl")
 @ViewScoped
 public class FilesPlatformController extends AbstractSessionController {
+
     @Inject
     private FileStorageRepository fileStorageRepository;
 
+    private List<FileStorage> filestorage;
+
     @Override
     public void init() {
-
+        filestorage = fileStorageRepository.getAll();
     }
+    
+    
 
     public void download(FileStorage fileStorage) {
         File file = new File(fileStorage.getPath());
-        try { ResponseHelper.DownloadFile(FacesContext.getCurrentInstance(), fileStorage.getName(), file); }
-        catch (IOException ignore) { commonController.FacesMessagesError("Failed", "Download Failed"); }
+        try {
+            ResponseHelper.DownloadFile(FacesContext.getCurrentInstance(), fileStorage.getName(), file);
+        } catch (IOException ignore) {
+            commonController.FacesMessagesError("Failed", "Download Failed");
+        }
     }
 
     public List<FileStorage> getAllFiles() {
@@ -37,4 +45,13 @@ public class FilesPlatformController extends AbstractSessionController {
     public void remove(FileStorage fileStorage) {
         fileStorageRepository.remove(fileStorage);
     }
+
+    public List<FileStorage> getFilestorage() {
+        return filestorage;
+    }
+
+    public void setFilestorage(List<FileStorage> filestorage) {
+        this.filestorage = filestorage;
+    }
+
 }

@@ -20,10 +20,23 @@
                 <div class="content-card">
                     <p:dataTable widgetVar="datatable_form_data" styleClass="custom-table"
                                  paginator="true" paginatorAlwaysVisible="false" rows="12" paginatorPosition="bottom"
-                                 tableStyle="min-width: 60rem !important;" value="#{usersPlatformCtrl.allUsersPlatform}" var="item">
-                        <p:column headerText="#{bundle.name}" field="name"/>
-                        <p:column headerText="#{bundle.username}" field="username"/>
-                        <p:column headerText="#{bundle.roles_platform}" field="userPlatformRolesId.name">
+                                 tableStyle="min-width: 60rem !important;" value="#{usersPlatformCtrl.userPlatformRoles}" var="item">
+                        <p:column headerText="#{bundle.name}" 
+                                  sortBy="#{item.name}" 
+                                  filterBy="#{item.name}">
+                            <h:outputText value="#{item.name}" />
+                        </p:column>
+
+                        <p:column headerText="#{bundle.username}" 
+                                  sortBy="#{item.username}" 
+                                  filterBy="#{item.username}">
+                            <h:outputText value="#{item.username}" />
+                        </p:column>
+
+                        <p:column headerText="#{bundle.roles_platform}" 
+                                  sortBy="#{item.userPlatformRolesId.name}" 
+                                  filterBy="#{item.userPlatformRolesId.name}">
+                            <h:outputText value="#{item.userPlatformRolesId.name}" />
                             <f:facet name="filter">
                                 <p:selectOneMenu onchange="PF('datatable_form_data').filter()" styleClass="ui-custom-filter">
                                     <f:selectItem itemLabel="#{bundle.all}" itemValue="#{null}" noSelectionOption="true"/>
@@ -31,7 +44,15 @@
                                 </p:selectOneMenu>
                             </f:facet>
                         </p:column>
-                        <p:column headerText="#{bundle.email}" field="email"/>
+
+                        <p:column headerText="#{bundle.email}" 
+                                  sortBy="#{item.email}" 
+                                  filterBy="#{item.email}">
+                            <h:outputText value="#{item.email}" />
+                        </p:column>
+
+
+
                         <p:column headerText="#{bundle.options}" width="10rem">
                             <p:commandButton disabled="#{usersPlatformCtrl.disableOptions(item)}"
                                              actionListener="#{usersPlatformCtrl.remove(item)}" update="@form"

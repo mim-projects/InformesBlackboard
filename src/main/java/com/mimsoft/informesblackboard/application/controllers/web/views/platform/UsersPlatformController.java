@@ -16,6 +16,7 @@ import java.util.Objects;
 @Named("usersPlatformCtrl")
 @ViewScoped
 public class UsersPlatformController extends AbstractSessionController {
+
     @Inject
     private UserPlatformRepository userPlatformRepository;
     @Inject
@@ -24,9 +25,11 @@ public class UsersPlatformController extends AbstractSessionController {
     private UserPlatform selectedUserPlatform;
     private Integer selectedUserRolesPlatformId;
 
+    private List<UserPlatform> UserPlatformRoles;
+
     @Override
     public void init() {
-
+        UserPlatformRoles = userPlatformRepository.findAll();
     }
 
     public void preCreateOrUpdate(UserPlatform item) {
@@ -115,4 +118,13 @@ public class UsersPlatformController extends AbstractSessionController {
     public void setSelectedUserRolesPlatformId(Integer selectedUserRolesPlatformId) {
         this.selectedUserRolesPlatformId = selectedUserRolesPlatformId;
     }
+
+    public List<UserPlatform> getUserPlatformRoles() {
+        return UserPlatformRoles;
+    }
+
+    public void setUserPlatformRoles(List<UserPlatform> UserPlatformRoles) {
+        this.UserPlatformRoles = UserPlatformRoles;
+    }
+
 }
