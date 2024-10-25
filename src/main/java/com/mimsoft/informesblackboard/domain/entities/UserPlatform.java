@@ -30,6 +30,13 @@ public class UserPlatform extends EntityCore {
     @ManyToOne(optional = false)
     private UserPlatformRoles userPlatformRolesId;
 
+      // Nueva columna 'language'
+    @Column(name = "language", length = 10)
+    private String language;
+
+    // Nueva columna 'theme'
+    @Column(name = "theme", length = 10)
+    private String theme;
     public UserPlatform() {
     }
 
@@ -91,16 +98,27 @@ public class UserPlatform extends EntityCore {
         this.userPlatformRolesId = userPlatformRolesId;
     }
 
+    public String getTheme() {
+        return theme;
+    }
+
+    public void setTheme(String theme) {
+        this.theme = theme;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
     @Override
     public String toString() {
-        return "UserPlatform{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", imageUrl='" + imageUrl + '\'' +
-                ", userPlatformRolesId=" + userPlatformRolesId +
-                '}';
+        return "UserPlatform{" + "id=" + id + ", name=" + name + ", username=" + username + ", password=" + password + ", email=" + email + ", imageUrl=" + imageUrl + ", userPlatformRolesId=" + userPlatformRolesId + ", language=" + language + ", theme=" + theme + '}';
     }
+
+    
+    
 }
