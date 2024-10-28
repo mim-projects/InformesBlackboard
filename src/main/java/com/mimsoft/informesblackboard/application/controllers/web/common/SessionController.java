@@ -2,6 +2,7 @@ package com.mimsoft.informesblackboard.application.controllers.web.common;
 
 import com.mimsoft.informesblackboard.Configuration;
 import com.mimsoft.informesblackboard.application.controllers.shared.RequestController;
+import com.mimsoft.informesblackboard.application.controllers.web.views.HomeController;
 import com.mimsoft.informesblackboard.application.data.interfaces.BundleLanguage;
 import com.mimsoft.informesblackboard.application.data.repositories.UserPlatformRepository;
 import com.mimsoft.informesblackboard.application.routes.Route;
@@ -29,6 +30,8 @@ public class SessionController implements BundleLanguage, Serializable {
     private RequestController requestController;
     @Inject
     private UserPlatformRepository userPlatformRepository;
+    @Inject
+    private HomeController homeCtrl;
 
     private UserPlatform currentUser;
     private String currentLang;
@@ -36,7 +39,7 @@ public class SessionController implements BundleLanguage, Serializable {
 
     public void validateSession() {
         updateTheme(currentTheme);
-        updateLanguage(currentLang==null?"EN":currentLang, false);
+        updateLanguage(currentLang == null ? "EN" : currentLang, false);
         if (!isActive()) {
             logout();
         }
@@ -57,8 +60,8 @@ public class SessionController implements BundleLanguage, Serializable {
             return false;
         }
         setCurrentUser(currentUser);
-        
-        currentLang= currentUser.getLanguage();
+
+        currentLang = currentUser.getLanguage();
         return true;
     }
 
@@ -139,17 +142,17 @@ public class SessionController implements BundleLanguage, Serializable {
 
         System.out.println("Current Language:" + currentLang);
         System.out.println("Lang: " + lang);
-        System.out.println("actualizarbasedatos: "+actualizarbasedatos);
+        System.out.println("actualizarbasedatos: " + actualizarbasedatos);
         if (actualizarbasedatos) {
             System.out.println("Base de datos update: " + actualizarbasedatos);
-            
+
             String currentLang2 = userPlatformRepository.getCurrentlang(currentUser);
 
             if (currentLang2 == null) {
                 System.out.println("no tiene resultado currentlang");
                 currentLang2 = "EN";
             }
-            currentLang2=currentLang;
+            currentLang2 = currentLang;
             System.out.println("--------------------------------------------------");
             System.out.println("Current Language: Despues de consulta: " + currentLang2);
             System.out.println("Lang: Despues de consulta:  " + lang);
@@ -158,28 +161,28 @@ public class SessionController implements BundleLanguage, Serializable {
             currentUser.setLanguage(lang);
             userPlatformRepository.update(currentUser);
 
-      
         } else {
             System.out.println("Base de datos update: " + actualizarbasedatos);
 
-            
-            
         }
 
-           System.out.println("--------------------------------------------------");
-            System.out.println("Current Language: Despues de consulta: " + currentLang);
-            System.out.println("Lang: Despues de consulta:  " + lang);
-            System.out.println("--------------------------------------------------");
+        System.out.println("--------------------------------------------------");
+        System.out.println("Current Language: Despues de consulta: " + currentLang);
+        System.out.println("Lang: Despues de consulta:  " + lang);
+        System.out.println("--------------------------------------------------");
 
-           boolean reload = !Objects.equals(currentLang, lang);
-            currentLang=lang;
-            
-            FacesContext.getCurrentInstance().getViewRoot().setLocale(Locale.forLanguageTag(currentLang.toLowerCase()));
+        boolean reload = !Objects.equals(currentLang, lang);
+        currentLang = lang;
+        
+        // Llamada a clearTablesGraphic para actualizar los meses en el nuevo idioma
+        homeCtrl.clearTablesGraphic();
+        
+        FacesContext.getCurrentInstance().getViewRoot().setLocale(Locale.forLanguageTag(currentLang.toLowerCase()));
 
-            if (reload) {
-                System.out.println("Estoy dentro de reload");
-                PrimeFaces.current().executeScript("setTimeout(function(){ window.location.reload(); }, 500);");
-            }
+        if (reload) {
+            System.out.println("Estoy dentro de reload");
+            PrimeFaces.current().executeScript("setTimeout(function(){ window.location.reload(); }, 500);");
+        }
     }
 
     public String getCurrentLang() {
