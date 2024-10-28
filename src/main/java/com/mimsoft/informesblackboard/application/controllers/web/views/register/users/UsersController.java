@@ -23,6 +23,7 @@ import java.util.List;
 @Named("usersCtrl")
 @ViewScoped
 public class UsersController extends AbstractSessionController {
+
     @Inject
     private CustomUsersRepository customUsersRepository;
     @Inject
@@ -35,6 +36,8 @@ public class UsersController extends AbstractSessionController {
     private CustomPeriodsRepository periodsRepository;
     @Inject
     private RolesRepository rolesRepository;
+    @Inject
+    private mantenerInfoCtrl mantenerInfoCtrl;
 
     private LazyDataModel<CustomUsers> customUsersLazyDataModel;
     private String selectedPeriodId;
@@ -54,6 +57,7 @@ public class UsersController extends AbstractSessionController {
     }
 
     public void search() {
+        mantenerInfoCtrl.search();
         List<CustomUsers> list = customUsersRepository.findAllByPeriodGradeRoleCampusIds(selectedPeriodId, selectedGradeId, selectedRoleId, selectedCampusId);
         customUsersLazyDataModel = new CustomUserLazyDataModel(list);
         counterFilter = list.size();
@@ -104,6 +108,7 @@ public class UsersController extends AbstractSessionController {
     }
 
     public void setSelectedPeriodId(String selectedPeriodId) {
+        mantenerInfoCtrl.setSelectedPeriodId(selectedPeriodId);
         this.selectedPeriodId = selectedPeriodId;
     }
 
@@ -112,6 +117,7 @@ public class UsersController extends AbstractSessionController {
     }
 
     public void setSelectedGradeId(Integer selectedGradeId) {
+        mantenerInfoCtrl.setSelectedGradeId(selectedGradeId);
         this.selectedGradeId = selectedGradeId;
     }
 
@@ -120,6 +126,7 @@ public class UsersController extends AbstractSessionController {
     }
 
     public void setSelectedRoleId(Integer selectedRoleId) {
+        mantenerInfoCtrl.setSelectedRoleId(selectedRoleId);
         this.selectedRoleId = selectedRoleId;
     }
 
@@ -128,6 +135,7 @@ public class UsersController extends AbstractSessionController {
     }
 
     public void setSelectedCampusId(Integer selectedCampusId) {
+        mantenerInfoCtrl.setSelectedCampusId(selectedCampusId);
         this.selectedCampusId = selectedCampusId;
     }
 }
