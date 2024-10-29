@@ -11,7 +11,6 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
-
 import java.util.List;
 
 @Named("campusCtrl")
@@ -29,16 +28,19 @@ public class CampusController extends AbstractSessionController {
     private Integer selectedCampusId;
     private Campus selectedCampus;
     private CampusCodes selectedCampusCodes;
+    private List<Campus> allCampus;
+    private List<CampusCodes> allCampusCodes;
 
     @Override
     public void init() {
         selectedCampus = null;
         selectedCampusCodes = null;
+        allCampus = campusRepository.findAll();
+        allCampusCodes = campusCodesRepository.findAllDesc();
     }
 
     public void preUpdateOrCreate(Campus item) {
-        if (item == null) selectedCampus = new Campus();
-        else selectedCampus = item;
+        selectedCampus = item == null ? new Campus() : item;
     }
 
     public void preUpdateCampusCode() {
@@ -56,6 +58,7 @@ public class CampusController extends AbstractSessionController {
             selectedCampusCodes.setCampusId(campusRepository.findById(selectedCampusId));
             campusCodesRepository.create(selectedCampusCodes);
             commonController.FacesMessagesInfo(sessionController.getBundleMessage("successful"), sessionController.getBundleMessage("create_item"));
+            init();
             PrimeFaces.current().executeScript("PF('" + modalWidgetVar + "').hide()");
             PrimeFaces.current().ajax().update(updateForm);
         }
@@ -66,21 +69,14 @@ public class CampusController extends AbstractSessionController {
     }
 
     public void removeCampusCode(CampusCodes campusCodes) {
-        if (usersRepository.findByCampusCode(campusCodes.getId()) != null ||
-                coursesRepository.findByCampusCode(campusCodes.getId()) != null) {
+        if (usersRepository.findByCampusCode(campusCodes.getId()) != null
+                || coursesRepository.findByCampusCode(campusCodes.getId()) != null) {
             commonController.FacesMessagesError(sessionController.getBundleMessage("failed"), sessionController.getBundleMessage("keyword_exist"));
         } else {
             campusCodesRepository.remove(campusCodes);
+            init();
             commonController.FacesMessagesWarn(sessionController.getBundleMessage("successful"), sessionController.getBundleMessage("remove_item"));
         }
-    }
-
-    public List<Campus> getAllCampus() {
-        return campusRepository.findAll();
-    }
-
-    public List<CampusCodes> getAllCampusCodes() {
-        return campusCodesRepository.findAllDesc();
     }
 
     public Campus getSelectedCampus() {
@@ -105,5 +101,21 @@ public class CampusController extends AbstractSessionController {
 
     public void setSelectedCampusId(Integer selectedCampusId) {
         this.selectedCampusId = selectedCampusId;
+    }
+
+    public List<Campus> getAllCampus() {
+        return allCampus;
+    }
+
+    public void setAllCampus(List<Campus> allCampus) {
+        this.allCampus = allCampus;
+    }
+
+    public List<CampusCodes> getAllCampusCodes() {
+        return allCampusCodes;
+    }
+
+    public void setAllCampusCodes(List<CampusCodes> allCampusCodes) {
+        this.allCampusCodes = allCampusCodes;
     }
 }

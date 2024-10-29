@@ -15,12 +15,18 @@ public class GradesController extends AbstractSessionController {
     @Inject
     private GradesRepository gradesRepository;
 
+    private List<Grades> allGrades;
+
     @Override
     public void init() {
-
+        allGrades = gradesRepository.findAll();
     }
 
     public List<Grades> getAllGrades() {
-        return gradesRepository.findAll();
+        return allGrades;
+    }
+
+    public void setAllGrades(List<Grades> allGrades) {
+        this.allGrades = allGrades;
     }
 }

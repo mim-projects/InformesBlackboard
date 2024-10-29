@@ -15,12 +15,18 @@ public class ModalityController extends AbstractSessionController {
     @Inject
     private ModalityRepository modalityRepository;
 
+    private List<Modality> allModalities;
+
     @Override
     public void init() {
-
+        allModalities = modalityRepository.findAll();
     }
 
     public List<Modality> getAllModalities() {
-        return modalityRepository.findAll();
+        return allModalities;
+    }
+
+    public void setAllModalities(List<Modality> allModalities) {
+        this.allModalities = allModalities;
     }
 }

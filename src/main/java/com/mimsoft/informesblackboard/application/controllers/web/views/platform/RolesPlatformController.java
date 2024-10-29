@@ -15,12 +15,18 @@ public class RolesPlatformController extends AbstractSessionController {
     @Inject
     private UserPlatformRolesRepository userPlatformRolesRepository;
 
+    private List<UserPlatformRoles> allRolesPlatform;
+
     @Override
     public void init() {
-
+        allRolesPlatform = userPlatformRolesRepository.findAll();
     }
 
     public List<UserPlatformRoles> getAllRolesPlatform() {
-        return userPlatformRolesRepository.findAll();
+        return allRolesPlatform;
+    }
+
+    public void setAllRolesPlatform(List<UserPlatformRoles> allRolesPlatform) {
+        this.allRolesPlatform = allRolesPlatform;
     }
 }

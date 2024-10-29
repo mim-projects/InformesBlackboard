@@ -19,22 +19,32 @@ public class FilesPlatformController extends AbstractSessionController {
     @Inject
     private FileStorageRepository fileStorageRepository;
 
+    private List<FileStorage> allFiles;
+
     @Override
     public void init() {
-
+        allFiles = fileStorageRepository.getAll();
     }
 
     public void download(FileStorage fileStorage) {
         File file = new File(fileStorage.getPath());
-        try { ResponseHelper.DownloadFile(FacesContext.getCurrentInstance(), fileStorage.getName(), file); }
-        catch (IOException ignore) { commonController.FacesMessagesError("Failed", "Download Failed"); }
-    }
-
-    public List<FileStorage> getAllFiles() {
-        return fileStorageRepository.getAll();
+        try {
+            ResponseHelper.DownloadFile(FacesContext.getCurrentInstance(), fileStorage.getName(), file);
+        } catch (IOException ignore) {
+            commonController.FacesMessagesError("Failed", "Download Failed");
+        }
     }
 
     public void remove(FileStorage fileStorage) {
         fileStorageRepository.remove(fileStorage);
     }
+
+    public List<FileStorage> getAllFiles() {
+        return allFiles;
+    }
+
+    public void setAllFiles(List<FileStorage> allFiles) {
+        this.allFiles = allFiles;
+    }
+
 }

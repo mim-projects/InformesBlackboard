@@ -24,9 +24,11 @@ public class UsersPlatformController extends AbstractSessionController {
     private UserPlatform selectedUserPlatform;
     private Integer selectedUserRolesPlatformId;
 
+    private List<UserPlatform> allUsersPlatform;
+
     @Override
     public void init() {
-
+        allUsersPlatform = userPlatformRepository.findAll();
     }
 
     public void preCreateOrUpdate(UserPlatform item) {
@@ -93,7 +95,11 @@ public class UsersPlatformController extends AbstractSessionController {
     }
 
     public List<UserPlatform> getAllUsersPlatform() {
-        return userPlatformRepository.findAll();
+        return allUsersPlatform;
+    }
+
+    public void setAllUsersPlatform(List<UserPlatform> allUsersPlatform) {
+        this.allUsersPlatform = allUsersPlatform;
     }
 
     public List<UserPlatformRoles> getAllUserPlatformRoles() {

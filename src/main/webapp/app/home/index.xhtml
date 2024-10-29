@@ -10,7 +10,7 @@
     </ui:define>
     <ui:define name="container_body">
         <div class="container">
-            <div style="display: flex; justify-content: space-between; gap: 2rem; align-items: center; flex-wrap: wrap">
+            <div style="display: flex; justify-content: space-between; gap: 2rem; align-items: center; flex-wrap: wrap; width: 100%;">
                 <h:form id="filters">
                     <div class="filter-group">
                         <p>
@@ -104,8 +104,8 @@
                 </ui:repeat>
             </h:form>
 
-            <h:form id="storage">
-                <div class="card">
+            <h:form id="storage" style="width: 100%">
+                <div class="card" style="width: 100% !important;">
                     <div class="title-card">
                         <div class="title-card-icon-text">
                             <i class="pi pi-server" style="font-size: 1rem !important;"></i>
