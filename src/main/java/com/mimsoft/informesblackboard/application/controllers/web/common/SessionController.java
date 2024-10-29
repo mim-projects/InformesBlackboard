@@ -8,24 +8,20 @@ import com.mimsoft.informesblackboard.application.data.repositories.UserPlatform
 import com.mimsoft.informesblackboard.application.routes.Route;
 import com.mimsoft.informesblackboard.application.routes.Routes;
 import com.mimsoft.informesblackboard.domain.entities.UserPlatform;
-import com.sun.source.tree.ContinueTree;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.primefaces.PrimeFaces;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
-import javax.annotation.PostConstruct;
 
 @Named("sessionCtrl")
 @SessionScoped
 public class SessionController implements BundleLanguage, Serializable {
-
     @Inject
     private RequestController requestController;
     @Inject
@@ -34,16 +30,15 @@ public class SessionController implements BundleLanguage, Serializable {
     private HomeController homeCtrl;
 
     private UserPlatform currentUser;
-    private String currentLang;
-    private String currentTheme;
 
     public void validateSession() {
-        updateTheme(currentTheme);
-        updateLanguage(currentLang == null ? "EN" : currentLang, false);
         if (!isActive()) {
             logout();
+            return;
         }
         validateRoute();
+        updateTheme(null);
+        updateLanguage(null);
     }
 
     public boolean isActive() {
@@ -56,12 +51,7 @@ public class SessionController implements BundleLanguage, Serializable {
 
     public boolean setCurrentUser(String username, String password) {
         UserPlatform currentUser = userPlatformRepository.findByUsernamePassword(username, password);
-        if (currentUser == null) {
-            return false;
-        }
         setCurrentUser(currentUser);
-
-        currentLang = currentUser.getLanguage();
         return true;
     }
 
@@ -74,17 +64,11 @@ public class SessionController implements BundleLanguage, Serializable {
     }
 
     public String getName() {
-        if (currentUser == null) {
-            return "-";
-        }
-        return currentUser.getName().length() > 15 ? currentUser.getName().substring(0, 14) : currentUser.getName();
+        return currentUser == null ? "-" : currentUser.getName().length() > 15 ? currentUser.getName().substring(0, 14) : currentUser.getName();
     }
 
     public String getUsername() {
-        if (currentUser == null) {
-            return "-";
-        }
-        return currentUser.getUsername().length() > 15 ? currentUser.getUsername().substring(0, 14) : currentUser.getUsername();
+        return currentUser == null ? "-" : currentUser.getUsername().length() > 15 ? currentUser.getUsername().substring(0, 14) : currentUser.getUsername();
     }
 
     public void logout() {
@@ -98,104 +82,34 @@ public class SessionController implements BundleLanguage, Serializable {
     }
 
     public void updateTheme(String theme) {
-        System.out.println("--------------------------------------");
-        System.out.println("Entré a updateTheme");
-
-        // Obtener el tema actual desde la base de datos si currentTheme es nulo
-        if (currentTheme == null) {
-            currentTheme = userPlatformRepository.getCurrentTheme(currentUser);
-            System.out.println("El tema actual obtenido de la base de datos es: " + currentTheme);
-        }
-
-        System.out.println("CurrentTheme: " + currentTheme);
-
-        // Si el tema es light y currentTheme es nulo, se establece el currentTheme desde la base de datos
-        if (currentTheme == null && "light".equals(theme)) {
-            theme = currentTheme; // Se obtiene de la base de datos
-        }
-
-        // Verificar que el tema proporcionado sea válido
-        if (theme == null || (!theme.equals("light") && !theme.equals("dark"))) {
-            theme = currentTheme; // Establecer un tema por defecto
-        }
-
-        System.out.println("Theme: " + theme);
-
-        // Actualizar el tema del usuario actual
-        currentUser.setTheme(theme);
-        userPlatformRepository.updatetheme(currentUser, theme); // Persistir el cambio en la base de datos
-
-        // Verificar si hay un cambio en el tema para recargar la página
-        boolean reload = !Objects.equals(currentTheme, theme);
-        currentTheme = theme;
-
-        // Recargar la página si es necesario
-        if (reload) {
-            PrimeFaces.current().executeScript("location.reload()");
+        if (theme == null || !Objects.equals(currentUser.getTheme(), theme)) {
+            if (theme == null) theme = getCurrentTheme();
+            currentUser.setTheme(theme.toLowerCase());
+            userPlatformRepository.update(currentUser);
         }
     }
 
-    public void updateLanguage(String lang, Boolean actualizarbasedatos) {
-        System.out.println("---------------------------------------------------");
-        System.out.println("Entre a update language");
-        System.out.println("CurrentUser: " + currentUser);
-
-        System.out.println("Current Language:" + currentLang);
-        System.out.println("Lang: " + lang);
-        System.out.println("actualizarbasedatos: " + actualizarbasedatos);
-        if (actualizarbasedatos) {
-            System.out.println("Base de datos update: " + actualizarbasedatos);
-
-            String currentLang2 = userPlatformRepository.getCurrentlang(currentUser);
-
-            if (currentLang2 == null) {
-                System.out.println("no tiene resultado currentlang");
-                currentLang2 = "EN";
-            }
-            currentLang2 = currentLang;
-            System.out.println("--------------------------------------------------");
-            System.out.println("Current Language: Despues de consulta: " + currentLang2);
-            System.out.println("Lang: Despues de consulta:  " + lang);
-            System.out.println("--------------------------------------------------");
-
-            currentUser.setLanguage(lang);
+    public void updateLanguage(String lang) {
+        if (lang == null || !Objects.equals(currentUser.getLanguage(), lang)) {
+            if (lang == null) lang = getCurrentLang();
+            currentUser.setLanguage(lang.toLowerCase());
             userPlatformRepository.update(currentUser);
-
-        } else {
-            System.out.println("Base de datos update: " + actualizarbasedatos);
-
-        }
-
-        System.out.println("--------------------------------------------------");
-        System.out.println("Current Language: Despues de consulta: " + currentLang);
-        System.out.println("Lang: Despues de consulta:  " + lang);
-        System.out.println("--------------------------------------------------");
-
-        boolean reload = !Objects.equals(currentLang, lang);
-        currentLang = lang;
-        
-        // Llamada a clearTablesGraphic para actualizar los meses en el nuevo idioma
-        homeCtrl.clearTablesGraphic();
-        
-        FacesContext.getCurrentInstance().getViewRoot().setLocale(Locale.forLanguageTag(currentLang.toLowerCase()));
-
-        if (reload) {
-            System.out.println("Estoy dentro de reload");
-            PrimeFaces.current().executeScript("setTimeout(function(){ window.location.reload(); }, 500);");
+            homeCtrl.clearTablesGraphic();
+            FacesContext.getCurrentInstance().getViewRoot().setLocale(Locale.forLanguageTag(getCurrentLang().toLowerCase()));
         }
     }
 
     public String getCurrentLang() {
-        return currentLang;
+        return currentUser == null || currentUser.getLanguage() == null ? "en" : currentUser.getLanguage();
     }
 
     public String getCurrentTheme() {
-        return currentTheme;
+        return currentUser == null || currentUser.getTheme() == null ? "light" : currentUser.getTheme();
     }
 
     @Override
     public String getBundleMessage(String key) {
-        ResourceBundle resourceBundle = ResourceBundle.getBundle("bundle_" + currentLang.toLowerCase());
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("bundle_" + getCurrentLang().toLowerCase());
         return resourceBundle.getString(key);
     }
 
@@ -210,14 +124,10 @@ public class SessionController implements BundleLanguage, Serializable {
         String url = requestController.getURL();
         String[] parts = url.split("/app/");
 
-        if (parts.length < 2) {
-            logout();
-        }
+        if (parts.length < 2) logout();
         String[] subParts = parts[1].split("\\.xhtml");
 
-        if (subParts.length < 1) {
-            logout();
-        }
+        if (subParts.length < 1) logout();
         String route = "/app/" + subParts[0] + ".xhtml";
 
         Route currentRoute = null;

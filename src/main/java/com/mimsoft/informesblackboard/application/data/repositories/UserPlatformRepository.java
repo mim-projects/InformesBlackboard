@@ -10,7 +10,6 @@ import java.util.List;
 
 @RequestScoped
 public class UserPlatformRepository {
-
     @Inject
     @RepositoryClass(UserPlatform.class)
     private Repository<UserPlatform> repository;
@@ -32,31 +31,6 @@ public class UserPlatformRepository {
 
     public void update(UserPlatform currenUser) {
         repository.update(currenUser);
-    }
-
-    public void updatelang(UserPlatform currenUser, String lang) {
-        System.out.println("entre a repositorio de updatelang en UserPlatformRepository ");
-        currenUser.setLanguage(lang); // Actualiza el campo 'theme'
-        repository.update(currenUser);
-    }
-   
-    // Método para obtener el tema actual del usuario
-    public String getCurrentlang(UserPlatform currentUser) {
-        System.out.println("Obteniendo el tema actual del usuario.");
-        return currentUser.getLanguage(); // Devuelve el tema actual
-    }
-
-    // Método actualizado para recibir el tema
-    public void updatetheme(UserPlatform currenUser, String theme) {
-        System.out.println("entre a repositorio de updatetheme en UserPlatformRepository ");
-        currenUser.setTheme(theme); // Actualiza el campo 'theme'
-        repository.update(currenUser);
-    }
-
-    // Método para obtener el tema actual del usuario
-    public String getCurrentTheme(UserPlatform currentUser) {
-        System.out.println("Obteniendo el tema actual del usuario.");
-        return currentUser.getTheme(); // Devuelve el tema actual
     }
 
     public List<UserPlatform> findAll() {

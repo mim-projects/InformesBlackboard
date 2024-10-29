@@ -30,13 +30,12 @@ public class UserPlatform extends EntityCore {
     @ManyToOne(optional = false)
     private UserPlatformRoles userPlatformRolesId;
 
-      // Nueva columna 'language'
-    @Column(name = "language", length = 10)
+    @Column(name = "language")
     private String language;
 
-    // Nueva columna 'theme'
-    @Column(name = "theme", length = 10)
+    @Column(name = "theme")
     private String theme;
+
     public UserPlatform() {
     }
 

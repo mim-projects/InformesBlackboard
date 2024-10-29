@@ -14,17 +14,17 @@
                <div style="display: flex; flex-wrap: wrap;">
                   <p:menubar styleClass="menu_theme">
                      <p:submenu style="text-transform: uppercase" label="#{sessionCtrl.currentTheme}" icon="pi #{sessionCtrl.currentTheme eq 'light' ?'pi-sun' :'pi-moon'}">
-                        <p:menuitem actionListener="#{sessionCtrl.updateTheme('light')}" process="@this"
+                        <p:menuitem actionListener="#{sessionCtrl.updateTheme('light')}" process="@this" update="@all"
                                     icon="pi pi-sun" styleClass="ui-button ui-button-flat" value="light"/>
-                        <p:menuitem actionListener="#{sessionCtrl.updateTheme('dark')}" process="@this"
+                        <p:menuitem actionListener="#{sessionCtrl.updateTheme('dark')}" process="@this" update="@all"
                                     icon="pi pi-moon" styleClass="ui-button ui-button-flat" value="dark"/>
                      </p:submenu>
                   </p:menubar>
                   <p:menubar styleClass="menu_lang">
                      <p:submenu style="text-transform: uppercase" label="#{sessionCtrl.currentLang}" icon="pi pi-globe">
-                        <p:menuitem actionListener="#{sessionCtrl.updateLanguage('ES',true)}" process="@this"
+                        <p:menuitem actionListener="#{sessionCtrl.updateLanguage('ES')}" process="@this" update="@all"
                                     styleClass="ui-button ui-button-flat" value="ES"/>
-                        <p:menuitem actionListener="#{sessionCtrl.updateLanguage('EN',true)}" process="@this"
+                        <p:menuitem actionListener="#{sessionCtrl.updateLanguage('EN')}" process="@this" update="@all"
                                     styleClass="ui-button ui-button-flat" value="EN"/>
                      </p:submenu>
                   </p:menubar>

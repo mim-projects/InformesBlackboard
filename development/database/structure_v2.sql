@@ -16,8 +16,12 @@ create table user_platform (
     email varchar(255),
     image_url varchar(500),
     user_platform_roles_id int not null,
+    language varchar(10) default 'en',
+    theme varchar(10) default 'light',
     foreign key (user_platform_roles_id) references user_platform_roles(id)
 );
+# alter table user_platform add column language varchar(10) default 'en';
+# alter table user_platform add column theme varchar(10) default 'light';
 
 create table campus (
     id int not null auto_increment primary key,
