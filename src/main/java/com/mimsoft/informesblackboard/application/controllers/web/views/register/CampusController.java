@@ -16,7 +16,6 @@ import java.util.List;
 @Named("campusCtrl")
 @ViewScoped
 public class CampusController extends AbstractSessionController {
-
     @Inject
     private CampusRepository campusRepository;
     @Inject
@@ -29,34 +28,19 @@ public class CampusController extends AbstractSessionController {
     private Integer selectedCampusId;
     private Campus selectedCampus;
     private CampusCodes selectedCampusCodes;
-    private Integer counterFilter;
-    // Variables para almacenar el campo de orden y el orden ascendente/descendente
-    private String sortField;
-    private boolean ascending = true;
-    private List<Campus> campus;
-    private List<CampusCodes>campuscode;
+    private List<Campus> allCampus;
+    private List<CampusCodes> allCampusCodes;
 
     @Override
-
     public void init() {
         selectedCampus = null;
         selectedCampusCodes = null;
-        counterFilter = 0;
-        campus = campusRepository.findAll();
-        campuscode=campusCodesRepository.findAll();
-    }
-
-    public void updateCampusList() {
-        // Aquí puedes realizar la lógica para actualizar la lista de campus
-        // campusList = service.getCampusOrderedBy(selectedColumn);
+        allCampus = campusRepository.findAll();
+        allCampusCodes = campusCodesRepository.findAllDesc();
     }
 
     public void preUpdateOrCreate(Campus item) {
-        if (item == null) {
-            selectedCampus = new Campus();
-        } else {
-            selectedCampus = item;
-        }
+        selectedCampus = item == null ? new Campus() : item;
     }
 
     public void preUpdateCampusCode() {
@@ -74,6 +58,7 @@ public class CampusController extends AbstractSessionController {
             selectedCampusCodes.setCampusId(campusRepository.findById(selectedCampusId));
             campusCodesRepository.create(selectedCampusCodes);
             commonController.FacesMessagesInfo(sessionController.getBundleMessage("successful"), sessionController.getBundleMessage("create_item"));
+            init();
             PrimeFaces.current().executeScript("PF('" + modalWidgetVar + "').hide()");
             PrimeFaces.current().ajax().update(updateForm);
         }
@@ -89,17 +74,9 @@ public class CampusController extends AbstractSessionController {
             commonController.FacesMessagesError(sessionController.getBundleMessage("failed"), sessionController.getBundleMessage("keyword_exist"));
         } else {
             campusCodesRepository.remove(campusCodes);
+            init();
             commonController.FacesMessagesWarn(sessionController.getBundleMessage("successful"), sessionController.getBundleMessage("remove_item"));
         }
-    }
-
-    public List<Campus> getAllCampus() {
-        return campusRepository.findAll();
-    }
-    // Método que devuelve la lista ordenada
-
-    public List<CampusCodes> getAllCampusCodes() {
-        return campusCodesRepository.findAllDesc();
     }
 
     public Campus getSelectedCampus() {
@@ -126,44 +103,19 @@ public class CampusController extends AbstractSessionController {
         this.selectedCampusId = selectedCampusId;
     }
 
-    public Integer getCounterFilter() {
-        return counterFilter;
+    public List<Campus> getAllCampus() {
+        return allCampus;
     }
 
-    public void setCounterFilter(Integer counterFilter) {
-        this.counterFilter = counterFilter;
+    public void setAllCampus(List<Campus> allCampus) {
+        this.allCampus = allCampus;
     }
 
-    public String getSortField() {
-        return sortField;
+    public List<CampusCodes> getAllCampusCodes() {
+        return allCampusCodes;
     }
 
-    public void setSortField(String sortField) {
-        this.sortField = sortField;
+    public void setAllCampusCodes(List<CampusCodes> allCampusCodes) {
+        this.allCampusCodes = allCampusCodes;
     }
-
-    public boolean isAscending() {
-        return ascending;
-    }
-
-    public void setAscending(boolean ascending) {
-        this.ascending = ascending;
-    }
-
-    public List<Campus> getCampus() {
-        return campus;
-    }
-
-    public void setCampus(List<Campus> campus) {
-        this.campus = campus;
-    }
-
-    public List<CampusCodes> getCampuscode() {
-        return campuscode;
-    }
-
-    public void setCampuscode(List<CampusCodes> campuscode) {
-        this.campuscode = campuscode;
-    }
-
 }

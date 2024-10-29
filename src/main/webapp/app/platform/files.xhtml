@@ -15,20 +15,9 @@
                 <div class="content-card">
                     <p:dataTable widgetVar="datatable_form_data" styleClass="custom-table"
                                  paginator="true" paginatorAlwaysVisible="false" rows="12" paginatorPosition="bottom"
-                                 tableStyle="min-width: 60rem !important;" value="#{filesPlatformCtrl.filestorage}" var="item">
-                        <p:column headerText="#{bundle.name}" 
-                                  sortBy="#{item.name}" 
-                                  filterBy="#{item.name}">
-                            <h:outputText value="#{item.name}" />
-                        </p:column>
-
-                        <p:column headerText="#{bundle.date}" 
-                                  sortBy="#{item.createdAt}" 
-                                  filterBy="#{item.createdAt}">
-                            <h:outputText value="#{item.createdAt}" />
-                        </p:column>
-
-
+                                 tableStyle="min-width: 60rem !important;" value="#{filesPlatformCtrl.allFiles}" var="item">
+                        <p:column headerText="#{bundle.name}" field="name"/>
+                        <p:column headerText="#{bundle.date}" field="createdAt"/>
                         <p:column headerText="#{bundle.options}" width="15rem">
                             <p:commandButton actionListener="#{filesPlatformCtrl.remove(item)}" update="@form"
                                              value="#{bundle.remove}" styleClass="ui-button-flat ui-button-danger">

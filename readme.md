@@ -18,7 +18,7 @@ El contexto depende de la base de datos.
   - http://localhost:9990/console/index.html#undertow-server;name=default-server
   - Listener 
   - HTTP 
-  - Max Post Size = 104857600
+  - Max Post Size = 1048576000
 
 ## Paquetes requeridos en linux
 - Instalar los paquetes: `Freetype` `fontconfig` `dejavu-sans-fonts`

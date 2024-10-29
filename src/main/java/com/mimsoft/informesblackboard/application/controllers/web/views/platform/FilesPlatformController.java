@@ -16,18 +16,15 @@ import java.util.List;
 @Named("filesPlatformCtrl")
 @ViewScoped
 public class FilesPlatformController extends AbstractSessionController {
-
     @Inject
     private FileStorageRepository fileStorageRepository;
 
-    private List<FileStorage> filestorage;
+    private List<FileStorage> allFiles;
 
     @Override
     public void init() {
-        filestorage = fileStorageRepository.getAll();
+        allFiles = fileStorageRepository.getAll();
     }
-    
-    
 
     public void download(FileStorage fileStorage) {
         File file = new File(fileStorage.getPath());
@@ -38,20 +35,16 @@ public class FilesPlatformController extends AbstractSessionController {
         }
     }
 
-    public List<FileStorage> getAllFiles() {
-        return fileStorageRepository.getAll();
-    }
-
     public void remove(FileStorage fileStorage) {
         fileStorageRepository.remove(fileStorage);
     }
 
-    public List<FileStorage> getFilestorage() {
-        return filestorage;
+    public List<FileStorage> getAllFiles() {
+        return allFiles;
     }
 
-    public void setFilestorage(List<FileStorage> filestorage) {
-        this.filestorage = filestorage;
+    public void setAllFiles(List<FileStorage> allFiles) {
+        this.allFiles = allFiles;
     }
 
 }

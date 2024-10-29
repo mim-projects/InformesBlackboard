@@ -12,28 +12,21 @@ import java.util.List;
 @Named("rolesPlatformCtrl")
 @ViewScoped
 public class RolesPlatformController extends AbstractSessionController {
-
     @Inject
     private UserPlatformRolesRepository userPlatformRolesRepository;
 
-    private List<UserPlatformRoles> userplatform;
+    private List<UserPlatformRoles> allRolesPlatform;
 
     @Override
     public void init() {
-        userplatform = userPlatformRolesRepository.findAll();
+        allRolesPlatform = userPlatformRolesRepository.findAll();
     }
 
     public List<UserPlatformRoles> getAllRolesPlatform() {
-        return userPlatformRolesRepository.findAll();
+        return allRolesPlatform;
     }
 
-    public List<UserPlatformRoles> getUserplatform() {
-        return userplatform;
+    public void setAllRolesPlatform(List<UserPlatformRoles> allRolesPlatform) {
+        this.allRolesPlatform = allRolesPlatform;
     }
-
-    public void setUserplatform(List<UserPlatformRoles> userplatform) {
-        this.userplatform = userplatform;
-    }
-    
-    
 }

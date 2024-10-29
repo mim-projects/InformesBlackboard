@@ -12,27 +12,21 @@ import java.util.List;
 @Named("modalityCtrl")
 @ViewScoped
 public class ModalityController extends AbstractSessionController {
-
     @Inject
     private ModalityRepository modalityRepository;
 
-    private List<Modality> modality;
+    private List<Modality> allModalities;
 
     @Override
     public void init() {
-        modality = modalityRepository.findAll();
+        allModalities = modalityRepository.findAll();
     }
 
     public List<Modality> getAllModalities() {
-        return modalityRepository.findAll();
+        return allModalities;
     }
 
-    public List<Modality> getModality() {
-        return modality;
+    public void setAllModalities(List<Modality> allModalities) {
+        this.allModalities = allModalities;
     }
-
-    public void setModality(List<Modality> modality) {
-        this.modality = modality;
-    }
-
 }

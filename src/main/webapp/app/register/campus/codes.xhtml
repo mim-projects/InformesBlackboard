@@ -18,25 +18,18 @@
                     </div>
                 </div>
                 <div class="content-card">
-                    <p:dataTable widgetVar="datatable_form_data" styleClass="custom-table"  sortBy="#{item.code}" selection="#{campusCtrl.selectedCampusCodes}"
+                    <p:dataTable widgetVar="datatable_form_data" styleClass="custom-table"
                                  paginator="true" paginatorAlwaysVisible="false" rows="12" paginatorPosition="bottom"
-                                 tableStyle="min-width: 30rem !important;" value="#{campusCtrl.campuscode}" var="item">
-                                   <!-- Columna 'code' con sortBy y filterBy -->
-                        <p:column headerText="#{bundle.code}" sortBy="#{item.code}" filterBy="#{item.code}">
-                            <h:outputText value="#{item.code}" />
-                        </p:column>
-
-                        <!-- Columna 'campus' con sortBy y filterBy -->
-                        <p:column headerText="#{bundle.campus}" sortBy="#{item.campusId.name}" filterBy="#{item.campusId.name}">
-                            <h:outputText value="#{item.campusId.name}" />
-                        </p:column>
-                        
+                                 tableStyle="min-width: 30rem !important;" value="#{campusCtrl.allCampusCodes}" var="item">
+                        <p:column headerText="#{bundle.code}" field="code"/>
+                        <p:column headerText="#{bundle.campus}" field="campusId.name">
                             <f:facet name="filter">
                                 <p:selectOneMenu onchange="PF('datatable_form_data').filter()" styleClass="ui-custom-filter">
                                     <f:selectItem itemLabel="#{bundle.all}" itemValue="#{null}" noSelectionOption="true"/>
                                     <f:selectItems value="#{campusCtrl.allCampus}" var="campus" itemValue="#{campus.name}" itemLabel="#{campus.name}"/>
                                 </p:selectOneMenu>
                             </f:facet>
+                        </p:column>
                         <p:column headerText="#{bundle.options}" width="8rem">
                             <p:commandButton value="#{bundle.remove}" styleClass="ui-button-flat ui-button-danger"
                                              update="@form" actionListener="#{campusCtrl.removeCampusCode(item)}">

@@ -12,4 +12,8 @@ const echartAppend = (_id, echart, callback) => {
     echart.on("click", callback)
     return echart
 }
-window.addEventListener("resize", () => allCharts.forEach(items => items.g.resize()))
+window.addEventListener("load", () => {
+    window.addEventListener("resize",  () => {
+        allCharts.forEach(items => items.g.resize())
+    })
+})

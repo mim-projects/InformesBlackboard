@@ -1,12 +1,14 @@
 :root {
+    --gap-cards: 2rem;
     --columns: 3;
     --table-height: calc(7 * 2rem);
     --graphic-height: 16rem;
 }
 
 .container {
-    display: grid;
+    display: flex;
     gap: 2rem;
+    flex-wrap: wrap;
 }
 
 #filters {
@@ -42,19 +44,17 @@
 
 .card .content-card {
     display: grid;
-    /*grid-template-rows: var(--table-height) var(--graphic-height);*/
     grid-template-rows: var(--graphic-height) auto;
     gap: 1rem;
+    overflow-x: auto;
 }
 
 .card .content-card .table {
     min-height: 4rem;
 }
 
-#tables {
-    display: grid;
-    grid-template-columns: repeat(var(--columns), 1fr);
-    gap: 2rem;
+.card .content-card .graphic {
+    width: 100%;
 }
 
 .ui-button-warning {
@@ -75,14 +75,25 @@ table, th, td {
     }
 }
 
-@media screen and (max-width: 1280px) {
+#tables {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-cards);
+    width: 100%;
+}
+
+#tables .card {
+    width: calc((100% - (var(--gap-cards) * (var(--columns) - 1))) / var(--columns));
+}
+
+@media screen and (max-width: 1400px) {
     #tables {
         --columns: 2;
     }
 }
 
-@media screen and (max-width: 990px) {
-    #tables {
-        --columns: 1;
+@media screen and (max-width: 1000px) {
+    #tables .card {
+        width: 100% !important;
     }
 }

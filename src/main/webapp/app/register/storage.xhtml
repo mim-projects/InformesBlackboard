@@ -20,19 +20,13 @@
                 <div class="content-card">
                     <p:dataTable widgetVar="datatable_form_data" styleClass="custom-table"
                                  paginator="true" paginatorAlwaysVisible="false" rows="12" paginatorPosition="bottom"
-                                 tableStyle="min-width: 30rem !important;" value="#{storageCtrl.storagehis}" var="item">
+                                 tableStyle="min-width: 30rem !important;" value="#{storageCtrl.allStorageHistory}" var="item">
                         <p:column headerText="#{bundle.date}" filterMatchMode="contains"
                                   filterBy="#{commonCtrl.getDateFormat(item.createdAt, 'yyyy / MM')}"
                                   sortBy="#{commonCtrl.getDateFormat(item.createdAt, 'yyyy / MM')}">
                             <h:outputText value="#{commonCtrl.getDateFormat(item.createdAt, 'yyyy / MM')}"/>
                         </p:column>
-
-                        <p:column headerText="#{bundle.value}" 
-                                  sortBy="#{item.value}" 
-                                  filterBy="#{item.value}">
-                            <h:outputText value="#{item.value}" />
-                        </p:column>                        
-
+                        <p:column headerText="#{bundle.value}" field="value"/>
                         <p:column headerText="#{bundle.options}" width="12rem">
                             <p:commandButton value="#{bundle.remove}" styleClass="ui-button-flat ui-button-danger"
                                              update="@form" actionListener="#{storageCtrl.remove(item)}">

@@ -15,12 +15,8 @@
                 <div class="content-card">
                     <p:dataTable widgetVar="datatable_form_data" styleClass="custom-table"
                                  paginator="true" paginatorAlwaysVisible="false" rows="12" paginatorPosition="bottom"
-                                 value="#{gradesCtrl.grades}" var="item">
-                        <p:column headerText="#{bundle.name}" 
-                                  sortBy="#{item.name}" 
-                                  filterBy="#{item.name}">
-                            <h:outputText value="#{item.name}" />
-                        </p:column>
+                                 value="#{gradesCtrl.allGrades}" var="item">
+                        <p:column headerText="#{bundle.name}" field="name"/>
                     </p:dataTable>
                 </div>
             </h:form>

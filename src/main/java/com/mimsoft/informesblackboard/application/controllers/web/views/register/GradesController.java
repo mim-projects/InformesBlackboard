@@ -12,27 +12,21 @@ import java.util.List;
 @Named("gradesCtrl")
 @ViewScoped
 public class GradesController extends AbstractSessionController {
-
     @Inject
     private GradesRepository gradesRepository;
 
-    private List<Grades> grades;
+    private List<Grades> allGrades;
 
     @Override
     public void init() {
-        grades = gradesRepository.findAll();
+        allGrades = gradesRepository.findAll();
     }
 
     public List<Grades> getAllGrades() {
-        return gradesRepository.findAll();
+        return allGrades;
     }
 
-    public List<Grades> getGrades() {
-        return grades;
+    public void setAllGrades(List<Grades> allGrades) {
+        this.allGrades = allGrades;
     }
-
-    public void setGrades(List<Grades> grades) {
-        this.grades = grades;
-    }
-
 }

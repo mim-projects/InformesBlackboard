@@ -14,18 +14,16 @@ import java.util.List;
 @Named("storageCtrl")
 @ViewScoped
 public class StorageController extends AbstractSessionController {
-
     @Inject
     private StorageHistoryRepository storageHistoryRepository;
 
     private StorageHistory selectedStorageHistory;
-
-    private List<StorageHistory> storagehis;
+    private List<StorageHistory> allStorageHistory;
 
     @Override
     public void init() {
         selectedStorageHistory = null;
-        storagehis = storageHistoryRepository.findAllDesc();;
+        allStorageHistory = storageHistoryRepository.findAllDesc();;
     }
 
     public void preUpdateOrCreate(StorageHistory item) {
@@ -43,18 +41,16 @@ public class StorageController extends AbstractSessionController {
         } else {
             selectedStorageHistory.setCreatedAt(DateHelper.DateToStartMonth(selectedStorageHistory.getCreatedAt()));
             storageHistoryRepository.create(selectedStorageHistory);
-            commonController.FacesMessagesInfo(sessionController.getBundleMessage("successful"), sessionController.getBundleMessage("create_item"));
-            PrimeFaces.current().executeScript("PF('" + modalWidgetVar + "').hide()");
+            init();
             PrimeFaces.current().ajax().update(updateForm);
-            
-            //LO AGREGUE PORQUE NO SE ACTUALIZABA LA PAGINA AL AGREGAR EL NUEVO STORAGE
-            PrimeFaces.current().executeScript("setTimeout(function(){ window.location.reload(); }, 500);");
-
+            PrimeFaces.current().executeScript("PF('" + modalWidgetVar + "').hide()");
+            commonController.FacesMessagesInfo(sessionController.getBundleMessage("successful"), sessionController.getBundleMessage("create_item"));
         }
     }
 
     public void updateAndCloseWV(String modalWidgetVar, String updateForm) {
         storageHistoryRepository.update(selectedStorageHistory);
+        init();
         commonController.FacesMessagesInfo(sessionController.getBundleMessage("successful"), sessionController.getBundleMessage("update_item"));
         PrimeFaces.current().executeScript("PF('" + modalWidgetVar + "').hide()");
         PrimeFaces.current().ajax().update(updateForm);
@@ -65,10 +61,6 @@ public class StorageController extends AbstractSessionController {
         commonController.FacesMessagesWarn(sessionController.getBundleMessage("successful"), sessionController.getBundleMessage("remove_item"));
     }
 
-    public List<StorageHistory> getAllStorageHistory() {
-        return storageHistoryRepository.findAllDesc();
-    }
-
     public StorageHistory getSelectedStorageHistory() {
         return selectedStorageHistory;
     }
@@ -77,12 +69,11 @@ public class StorageController extends AbstractSessionController {
         this.selectedStorageHistory = selectedStorageHistory;
     }
 
-    public List<StorageHistory> getStoragehis() {
-        return storagehis;
+    public List<StorageHistory> getAllStorageHistory() {
+        return allStorageHistory;
     }
 
-    public void setStoragehis(List<StorageHistory> storagehis) {
-        this.storagehis = storagehis;
+    public void setAllStorageHistory(List<StorageHistory> allStorageHistory) {
+        this.allStorageHistory = allStorageHistory;
     }
-
 }

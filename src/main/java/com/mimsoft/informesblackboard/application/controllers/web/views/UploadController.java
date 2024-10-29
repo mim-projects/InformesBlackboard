@@ -51,8 +51,6 @@ public class UploadController extends AbstractSessionController {
     }
 
     public synchronized void handleFileUpload(FileUploadEvent event) {
-        System.out.println("---------------------------------------------");
-        System.out.println("Entre a handleFileUpload");
         String originalName = event.getFile().getFileName();
         if (fileStorageRepository.exists(originalName)) {
             commonController.FacesMessagesError("Failed", "File exist");
@@ -117,9 +115,6 @@ public class UploadController extends AbstractSessionController {
 
     public void updateSelectedTypeFile(String selectedTypeFile) {
         this.selectedTypeFile = selectedTypeFile;
-        System.out.println("----------------------------");
-        System.out.println("updateSelectedTypeFile");
-        System.out.println("selectedTypeFile: "+selectedTypeFile);
     }
 
     public String getSelectedTypeFile() {
