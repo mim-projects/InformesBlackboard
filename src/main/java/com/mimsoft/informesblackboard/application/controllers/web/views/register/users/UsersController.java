@@ -13,15 +13,18 @@ import com.mimsoft.informesblackboard.domain.entities.Campus;
 import com.mimsoft.informesblackboard.domain.entities.Grades;
 import com.mimsoft.informesblackboard.domain.entities.Modality;
 import com.mimsoft.informesblackboard.domain.entities.Roles;
-import org.primefaces.model.LazyDataModel;
 
-import javax.faces.view.ViewScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.primefaces.PrimeFaces;
+import org.primefaces.model.LazyDataModel;
+
 import java.util.List;
 
 @Named("usersCtrl")
-@ViewScoped
+@SessionScoped
 public class UsersController extends AbstractSessionController {
     @Inject
     private CustomUsersRepository customUsersRepository;
@@ -42,11 +45,18 @@ public class UsersController extends AbstractSessionController {
     private Integer selectedRoleId;
     private Integer selectedCampusId;
     private Integer counterFilter;
+    boolean firstLoad = true;
 
     @Override
     public void init() {
         counterFilter = 0;
         selectedPeriodId = periodsRepository.findLastString();
+        firstLoad = false;
+    }
+
+    public void updatePeriods() {
+        if (firstLoad) return;
+        PrimeFaces.current().ajax().update("form_data:period");
     }
 
     public boolean isDisabledSearch() {
