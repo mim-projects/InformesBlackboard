@@ -13,17 +13,19 @@ import com.mimsoft.informesblackboard.domain.entities.Campus;
 import com.mimsoft.informesblackboard.domain.entities.Grades;
 import com.mimsoft.informesblackboard.domain.entities.Modality;
 import com.mimsoft.informesblackboard.domain.entities.Roles;
-import javax.faces.view.ViewScoped;
+
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.primefaces.PrimeFaces;
 import org.primefaces.model.LazyDataModel;
 
 import java.util.List;
 
 @Named("usersCtrl")
-@ViewScoped
+@SessionScoped
 public class UsersController extends AbstractSessionController {
-
     @Inject
     private CustomUsersRepository customUsersRepository;
     @Inject
@@ -36,8 +38,6 @@ public class UsersController extends AbstractSessionController {
     private CustomPeriodsRepository periodsRepository;
     @Inject
     private RolesRepository rolesRepository;
-    @Inject
-    private mantenerInfoCtrl mantenerInfoCtrl;
 
     private LazyDataModel<CustomUsers> customUsersLazyDataModel;
     private String selectedPeriodId;
@@ -45,11 +45,18 @@ public class UsersController extends AbstractSessionController {
     private Integer selectedRoleId;
     private Integer selectedCampusId;
     private Integer counterFilter;
+    boolean firstLoad = true;
 
     @Override
     public void init() {
         counterFilter = 0;
         selectedPeriodId = periodsRepository.findLastString();
+        firstLoad = false;
+    }
+
+    public void updatePeriods() {
+        if (firstLoad) return;
+        PrimeFaces.current().ajax().update("form_data:period");
     }
 
     public boolean isDisabledSearch() {
@@ -57,7 +64,6 @@ public class UsersController extends AbstractSessionController {
     }
 
     public void search() {
-        mantenerInfoCtrl.search();
         List<CustomUsers> list = customUsersRepository.findAllByPeriodGradeRoleCampusIds(selectedPeriodId, selectedGradeId, selectedRoleId, selectedCampusId);
         customUsersLazyDataModel = new CustomUserLazyDataModel(list);
         counterFilter = list.size();
@@ -108,7 +114,6 @@ public class UsersController extends AbstractSessionController {
     }
 
     public void setSelectedPeriodId(String selectedPeriodId) {
-        mantenerInfoCtrl.setSelectedPeriodId(selectedPeriodId);
         this.selectedPeriodId = selectedPeriodId;
     }
 
@@ -117,7 +122,6 @@ public class UsersController extends AbstractSessionController {
     }
 
     public void setSelectedGradeId(Integer selectedGradeId) {
-        mantenerInfoCtrl.setSelectedGradeId(selectedGradeId);
         this.selectedGradeId = selectedGradeId;
     }
 
@@ -126,7 +130,6 @@ public class UsersController extends AbstractSessionController {
     }
 
     public void setSelectedRoleId(Integer selectedRoleId) {
-        mantenerInfoCtrl.setSelectedRoleId(selectedRoleId);
         this.selectedRoleId = selectedRoleId;
     }
 
@@ -135,7 +138,6 @@ public class UsersController extends AbstractSessionController {
     }
 
     public void setSelectedCampusId(Integer selectedCampusId) {
-        mantenerInfoCtrl.setSelectedCampusId(selectedCampusId);
         this.selectedCampusId = selectedCampusId;
     }
 }

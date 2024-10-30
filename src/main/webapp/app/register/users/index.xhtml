@@ -4,6 +4,9 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 template="/templates/template_app.xhtml">
+    <ui:define name="end_head">
+        <f:event type="preRenderView" listener="#{usersCtrl.updatePeriods()}"/>
+    </ui:define>
     <ui:define name="remotes_sections">
         <p:remoteCommand name="updateCoursesCounter" actionListener="#{usersCtrl.updateCounter()}" update="form_data:counter"/>
     </ui:define>
@@ -27,7 +30,7 @@
                         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem">
                             <div class="input-group">
                                 <p:outputLabel for="@next" value="#{bundle.periods}"/>
-                                <p:selectOneMenu value="#{usersCtrl.selectedPeriodId}" styleClass="ui-custom-filter">
+                                <p:selectOneMenu id="period" value="#{usersCtrl.selectedPeriodId}" styleClass="ui-custom-filter">
                                     <f:selectItems value="#{usersCtrl.allPeriodsString}" var="period" itemValue="#{period}" itemLabel="#{period}"/>
                                     <p:ajax event="change" update="btn_search"/>
                                 </p:selectOneMenu>
@@ -62,7 +65,7 @@
                     </div>
                     <p:dataTable id="datatable_form_data_id" widgetVar="datatable_form_data" styleClass="custom-table"
                                  paginator="true" paginatorAlwaysVisible="false" rows="12" paginatorPosition="bottom"
-                                 tableStyle="min-width: 70rem !important;" value="#{mantenerCtrl.customUsersLazyDataModel}" var="item"
+                                 tableStyle="min-width: 70rem !important;" value="#{usersCtrl.customUsersLazyDataModel}" var="item"
                                  multiViewState="true">
                         <p:ajax event="filter" oncomplete="updateCoursesCounter()"/>
                         <p:column headerText="#{bundle.users}" field="userKeyword"/>
