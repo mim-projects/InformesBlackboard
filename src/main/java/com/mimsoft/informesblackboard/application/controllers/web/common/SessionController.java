@@ -95,8 +95,8 @@ public class SessionController implements BundleLanguage, Serializable {
             currentUser.setLanguage(lang.toLowerCase());
             userPlatformRepository.update(currentUser);
             homeCtrl.clearTablesGraphic();
-            FacesContext.getCurrentInstance().getViewRoot().setLocale(Locale.forLanguageTag(getCurrentLang().toLowerCase()));
         }
+        FacesContext.getCurrentInstance().getViewRoot().setLocale(Locale.forLanguageTag(getCurrentLang()));
     }
 
     public String getCurrentLang() {
