@@ -3,10 +3,10 @@ package com.mimsoft.informesblackboard.application.controllers.web.views.registe
 import com.mimsoft.informesblackboard.application.controllers.web.common.AbstractSessionController;
 import com.mimsoft.informesblackboard.application.data.repositories.GradesRepository;
 import com.mimsoft.informesblackboard.domain.entities.Grades;
+
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-
 import java.util.List;
 
 @Named("gradesCtrl")

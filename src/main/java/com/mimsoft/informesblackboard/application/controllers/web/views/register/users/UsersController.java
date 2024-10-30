@@ -13,11 +13,11 @@ import com.mimsoft.informesblackboard.domain.entities.Campus;
 import com.mimsoft.informesblackboard.domain.entities.Grades;
 import com.mimsoft.informesblackboard.domain.entities.Modality;
 import com.mimsoft.informesblackboard.domain.entities.Roles;
+import org.primefaces.model.LazyDataModel;
+
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.primefaces.model.LazyDataModel;
-
 import java.util.List;
 
 @Named("usersCtrl")

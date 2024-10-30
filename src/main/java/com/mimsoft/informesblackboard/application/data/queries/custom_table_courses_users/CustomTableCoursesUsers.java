@@ -3,6 +3,7 @@ package com.mimsoft.informesblackboard.application.data.queries.custom_table_cou
 import com.mimsoft.informesblackboard.domain.entities.Campus;
 import com.mimsoft.informesblackboard.domain.entities.Modality;
 import com.mimsoft.informesblackboard.domain.entities.Roles;
+
 import javax.persistence.*;
 
 @Entity

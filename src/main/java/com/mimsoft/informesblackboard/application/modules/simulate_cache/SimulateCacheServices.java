@@ -5,9 +5,9 @@ import com.mimsoft.informesblackboard.Configuration;
 import com.mimsoft.informesblackboard.application.data.repositories.StaticSimpleDataJSONRepository;
 import com.mimsoft.informesblackboard.application.utils.others.DateHelper;
 import com.mimsoft.informesblackboard.domain.entities.StaticSimpleDataJSON;
+
 import javax.ejb.*;
 import javax.inject.Inject;
-
 import java.util.Date;
 import java.util.List;
 

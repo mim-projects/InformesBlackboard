@@ -3,11 +3,11 @@ package com.mimsoft.informesblackboard.application.controllers.web.common;
 import com.mimsoft.informesblackboard.application.controllers.shared.RequestController;
 import com.mimsoft.informesblackboard.application.routes.Route;
 import com.mimsoft.informesblackboard.application.routes.Routes;
+
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-
 import java.io.IOException;
 import java.io.Serializable;
 

@@ -120,4 +120,13 @@ public class CustomTableCoursesUsersHelper {
         }
         return total;
     }
+
+    @Override
+    public String toString() {
+        return "CustomTableCoursesUsersHelper{" +
+                "data=" + data +
+                ", columns=" + columns +
+                ", rows=" + rows +
+                '}';
+    }
 }

@@ -3,7 +3,6 @@ package com.mimsoft.informesblackboard.application.data.queries.custom_periods_g
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

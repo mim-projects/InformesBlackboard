@@ -3,10 +3,10 @@ package com.mimsoft.informesblackboard.application.data.repositories;
 import com.mimsoft.informesblackboard.domain.core.Repository;
 import com.mimsoft.informesblackboard.domain.core.RepositoryClass;
 import com.mimsoft.informesblackboard.domain.entities.FileStorage;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
 import org.apache.commons.io.FileUtils;
 
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;

@@ -2,8 +2,8 @@ package com.mimsoft.informesblackboard.application.data.queries.custom_users;
 
 import com.mimsoft.informesblackboard.application.data.queries.QueryRepository;
 import com.mimsoft.informesblackboard.domain.entities.Users;
-import javax.enterprise.context.RequestScoped;
 
+import javax.enterprise.context.RequestScoped;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -3,10 +3,11 @@ package com.mimsoft.informesblackboard.application.controllers.web.views;
 import com.mimsoft.informesblackboard.application.controllers.web.common.AbstractSessionController;
 import com.mimsoft.informesblackboard.application.data.repositories.UserPlatformRepository;
 import com.mimsoft.informesblackboard.domain.entities.UserPlatform;
+import org.primefaces.PrimeFaces;
+
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.primefaces.PrimeFaces;
 
 @Named("profileCtrl")
 @ViewScoped

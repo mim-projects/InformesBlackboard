@@ -3,7 +3,6 @@ package com.mimsoft.informesblackboard.domain.core;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.inject.Inject;
-
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 

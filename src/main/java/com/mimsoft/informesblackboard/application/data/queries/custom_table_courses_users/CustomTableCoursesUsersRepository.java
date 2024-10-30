@@ -6,9 +6,9 @@ import com.mimsoft.informesblackboard.application.data.queries.QueryRepository;
 import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheCallback;
 import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheServices;
 import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheStaticData;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-
 import java.util.ArrayList;
 import java.util.List;
 

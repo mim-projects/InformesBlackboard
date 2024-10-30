@@ -1,10 +1,10 @@
 package com.mimsoft.informesblackboard.application.data.models.lazy;
 
 import com.mimsoft.informesblackboard.domain.entities.Courses;
-import javax.faces.context.FacesContext;
 import org.primefaces.model.FilterMeta;
 import org.primefaces.model.SortOrder;
 
+import javax.faces.context.FacesContext;
 import java.util.Collection;
 import java.util.List;
 

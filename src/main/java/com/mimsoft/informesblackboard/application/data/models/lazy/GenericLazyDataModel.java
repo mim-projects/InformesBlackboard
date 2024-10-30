@@ -1,13 +1,13 @@
 package com.mimsoft.informesblackboard.application.data.models.lazy;
 
 import com.mimsoft.informesblackboard.domain.core.EntityCore;
-import javax.faces.context.FacesContext;
 import org.apache.commons.collections4.ComparatorUtils;
 import org.primefaces.model.FilterMeta;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortMeta;
 import org.primefaces.model.SortOrder;
 
+import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Comparator;

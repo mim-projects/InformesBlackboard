@@ -5,9 +5,9 @@ import com.mimsoft.informesblackboard.domain.core.RepositoryClass;
 import com.mimsoft.informesblackboard.domain.entities.Campus;
 import com.mimsoft.informesblackboard.domain.entities.Grades;
 import com.mimsoft.informesblackboard.domain.entities.Users;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;

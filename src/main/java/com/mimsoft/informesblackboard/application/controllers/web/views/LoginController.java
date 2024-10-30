@@ -4,11 +4,11 @@ import com.mimsoft.informesblackboard.application.controllers.web.common.CommonC
 import com.mimsoft.informesblackboard.application.controllers.web.common.RouterController;
 import com.mimsoft.informesblackboard.application.controllers.web.common.SessionController;
 import com.mimsoft.informesblackboard.application.routes.Routes;
+
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-
 import java.io.Serializable;
 
 @Named("loginCtrl")

@@ -4,7 +4,6 @@ import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.*;
-
 import java.util.ArrayList;
 import java.util.List;
 

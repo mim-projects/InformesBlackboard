@@ -2,7 +2,6 @@ package com.mimsoft.informesblackboard.application.controllers.web.common;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-
 import java.io.Serializable;
 
 public abstract class AbstractSessionController implements Serializable {

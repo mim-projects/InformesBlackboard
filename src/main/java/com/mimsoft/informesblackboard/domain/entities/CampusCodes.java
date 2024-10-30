@@ -1,6 +1,7 @@
 package com.mimsoft.informesblackboard.domain.entities;
 
 import com.mimsoft.informesblackboard.domain.core.EntityCore;
+
 import javax.persistence.*;
 
 @Entity

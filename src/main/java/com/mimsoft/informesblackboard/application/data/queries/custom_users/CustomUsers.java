@@ -1,8 +1,8 @@
 package com.mimsoft.informesblackboard.application.data.queries.custom_users;
 
 import com.mimsoft.informesblackboard.domain.core.EntityCore;
-import javax.persistence.*;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

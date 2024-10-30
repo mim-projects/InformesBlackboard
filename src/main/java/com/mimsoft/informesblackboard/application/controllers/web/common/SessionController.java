@@ -8,14 +8,16 @@ import com.mimsoft.informesblackboard.application.data.repositories.UserPlatform
 import com.mimsoft.informesblackboard.application.routes.Route;
 import com.mimsoft.informesblackboard.application.routes.Routes;
 import com.mimsoft.informesblackboard.domain.entities.UserPlatform;
+
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.ResourceBundle;
 
 @Named("sessionCtrl")
 @SessionScoped
@@ -35,8 +37,8 @@ public class SessionController implements BundleLanguage, Serializable {
             return;
         }
         validateRoute();
-        updateTheme(null);
-        updateLanguage(null);
+        updateTheme(currentUser == null ? null : currentUser.getTheme());
+        updateLanguage(currentUser == null ? null : currentUser.getLanguage());
     }
 
     public boolean isActive() {

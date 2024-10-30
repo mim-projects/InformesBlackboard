@@ -4,10 +4,10 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheKeywords;
 import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheServices;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-
 import java.util.*;
 
 @RequestScoped

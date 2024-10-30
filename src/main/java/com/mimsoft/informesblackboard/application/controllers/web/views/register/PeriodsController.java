@@ -10,7 +10,6 @@ import com.mimsoft.informesblackboard.application.modules.simulate_cache.Simulat
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-
 import java.util.*;
 
 @Named("periodsCtrl")

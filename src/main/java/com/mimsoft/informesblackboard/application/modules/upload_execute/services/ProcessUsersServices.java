@@ -8,9 +8,9 @@ import com.mimsoft.informesblackboard.application.modules.simulate_cache.Simulat
 import com.mimsoft.informesblackboard.application.modules.simulate_cache.SimulateCacheStatus;
 import com.mimsoft.informesblackboard.application.modules.upload_execute.interfaces.CallbackEntity;
 import com.mimsoft.informesblackboard.domain.entities.*;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;

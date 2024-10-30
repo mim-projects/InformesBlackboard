@@ -13,9 +13,9 @@ import com.mimsoft.informesblackboard.domain.entities.CampusCodes;
 import com.mimsoft.informesblackboard.domain.entities.Courses;
 import com.mimsoft.informesblackboard.domain.entities.Grades;
 import com.mimsoft.informesblackboard.domain.entities.Modality;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;

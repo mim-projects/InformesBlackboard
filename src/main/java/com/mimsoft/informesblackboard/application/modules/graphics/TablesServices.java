@@ -1,9 +1,9 @@
 package com.mimsoft.informesblackboard.application.modules.graphics;
 
 import com.mimsoft.informesblackboard.application.data.queries.custom_table_courses_users.CustomTableCoursesUsersHelper;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-
 import java.util.List;
 
 @RequestScoped

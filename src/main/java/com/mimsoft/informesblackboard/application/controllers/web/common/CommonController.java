@@ -3,13 +3,13 @@ package com.mimsoft.informesblackboard.application.controllers.web.common;
 import com.mimsoft.informesblackboard.Configuration;
 import com.mimsoft.informesblackboard.application.controllers.shared.RequestController;
 import com.mimsoft.informesblackboard.application.utils.others.ArrayHelper;
+import org.primefaces.PrimeFaces;
+
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.primefaces.PrimeFaces;
-
 import java.text.SimpleDateFormat;
 import java.util.*;
 

@@ -9,11 +9,11 @@ import com.mimsoft.informesblackboard.application.data.queries.custom_users.Cust
 import com.mimsoft.informesblackboard.application.data.queries.custom_users.CustomUsersRepository;
 import com.mimsoft.informesblackboard.application.data.repositories.*;
 import com.mimsoft.informesblackboard.domain.entities.*;
+import org.primefaces.model.LazyDataModel;
+
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.primefaces.model.LazyDataModel;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;

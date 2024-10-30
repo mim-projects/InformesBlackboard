@@ -19,8 +19,8 @@ import com.mimsoft.informesblackboard.domain.entities.StorageHistory;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 import static com.itextpdf.text.PageSize.LETTER;
 
