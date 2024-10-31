@@ -19,6 +19,10 @@ El contexto depende de la base de datos.
   - Listener 
   - HTTP 
   - Max Post Size = 1048576000
+- Incrementar la memoria de JAVA para el proceso de Wildfly
+  - Apagar el servicio de Wildfly
+  - Ejecutar (o modificar manualmente el archivo): `sudo sed -i "s/JAVA_OPTS=\"-Xms64m -Xmx512m/JAVA_OPTS=\"-Xms64m -Xmx2048m/g" /opt/wildfly/bin/standalone.conf`
+  - Iniciar el servicio de Wildfly
 
 ## Paquetes requeridos en linux
 - Instalar los paquetes: `Freetype` `fontconfig` `dejavu-sans-fonts`

@@ -111,6 +111,7 @@ sudo mkdir /opt/wildfly/informes_blackboard/storage/
 sudo mkdir /opt/wildfly/informes_blackboard/storage/upload/
 sudo /opt/wildfly/bin/jboss-cli.sh --connect
 # > /subsystem=undertow/server=default-server/http-listener=default/:write-attribute(name=max-post-size,value=1048576000)
+# sudo sed -i "s/JAVA_OPTS=\"-Xms64m -Xmx512m/JAVA_OPTS=\"-Xms64m -Xmx2048m/g" /opt/wildfly/bin/standalone.conf
 
 
 # =============================================================================
