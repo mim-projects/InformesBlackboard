@@ -42,7 +42,7 @@ public class UsersPlatformController extends AbstractSessionController {
     }
 
     public void updateSelectedPassword() {
-        selectedUserPlatform.setPassword(commonController.createRandomPassword(7, 1));
+        selectedUserPlatform.setPassword(commonController.createRandomPassword(10, 0));
     }
 
     public boolean disableOptions(UserPlatform item) {

@@ -31,17 +31,17 @@ public class SimulateCacheStaticData {
         return CreateKeywordUsers(periods, date, grade) + "_" + campus + "_" + table;
     }
 
-    public static String CreateKeywordCoursesFilters(String period, int month, int[] modality, Integer gradesId) {
+    public static String CreateKeywordCoursesFilters(String period, Integer month, int[] modality, Integer gradesId) {
         StringBuilder modalities = new StringBuilder();
         for (Integer integer : modality) modalities.append(integer).append("_");
         if (!modalities.toString().isEmpty()) modalities = new StringBuilder(modalities.substring(0, modalities.length() - 1));
-        return SimulateCacheKeywords.CustomTableCourses.getKeyword() + period + "_mt" + month + "_g" + gradesId + "_m" + modalities;
+        return SimulateCacheKeywords.CustomTableCourses.getKeyword() + (period == null ? "all" : period) + "_mt" + (month == null || month == -1 ? "all" : month) + "_g" + gradesId + "_m" + modalities;
     }
 
-    public static String CreateKeywordUsersFilters(String period, int month, int[] roles, Integer gradesId) {
+    public static String CreateKeywordUsersFilters(String period, Integer month, int[] roles, Integer gradesId) {
         StringBuilder rol = new StringBuilder();
         for (Integer integer : roles) rol.append(integer).append("_");
         if (!rol.toString().isEmpty()) rol = new StringBuilder(rol.substring(0, rol.length() - 1));
-        return SimulateCacheKeywords.CustomTableUsers.getKeyword() + period + "_mt" + month + "_g" + gradesId + "_r" + rol;
+        return SimulateCacheKeywords.CustomTableUsers.getKeyword() + (period == null ? "all" : period) + "_mt" + (month == null || month == -1 ? "all" : month) + "_g" + gradesId + "_r" + rol;
     }
 }

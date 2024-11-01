@@ -126,31 +126,12 @@ public class HomeController extends AbstractSessionController implements DataRes
     }
 
     public boolean invalidateFilters() {
-        return selectedPeriod == null || selectedMonth == null
-                || !modalityMultiSelectorBooleanListHelper.containTrue()
-                || !rolesMultiSelectorBooleanListHelper.containTrue();
-    }
-
-    private String createFilename() {
-        int indexMonth = 0;
-        for (int i = 0; i < allMonths.length; i++) {
-            if (allMonths[i].equals(selectedMonth)) {
-                indexMonth = i + 1;
-                break;
-            }
-        }
-        String month = indexMonth < 10 ? "0" + indexMonth : "" + indexMonth;
-        month = selectedPeriod.substring(0, 4) + "-" + month;
-        return month + " - IGUPBB - " + new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        return !modalityMultiSelectorBooleanListHelper.containTrue() || !rolesMultiSelectorBooleanListHelper.containTrue();
     }
 
     public void createReportPDF() {
         try {
-            String periodLegend = selectedPeriod.length() > 4
-                    ? (selectedPeriod.substring(0, 4) + "-" + selectedPeriod.substring(4))
-                    : selectedPeriod;
-            periodLegend += " | " + selectedMonth;
-            DashboardReport.DownloadPDF(this, createFilename(), periodLegend);
+            DashboardReport.DownloadPDF(this, createFilename(), createPeriodLegendForFile(" | ", false));
         } catch (Exception e) {
             commonController.FacesMessagesError(sessionController.getBundleMessage("failed"), sessionController.getBundleMessage("try_again"));
         }
@@ -158,14 +139,35 @@ public class HomeController extends AbstractSessionController implements DataRes
 
     public void createReportSpreadSheet() {
         try {
-            String periodLegend = selectedPeriod.length() > 4
-                    ? (selectedPeriod.substring(0, 4) + "-" + selectedPeriod.substring(4))
-                    : selectedPeriod;
-            periodLegend += " | " + selectedMonth;
-            DashboardReport.DownloadSpreadsheet(this, createFilename(), periodLegend);
+            DashboardReport.DownloadSpreadsheet(this, createFilename(), createPeriodLegendForFile(" | ", false));
         } catch (Exception e) {
             commonController.FacesMessagesError(sessionController.getBundleMessage("failed"), sessionController.getBundleMessage("try_again"));
         }
+    }
+
+    private String createFilename() {
+        return createPeriodLegendForFile("-", true) + " - IGUPBB - " + new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+    }
+
+    private String createPeriodLegendForFile(String separator, boolean filename) {
+        String title = "";
+
+        if (selectedPeriod == null) title = filename ? sessionController.getBundleMessage("all").toUpperCase() + "P" : sessionController.getBundleMessage("all_periods");
+        else title = selectedPeriod.length() > 4 ? (selectedPeriod.substring(0, 4) + (filename ? "" : ("-" + selectedPeriod.substring(4)))) : selectedPeriod;
+
+        int indexMonth = -1;
+        for (int i = 0; i < allMonths.length; i++) {
+            if (allMonths[i].equals(selectedMonth)) {
+                indexMonth = i;
+                break;
+            }
+        }
+
+        title += separator;
+        if (indexMonth == -1) title += filename ? sessionController.getBundleMessage("all").toUpperCase() + "M" : sessionController.getBundleMessage("all_months");
+        else title += filename ? (indexMonth + 1) < 10 ? "0" + (indexMonth + 1) : "" + indexMonth : allMonths[indexMonth];
+
+        return title;
     }
 
     public boolean disabledButtonReport() {

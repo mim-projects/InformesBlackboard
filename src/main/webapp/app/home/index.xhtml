@@ -18,7 +18,7 @@
                             <span>#{bundle.periods}</span>
                         </p>
                         <p:selectOneMenu value="#{homeCtrl.selectedPeriod}" style="min-width: 8rem !important">
-                            <f:selectItem itemValue="#{null}" itemLabel="#{null}"/>
+                            <f:selectItem itemValue="#{null}" itemLabel="#{bundle.all}"/>
                             <f:selectItems value="#{homeCtrl.allPeriods}" var="period" itemLabel="#{period}" itemValue="#{period}"/>
                             <p:ajax event="change" update="controls"/>
                         </p:selectOneMenu>
@@ -29,7 +29,7 @@
                             <span>#{bundle.date}</span>
                         </p>
                         <p:selectOneMenu value="#{homeCtrl.selectedMonth}" style="min-width: 8rem !important">
-                            <f:selectItem itemValue="#{null}" itemLabel="#{null}"/>
+                            <f:selectItem itemValue="#{null}" itemLabel="#{bundle.all}"/>
                             <f:selectItems value="#{homeCtrl.allMonths}" var="month" itemLabel="#{month}" itemValue="#{month}"/>
                             <p:ajax event="change" update="controls"/>
                         </p:selectOneMenu>

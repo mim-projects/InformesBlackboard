@@ -41,13 +41,12 @@ public class CustomTableCoursesUsersRepository extends QueryRepository {
                     "    count(distinct hash_code) as value " +
                     "from courses " +
                     "left join campus_codes on campus_codes.id = courses.campus_code_id " +
-                    "where " +
-                    "    courses.periods = '" + period + "' and " +
+                    "where " + (period == null ? "" : " courses.periods = '" + period + "' and ") +
                     "    courses.grades_id = '" + gradesId + "' and " +
-                    "    courses.periods like concat(date_format(courses.dated_at, '%Y'), '%') and " +
-                    "    month(courses.dated_at) = '" + month + "' " + helper +
-                    "group by campus_id, grades_id, modality_id " +
-                    "order by value desc;";
+                    "    courses.periods like concat(date_format(courses.dated_at, '%Y'), '%') " + helper +
+                    (month == null || month == -1 ? "" : " and month(courses.dated_at) = '" + month + "' ") +
+                    " group by campus_id, grades_id, modality_id " +
+                    " order by value desc;";
             try {
                 return entityManager.createNativeQuery(query, CustomTableCoursesUsers.class).getResultList();
             } catch (Exception ignore) {
@@ -71,13 +70,12 @@ public class CustomTableCoursesUsersRepository extends QueryRepository {
                     "    count(distinct keyword) as value " +
                     "from users " +
                     "left join campus_codes on campus_codes.id = users.campus_code_id " +
-                    "where " +
-                    "    users.periods = '" + period + "' and " +
+                    "where " + (period == null ? "" : " users.periods = '" + period + "' and ") +
                     "    users.grades_id = '" + gradesId + "' and " +
-                    "    users.periods like concat(date_format(users.dated_at, '%Y'), '%') and " +
-                    "    month(users.dated_at) = '" + month + "' " + helper +
-                    "group by campus_id, grades_id, roles_id " +
-                    "order by value desc;";
+                    "    users.periods like concat(date_format(users.dated_at, '%Y'), '%') " + helper +
+                    (month == null || month == -1 ? "" : " and month(users.dated_at) = '" + month + "' ") +
+                    " group by campus_id, grades_id, roles_id " +
+                    " order by value desc;";
             try {
                 return entityManager.createNativeQuery(query, CustomTableCoursesUsers.class).getResultList();
             } catch (Exception ignore) {
