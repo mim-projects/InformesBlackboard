@@ -1,7 +1,7 @@
 package com.mimsoft.informesblackboard;
 
 public class Configuration {
-    public static final boolean SERVER = false;
+    public static final boolean SERVER = true;
     public static final String PATH_FILE = SERVER
             ?"/opt/wildfly/informes_blackboard/storage/"
             :"C:/Users/amcode1402/Desktop/mimsoft/Sistema de Informes Blackboard/InformesBlackboard/development/storage/";

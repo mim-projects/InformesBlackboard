@@ -37,6 +37,7 @@ public class FilesPlatformController extends AbstractSessionController {
 
     public void remove(FileStorage fileStorage) {
         fileStorageRepository.remove(fileStorage);
+        init();
     }
 
     public List<FileStorage> getAllFiles() {

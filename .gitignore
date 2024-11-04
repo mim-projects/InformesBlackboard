@@ -3,6 +3,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 development/storage/*
+nb-configuration.xml
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
