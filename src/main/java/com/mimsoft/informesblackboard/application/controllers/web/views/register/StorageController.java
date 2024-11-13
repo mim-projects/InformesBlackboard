@@ -9,6 +9,7 @@ import org.primefaces.PrimeFaces;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.Date;
 import java.util.List;
 
 @Named("storageCtrl")
@@ -39,7 +40,9 @@ public class StorageController extends AbstractSessionController {
         if (storageHistoryRepository.findCreatedAt(selectedStorageHistory.getCreatedAt()) != null) {
             commonController.FacesMessagesError(sessionController.getBundleMessage("failed"), sessionController.getBundleMessage("keyword_exist"));
         } else {
-            selectedStorageHistory.setCreatedAt(DateHelper.DateToStartMonth(selectedStorageHistory.getCreatedAt()));
+            Date date = DateHelper.DateToStartMonth(selectedStorageHistory.getCreatedAt());
+            date = DateHelper.AddDays(date, 2);
+            selectedStorageHistory.setCreatedAt(date);
             storageHistoryRepository.create(selectedStorageHistory);
             init();
             PrimeFaces.current().ajax().update(updateForm);
