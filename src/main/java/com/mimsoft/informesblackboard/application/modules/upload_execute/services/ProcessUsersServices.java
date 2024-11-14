@@ -57,27 +57,32 @@ public class ProcessUsersServices {
             return;
         }
 
-        String[] parts = data.trim().split("\\|");
-        if (!parts[3].equalsIgnoreCase("y")) return;
-        String[] keyword = parts[0].split("_");
-        Grades grades = gradesHashMap.get(keyword.length == 10 ? GradesConstant.Posgrado.getValue() : GradesConstant.Licenciatura.getValue());
+        try {
+            String[] parts = data.trim().split("\\|");
+            if (!parts[3].equalsIgnoreCase("y")) return;
+            String[] keyword = parts[0].split("_");
+            Grades grades = gradesHashMap.get(keyword.length == 10 ? GradesConstant.Posgrado.getValue() : GradesConstant.Licenciatura.getValue());
 
-        Users users = new Users();
-        users.setKeyword(parts[1]);
-        users.setRolesId(rolesHashMap.get(parts[2].equalsIgnoreCase("student") ? RolesConstant.Estudiantes.getValue() : RolesConstant.Docentes.getValue()));
-        users.setPeriods(Integer.parseInt(keyword[0]));
-        users.setKeywordCourse((grades.getId().equals(GradesConstant.Posgrado.getValue())  ? (keyword[keyword.length - 4] + "_") : "") + keyword[keyword.length - 3]);
-        users.setGradesId(grades);
-        users.setCampusCodesId(campusCodesHashMap.get(keyword[1]));
-        users.setModalityId(modalityHasMap.get(keyword[keyword.length - 2]));
-        users.setDatedAt(date);
-        callback.callback(usersRepository.createIgnoreQuery(users));
-
-        // ====================================================================
-        if (currentLine == 1) {
-            simulateCacheServices.status(SimulateCacheStaticData.CreateKeywordUsers(users), SimulateCacheStatus.PROCESS);
-        } else if (currentLine == totalLine - 1) {
-            simulateCacheServices.status(SimulateCacheStaticData.CreateKeywordUsers(users), SimulateCacheStatus.UPDATED);
+            Users users = new Users();
+            users.setKeyword(parts[1]);
+            users.setRolesId(rolesHashMap.get(parts[2].equalsIgnoreCase("student") ? RolesConstant.Estudiantes.getValue() : RolesConstant.Docentes.getValue()));
+            users.setPeriods(Integer.parseInt(keyword[0]));
+            users.setKeywordCourse((grades.getId().equals(GradesConstant.Posgrado.getValue())  ? (keyword[keyword.length - 4] + "_") : "") + keyword[keyword.length - 3]);
+            users.setGradesId(grades);
+            users.setCampusCodesId(campusCodesHashMap.get(keyword[1]));
+            users.setModalityId(modalityHasMap.get(keyword[keyword.length - 2]));
+            users.setDatedAt(date);
+            callback.callback(usersRepository.createIgnoreQuery(users));
+            // ====================================================================
+            if (currentLine == 1) {
+                simulateCacheServices.status(SimulateCacheStaticData.CreateKeywordUsers(users), SimulateCacheStatus.PROCESS);
+            } else if (currentLine == totalLine - 1) {
+                simulateCacheServices.status(SimulateCacheStaticData.CreateKeywordUsers(users), SimulateCacheStatus.UPDATED);
+            }
+        } catch (Exception e) {
+            System.out.println("===============================================================");
+            System.out.println(">>> Failed execute ProcessUsersServices :: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }

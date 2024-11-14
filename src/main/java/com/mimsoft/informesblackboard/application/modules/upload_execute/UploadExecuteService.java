@@ -33,6 +33,17 @@ public class UploadExecuteService {
 
     private Boolean processComplete = null;
     private int progress = 0;
+    private String helperPath;
+    private Date helperDate;
+    private EntityManager helperEntityManager;
+    private UserTransaction helperUserTransaction;
+
+    public void preExecute(String path, Date date, EntityManager entityManager, UserTransaction userTransaction) {
+        this.helperPath = path;
+        this.helperDate = date;
+        this.helperEntityManager = entityManager;
+        this.helperUserTransaction = userTransaction;
+    }
 
     @Lock(LockType.READ)
     public Boolean isProcessComplete() {
@@ -65,6 +76,9 @@ public class UploadExecuteService {
             progress = 100;
         } catch (Exception e) {
             restart();
+            System.out.println("================================");
+            System.out.println(">> Failed processCycle");
+            e.printStackTrace();
             throw new Exception("Failed Process File: " + path);
         }
     }
@@ -80,19 +94,19 @@ public class UploadExecuteService {
     }
 
     @Lock(LockType.READ)
-    public void executeProcessUsers(String path, Date date, EntityManager entityManager, UserTransaction userTransaction) throws Exception {
-        processUsersServices.load(date);
-        ProcessMassiveServices<Users> processMassiveServices = new ProcessMassiveServices<>(entityManager, userTransaction);
-        process(path, (currentLine, totalLine, data) -> processUsersServices.execute(currentLine, totalLine, data, processMassiveServices::addQueryString));
+    public void executeProcessUsers() throws Exception {
+        processUsersServices.load(helperDate);
+        ProcessMassiveServices<Users> processMassiveServices = new ProcessMassiveServices<>(helperEntityManager, helperUserTransaction);
+        process(helperPath, (currentLine, totalLine, data) -> processUsersServices.execute(currentLine, totalLine, data, processMassiveServices::addQueryString));
         processMassiveServices.executeString();
         simulateCacheServices.remove(SimulateCacheKeywords.AllPeriods.getKeyword());
     }
 
     @Lock(LockType.READ)
-    public void executeProcessCourses(String path, Date date, EntityManager entityManager, UserTransaction userTransaction) throws Exception {
-        processCoursesServices.load(date);
-        ProcessMassiveServices<Courses> processMassiveServices = new ProcessMassiveServices<>(entityManager, userTransaction);
-        process(path, (currentLine, totalLine, data) -> processCoursesServices.execute(currentLine, totalLine, data, processMassiveServices::add));
+    public void executeProcessCourses() throws Exception {
+        processCoursesServices.load(helperDate);
+        ProcessMassiveServices<Courses> processMassiveServices = new ProcessMassiveServices<>(helperEntityManager, helperUserTransaction);
+        process(helperPath, (currentLine, totalLine, data) -> processCoursesServices.execute(currentLine, totalLine, data, processMassiveServices::add));
         processMassiveServices.execute();
         simulateCacheServices.remove(SimulateCacheKeywords.AllPeriods.getKeyword());
     }

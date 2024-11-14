@@ -67,6 +67,13 @@ public class UploadController extends AbstractSessionController {
         String filename = ("FILE_" + new Date().getTime() + "." + temp[temp.length - 1]).toUpperCase();
         String pathname = Configuration.PATH_FILE_UPLOADS + filename;
 
+        try {
+            FileUtils.writeByteArrayToFile(new File(pathname), uploadedFile.getContent());
+        } catch (IOException e) {
+            commonController.FacesMessagesError("Failed", "Could not be saved to the server");
+            return;
+        }
+
         Date date = new Date();
         String[] parts = originalName.split(" ");
         if (parts.length > 1) {
@@ -82,25 +89,22 @@ public class UploadController extends AbstractSessionController {
         fileStorage.setPath(pathname);
         fileStorage.setCreatedAt(date);
         fileStorageRepository.create(fileStorage);
-        new Thread(() -> executeProcess(pathname, fileStorage.getCreatedAt(), uploadedFile.getContent())).start();
+
+        uploadExecuteService.preExecute(pathname, date, entityManager, userTransaction);
+        executeProcess(pathname);
     }
 
-    private void executeProcess(String pathname, Date date, byte[] data) {
-        File file = new File(pathname);
-        try {
-            FileUtils.writeByteArrayToFile(file, data);
-            if (selectedTypeFile.equalsIgnoreCase("users")) uploadExecuteService.executeProcessUsers(pathname, date, entityManager, userTransaction);
-            else if (selectedTypeFile.equalsIgnoreCase("courses")) uploadExecuteService.executeProcessCourses(pathname, date, entityManager, userTransaction);
-            //FileUtils.forceDelete(file);
-        } catch (Exception e) {
-            e.printStackTrace();
+    private void executeProcess(String pathname) {
+        new Thread(() -> {
             try {
-                FileUtils.forceDeleteOnExit(file);
+                if (selectedTypeFile.equalsIgnoreCase("users")) uploadExecuteService.executeProcessUsers();
+                else if (selectedTypeFile.equalsIgnoreCase("courses")) uploadExecuteService.executeProcessCourses();
+                //FileUtils.forceDelete(file);
+            } catch (Exception e) {
                 fileStorageRepository.removeFromPathname(pathname);
-            } catch (IOException ex) {
-                ex.printStackTrace();
+                e.printStackTrace();
             }
-        }
+        }).start();
     }
 
     public void executeComplete() {

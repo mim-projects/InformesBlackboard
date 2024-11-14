@@ -56,26 +56,32 @@ public class ProcessCoursesServices {
             return;
         }
 
-        String[] parts = data.trim().split("\\|");
-        String[] keyword = parts[1].split("_");
-        Grades grades = gradesHashMap.get(keyword.length == 10 ? GradesConstant.Posgrado.getValue() : GradesConstant.Licenciatura.getValue());
+        try {
+            String[] parts = data.trim().split("\\|");
+            String[] keyword = parts[1].split("_");
+            Grades grades = gradesHashMap.get(keyword.length == 10 ? GradesConstant.Posgrado.getValue() : GradesConstant.Licenciatura.getValue());
 
-        Courses courses = new Courses();
-        courses.setKeyword((grades.getId().equals(GradesConstant.Posgrado.getValue())  ? (keyword[keyword.length - 4] + "_") : "") + keyword[keyword.length - 3]);
-        courses.setName(StringHelper.StripAccents(parts[2].split("\\(")[0]));
-        courses.setPeriods(Integer.parseInt(keyword[0]));
-        courses.setModalityId(modalityHasMap.get(keyword[keyword.length - 2]));
-        courses.setCampusCodesId(campusCodesHashMap.get(keyword[1]));
-        courses.setGradesId(grades);
-        courses.setHashCode(parts[0] + new SimpleDateFormat("yyyy-MM-dd").format(date));
-        courses.setDatedAt(date);
-        callback.callback(courses);
+            Courses courses = new Courses();
+            courses.setKeyword((grades.getId().equals(GradesConstant.Posgrado.getValue())  ? (keyword[keyword.length - 4] + "_") : "") + keyword[keyword.length - 3]);
+            courses.setName(StringHelper.StripAccents(parts[2].split("\\(")[0]));
+            courses.setPeriods(Integer.parseInt(keyword[0]));
+            courses.setModalityId(modalityHasMap.get(keyword[keyword.length - 2]));
+            courses.setCampusCodesId(campusCodesHashMap.get(keyword[1]));
+            courses.setGradesId(grades);
+            courses.setHashCode(parts[0] + new SimpleDateFormat("yyyy-MM-dd").format(date));
+            courses.setDatedAt(date);
+            callback.callback(courses);
 
-        // ====================================================================
-        if (currentLine == 1) {
-            simulateCacheServices.status(SimulateCacheStaticData.CreateKeywordCourses(courses), SimulateCacheStatus.PROCESS);
-        } else if (currentLine == totalLine - 1) {
-            simulateCacheServices.status(SimulateCacheStaticData.CreateKeywordCourses(courses), SimulateCacheStatus.UPDATED);
+            // ====================================================================
+            if (currentLine == 1) {
+                simulateCacheServices.status(SimulateCacheStaticData.CreateKeywordCourses(courses), SimulateCacheStatus.PROCESS);
+            } else if (currentLine == totalLine - 1) {
+                simulateCacheServices.status(SimulateCacheStaticData.CreateKeywordCourses(courses), SimulateCacheStatus.UPDATED);
+            }
+        } catch (Exception e) {
+            System.out.println("===============================================================");
+            System.out.println(">>> Failed execute ProcessCoursesServices :: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }

@@ -41,13 +41,16 @@ public class CustomTableCoursesUsersHelper {
 
 
     public Integer getValue(String column, String row) {
-        try { return data.get(column).getOrDefault(row, 0); }
-        catch (Exception ignore) { return 0; }
+        try {
+            return data.get(column).getOrDefault(row, 0);
+        } catch (Exception ignore) {
+            return 0;
+        }
     }
 
     public Integer getTotalColumn(String key1) {
         Integer total = 0;
-        for (String key2: getAllRows()) {
+        for (String key2 : getAllRows()) {
             total += getValue(key1, key2);
         }
         return total;
@@ -55,7 +58,7 @@ public class CustomTableCoursesUsersHelper {
 
     public Integer getTotalRow(String key2) {
         Integer total = 0;
-        for (String key1: getAllColumns()) {
+        for (String key1 : getAllColumns()) {
             total += getValue(key1, key2);
         }
         return total;
@@ -82,7 +85,7 @@ public class CustomTableCoursesUsersHelper {
     public Integer[] getColumnValues(String row) {
         Integer[] values = new Integer[rows.size()];
         int k = 0;
-        for (String column: getAllColumns()) {
+        for (String column : getAllColumns()) {
             values[k] = getValue(column, row);
             k++;
         }
@@ -92,9 +95,14 @@ public class CustomTableCoursesUsersHelper {
     public Integer[] getRowValues(String column) {
         Integer[] values = new Integer[columns.size()];
         int k = 0;
-        for (String row: getAllRows()) {
-            values[k] = getValue(column, row);
-            k++;
+        for (String row : getAllRows()) {
+            try {
+                values[k] = getValue(column, row);
+                k++;
+            } catch (Exception e) {
+                System.out.println("Error en el indice >> CustomTableCoursesUsersHelper::getRowValues");
+                e.printStackTrace();
+            }
         }
         return values;
     }
@@ -113,8 +121,8 @@ public class CustomTableCoursesUsersHelper {
 
     public Integer getTotal() {
         Integer total = 0;
-        for (String key1: getAllColumns()) {
-            for (String key2: getAllRows()) {
+        for (String key1 : getAllColumns()) {
+            for (String key2 : getAllRows()) {
                 total += getValue(key1, key2);
             }
         }
