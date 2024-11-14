@@ -52,7 +52,7 @@
                     </div>
                     <div class="input-group">
                         <p:outputLabel for="@next" value="#{bundle.value}"/>
-                        <p:inputNumber decimalPlaces="2" minValue="0" value="#{storageCtrl.selectedStorageHistory.value}"/>
+                        <p:inputNumber thousandSeparator="" decimalSeparator="." decimalPlaces="2" minValue="0" value="#{storageCtrl.selectedStorageHistory.value}"/>
                     </div>
                     <div style="display: flex; gap: 0.5rem; justify-content: end">
                         <p:commandButton value="#{bundle.cancel}" styleClass="ui-button-flat" oncomplete="PF('form_create_wv').hide()"/>
@@ -72,7 +72,7 @@
                     </div>
                     <div class="input-group">
                         <p:outputLabel for="@next" value="#{bundle.value}"/>
-                        <p:inputNumber decimalPlaces="2" minValue="0" value="#{storageCtrl.selectedStorageHistory.value}"/>
+                        <p:inputNumber thousandSeparator="" decimalSeparator="." decimalPlaces="2" minValue="0" value="#{storageCtrl.selectedStorageHistory.value}"/>
                     </div>
                     <div style="display: flex; gap: 0.5rem; justify-content: end">
                         <p:commandButton value="#{bundle.cancel}" styleClass="ui-button-flat" oncomplete="PF('form_edit_wv').hide()"/>

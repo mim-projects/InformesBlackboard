@@ -11,6 +11,10 @@
                   <i class="pi pi-calendar-times"></i>
                   <h1>#{bundle.periods}</h1>
                </div>
+                <div>
+                    <p:commandButton icon="pi pi-trash" value="#{bundle.remove_group}" styleClass="ui-button-danger ui-button-flat"
+                                     update="form_remove" oncomplete="PF('remove_wv').show()"/>
+                </div>
             </div>
             <div class="content-card">
                <p:dataTable widgetVar="datatable_form_data" styleClass="custom-table"
@@ -64,5 +68,40 @@
             </div>
          </h:form>
       </div>
+
+       <h:form id="form_remove">
+           <p:dialog widgetVar="remove_wv" styleClass="custom-dialog custom-dialog-top" header="#{bundle.remove_group}"
+                     blockScroll="true" draggable="false" resizable="false" responsive="true" modal="true">
+               <div style="display: grid; gap: 1rem">
+                   <div class="input-group">
+                       <p:outputLabel for="@next" value="#{bundle.periods}"/>
+                       <p:selectOneMenu value="#{periodsCtrl.selectedPeriods}">
+                           <f:selectItem itemLabel="#{bundle.all}" itemValue="#{null}" noSelectionOption="true"/>
+                           <f:selectItems value="#{periodsCtrl.allPeriodsDistinct}" var="period" itemValue="#{period}" itemLabel="#{period}"/>
+                           <p:ajax event="change" update="form_remove:months form_remove:types"/>
+                       </p:selectOneMenu>
+                   </div>
+                   <div class="input-group">
+                       <p:outputLabel for="@next" value="#{bundle.month}"/>
+                       <p:selectOneMenu id="months">
+                           <f:selectItem itemLabel="#{bundle.all}" itemValue="#{null}" noSelectionOption="true"/>
+                           <f:selectItems value="#{periodsCtrl.allMonthsUsed}" var="month" itemValue="#{month}" itemLabel="#{month}"/>
+                       </p:selectOneMenu>
+                   </div>
+                   <div class="input-group">
+                       <p:outputLabel for="@next" value="#{bundle.type}"/>
+                       <p:selectOneMenu id="types">
+                           <f:selectItem itemLabel="#{bundle.all}" itemValue="#{null}" noSelectionOption="true"/>
+                           <f:selectItems value="#{periodsCtrl.allTables}" var="types" itemValue="#{types}" itemLabel="#{types}"/>
+                       </p:selectOneMenu>
+                   </div>
+                   <div style="display: flex; gap: 0.5rem; justify-content: end">
+                       <p:commandButton value="#{bundle.cancel}" styleClass="ui-button-flat" oncomplete="PF('remove_wv').hide()"/>
+                       <p:commandButton value="#{bundle.accept}" actionListener="#{periodsCtrl.removeGroup('remove_wv', 'form_data')}"
+                                        onstart="createGlobalLoader('#{bundle.loading}')" oncomplete="removeGlobalLoader()"/>
+                   </div>
+               </div>
+           </p:dialog>
+       </h:form>
    </ui:define>
 </ui:composition>

@@ -26,7 +26,7 @@ public class ProfileController extends AbstractSessionController {
     }
 
     public void createRandomPassword() {
-        currenUser.setPassword(commonController.createRandomPassword(6, 2));
+        currenUser.setPassword(commonController.createRandomPassword(10, 0));
     }
 
     public void updateUser() {
