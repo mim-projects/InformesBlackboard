@@ -86,4 +86,12 @@ public class OrderDataServices {
 
         return new ArrayList<>(list);
     }
+
+    public List<String> getAllOrderCampus() {
+        Set<String> list = new LinkedHashSet<>();
+        for (Campus campus : campusRepository.findAll()) {
+            list.add(campus.getName());
+        }
+        return new ArrayList<>(list);
+    }
 }

@@ -38,15 +38,16 @@ public class PeriodsController extends AbstractSessionController {
     }
 
     public void cleanCache(CustomPeriodsGradesCampus item) {
-        simulateCacheServices.remove(item.getKeywordCache());
+        //simulateCacheServices.remove(item.getKeywordCache());
+        simulateCacheServices.removeAll();
     }
 
     public void removeGroup(String widgetClose, String updateId) {
+        simulateCacheServices.removeAll();
         for (CustomPeriodsGradesCampus item : customPeriodsGradesCampusesList) {
             if (item.getPeriods().equalsIgnoreCase(selectedPeriods) || selectedPeriods == null) {
                 if (String.valueOf(item.getDatedAt().getMonth()).equals(selectedMonth) || selectedMonth == null) {
                     if (item.getTable().equalsIgnoreCase(selectedType) || selectedType == null) {
-                        cleanCache(item);
                         if (item.getTable().equalsIgnoreCase("users")) {
                             usersRepository.removeAllByPeriodCampusGrades(item.getPeriods(), item.getDatedAt(), item.getCampusId(), item.getGradesId());
                         } else {
@@ -65,7 +66,7 @@ public class PeriodsController extends AbstractSessionController {
     }
 
     public void remove(CustomPeriodsGradesCampus item) {
-        cleanCache(item);
+        simulateCacheServices.removeAll();
         if (item.getTable().equalsIgnoreCase("users")) {
             usersRepository.removeAllByPeriodCampusGrades(item.getPeriods(), item.getDatedAt(), item.getCampusId(), item.getGradesId());
         } else {

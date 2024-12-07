@@ -6,20 +6,24 @@ import com.mimsoft.informesblackboard.application.data.repositories.StaticSimple
 import com.mimsoft.informesblackboard.application.utils.others.DateHelper;
 import com.mimsoft.informesblackboard.domain.entities.StaticSimpleDataJSON;
 
-import javax.ejb.*;
+import javax.ejb.Lock;
+import javax.ejb.LockType;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.util.Date;
 import java.util.List;
 
-@Singleton
-@ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
-@TransactionManagement(TransactionManagementType.BEAN)
+@RequestScoped
 public class SimulateCacheServices {
     @Inject
     private StaticSimpleDataJSONRepository staticSimpleDataJSONRepository;
 
     public List<StaticSimpleDataJSON> getAllCacheList() {
         return staticSimpleDataJSONRepository.getAll();
+    }
+
+    public void removeAll() {
+        for (StaticSimpleDataJSON item: getAllCacheList()) remove(item.getKeyword());
     }
 
     @Lock(LockType.READ)

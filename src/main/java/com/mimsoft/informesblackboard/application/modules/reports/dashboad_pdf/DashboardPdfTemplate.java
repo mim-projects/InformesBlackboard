@@ -1,5 +1,7 @@
 package com.mimsoft.informesblackboard.application.modules.reports.dashboad_pdf;
 
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -13,9 +15,11 @@ import com.mimsoft.informesblackboard.application.modules.reports.dashboad_pdf.c
 import com.mimsoft.informesblackboard.application.modules.reports.utils.SectionTypes;
 import com.mimsoft.informesblackboard.application.modules.reports.utils.TemplateInstance;
 import com.mimsoft.informesblackboard.application.utils.others.ArrayHelper;
+import com.mimsoft.informesblackboard.application.utils.others.ColorsHelper;
 import com.mimsoft.informesblackboard.domain.entities.Grades;
 import com.mimsoft.informesblackboard.domain.entities.StorageHistory;
 
+import java.awt.*;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
@@ -82,9 +86,8 @@ public class DashboardPdfTemplate implements TemplateInstance {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy / MM");
         for (StorageHistory item: data.getAllStorageHistory()) {
             String keyword = simpleDateFormat.format(item.getCreatedAt());
-            Double value = Double.valueOf(item.getValue());
             dataHistory.addCell(keywordCell(keyword, convertColorRGBArr(Colors.UABC_YELLOW_2), BaseColor.BLACK));
-            dataHistory.addCell(valueCell(String.valueOf(value), BaseColor.WHITE, BaseColor.BLACK, false));
+            dataHistory.addCell(valueCell(String.valueOf(item.getValue()), BaseColor.WHITE, BaseColor.BLACK, false));
         }
         table.addCell(cellBorder(dataHistory, 0));
 
@@ -209,7 +212,11 @@ public class DashboardPdfTemplate implements TemplateInstance {
     // ========================================================================
 
     private PdfPCell createBarChartGraphic(String[] dataHeader, String[] dataKeyword, Integer[][] values) throws BadElementException, IOException {
-        Image image = new BarCharts(750, 180).setDataset(dataHeader, dataKeyword, values).build().getImage();
+        Paint[] colors = new Paint[dataHeader.length];
+        for (int k = 0; k < dataHeader.length; k++) {
+            colors[k] = ColorsHelper.HexToColor(data.getChartsServices().getColorForCampus(dataHeader[k]));
+        }
+        Image image = new BarCharts(750, 180).setDataset(dataHeader, dataKeyword, values, colors).build().getImage();
         PdfPCell graphic = new PdfPCell(image, true);
         graphic.setBorder(0);
         return graphic;

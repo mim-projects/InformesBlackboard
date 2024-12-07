@@ -2,6 +2,8 @@ package com.mimsoft.informesblackboard.application.modules.graphics;
 
 import com.mimsoft.informesblackboard.application.data.constants.Colors;
 import com.mimsoft.informesblackboard.application.data.queries.custom_table_courses_users.CustomTableCoursesUsersHelper;
+import com.mimsoft.informesblackboard.application.data.repositories.CampusRepository;
+import com.mimsoft.informesblackboard.domain.entities.Campus;
 import com.mimsoft.informesblackboard.domain.entities.StorageHistory;
 
 import javax.enterprise.context.RequestScoped;
@@ -12,12 +14,25 @@ import java.util.List;
 @RequestScoped
 public class ChartsServices {
     @Inject
+    private CampusRepository campusRepository;
+    @Inject
     private OrderDataServices orderDataServices;
 
     private static final String[] COLORS = new String[] {
             Colors.UABC_YELLOW.getValue(), Colors.UABC_GREEN.getValue(), Colors.UABC_BLUE.getValue(),
             "#c23531", "#2f4554", "#61a0a8", "#d48265", "#91c7ae", "#749f83", "#ca8622", "#bda29a", "#6e7074", "#546570", "#c4ccd3"
     };
+
+    public String getColorForCampus(String name) {
+        int index = 0;
+        for (Campus campus : campusRepository.findAll()) {
+            if (campus.getName().equals(name)) {
+                return COLORS[index % COLORS.length];
+            }
+            index++;
+        }
+        return COLORS[0];
+    }
 
     public String getEmptyShowMessage(String message) {
         return "{ grid: { left: '2%', right: '2%', top: '2%', bottom: '2%' }, title: { text: \"" + message + "\", show: true, left: \"center\", top: \"center\", textStyle: { fontWeight: \"normal\", color: \"var(--text-color)\" } } }";
@@ -70,7 +85,7 @@ public class ChartsServices {
 
         int index = 0;
         for (String current: columns) {
-            colors[index] = COLORS[index];
+            colors[index] = getColorForCampus(current);
 
             Integer[] valArr = orderDataServices.orderValueForRow(unOrderRows, customTableCoursesUsersHelper.getRowValues(current)).toArray(new Integer[0]);
             StringBuilder valuesStr = new StringBuilder();
@@ -88,13 +103,18 @@ public class ChartsServices {
         for (String modality: modalities) modalityHelper.append("'").append(modality).append("',");
         if (modalityHelper.length() > 0) modalityHelper = new StringBuilder(modalityHelper.substring(0, modalityHelper.length() - 1));
 
+        StringBuilder campusHelper = new StringBuilder();
         StringBuilder seriesHelper = new StringBuilder();
-        for (int i = 0; i < campus.length; i++) seriesHelper.append("{ emphasis: { disabled: true }, name: '").append(campus[i]).append("', type: 'bar', itemStyle: { color: \"").append(color[i]).append("\" }, data: [").append(values[i]).append("] },");
+        for (int i = 0; i < campus.length; i++) {
+            seriesHelper.append("{ emphasis: { disabled: true }, name: '").append(campus[i]).append("', type: 'bar', itemStyle: { color: \"").append(color[i]).append("\" }, data: [").append(values[i]).append("] },");
+            campusHelper.append("'").append(campus[i]).append("',");
+        }
+        if (campusHelper.length() > 0) campusHelper = new StringBuilder(campusHelper.substring(0, campusHelper.length() - 1));
         if (seriesHelper.length() > 0) seriesHelper = new StringBuilder(seriesHelper.substring(0, seriesHelper.length() - 1));
 
         return "{ " +
                 "  tooltip: { trigger: 'axis' }, " +
-                "  legend: { data: ['" + campus[0] + "', '" + campus[1] + "', '" + campus[2] + "'], textStyle: { color: \"var(--text-color)\" } }, " +
+                "  legend: { data: [" + campusHelper + "], textStyle: { color: \"var(--text-color)\" } }, " +
                 "  grid: { containLabel: true, left: 0, right: 0, top: \"15%\", bottom: 0 }, " +
                 "  toolbox: { show: true, orient: 'vertical', left: 'right', top: 'top', " +
                 "    feature: { " +

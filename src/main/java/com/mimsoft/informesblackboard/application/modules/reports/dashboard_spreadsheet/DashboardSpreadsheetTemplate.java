@@ -134,6 +134,10 @@ public class DashboardSpreadsheetTemplate implements TemplateInstance {
         }
 
         // Headers
+        System.out.println("==========");
+        System.out.println(header);
+        System.out.println(rows);
+
         globalColumn = 0;
         rowSheet = sheet.createRow(++currentRow);
         for (String column: header) {
@@ -255,9 +259,7 @@ public class DashboardSpreadsheetTemplate implements TemplateInstance {
         for (Grades grade: data.getGraphicTableCoursesUsersHelper().getAllGradesForType(type.getValue())) {
             if (!data.getGraphicTableCoursesUsersHelper().renderHelper(type.getValue(), grade)) continue;
             list.add("");
-            list.addAll(data.getOrderDataServices().orderColumn(
-                    data.getGraphicTableCoursesUsersHelper().getCustomTableGraphicDataHelper(type.getValue(), grade).getAllColumns()
-            ));
+            list.addAll(data.getOrderDataServices().getAllOrderCampus());
         }
         return list;
     }
@@ -283,9 +285,13 @@ public class DashboardSpreadsheetTemplate implements TemplateInstance {
     }
 
     private void createFormulaSubTotalHorizontal(Cell cell, int rowLength) {
-        Cell rowRefEnd = cell.getSheet().getRow(cell.getRowIndex()).getCell(cell.getColumnIndex() - 1);
-        Cell rowRefStart = cell.getSheet().getRow(cell.getRowIndex()).getCell(rowRefEnd.getColumnIndex() - rowLength);
-        cell.setCellFormula("SUM(" + rowRefStart.getAddress().formatAsString() + ":" + rowRefEnd.getAddress().formatAsString() + ")");
+       try {
+           Cell rowRefEnd = cell.getSheet().getRow(cell.getRowIndex()).getCell(cell.getColumnIndex() - 1);
+           Cell rowRefStart = cell.getSheet().getRow(cell.getRowIndex()).getCell(rowRefEnd.getColumnIndex() - rowLength);
+           cell.setCellFormula("SUM(" + rowRefStart.getAddress().formatAsString() + ":" + rowRefEnd.getAddress().formatAsString() + ")");
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
     }
 
     private void createFormulaTotalHorizontal(Cell cell, int colLength) {

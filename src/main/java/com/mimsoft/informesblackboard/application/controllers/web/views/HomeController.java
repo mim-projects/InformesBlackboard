@@ -239,9 +239,10 @@ public class HomeController extends AbstractSessionController implements DataRes
     // DataResourceReports
     // ========================================================================
 
+
     @Override
-    public RequestController getRequestController() {
-        return requestController;
+    public ChartsServices getChartsServices() {
+        return chartsServices;
     }
 
     @Override

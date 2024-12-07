@@ -4,7 +4,7 @@ public class Configuration {
     public static final boolean SERVER = true;
     public static final String PATH_FILE = SERVER
             ?"/opt/wildfly/informes_blackboard/storage/"
-            :"C:/Users/amcode1402/Desktop/mimsoft/InformesBlackboard/InformesBlackboard/development/";
+            :"C:/Users/amcode1402/Desktop/mimsoft/InformesBlackboard/InformesBlackboard/development/storage/";
     public static final String PATH_FILE_UPLOADS = PATH_FILE + "upload/";
     public static final long MILLIS_EXPIRED_TIME_SESSION = 40 * 60000;
     public static final long DURATION_MAX_UPDATE_SIMULATE_CACHE = 120 * 60000;

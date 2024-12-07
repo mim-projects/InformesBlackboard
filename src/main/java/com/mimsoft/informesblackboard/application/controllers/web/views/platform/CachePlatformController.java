@@ -25,7 +25,7 @@ public class CachePlatformController extends AbstractSessionController {
     }
 
     public void removeAll() {
-        for (StaticSimpleDataJSON item: getAllCache()) remove(item.getKeyword());
+        simulateCacheServices.removeAll();
     }
 
     public void remove(String keyword) {

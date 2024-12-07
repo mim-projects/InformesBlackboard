@@ -28,6 +28,7 @@ public class BarCharts {
     private final int height;
     private JFreeChart chart;
     private DefaultCategoryDataset dataset;
+    private Paint[] colors;
 
     public BarCharts(int width, int height) {
         this.width = width;
@@ -35,7 +36,7 @@ public class BarCharts {
     }
 
     public BarCharts build() {
-        chart = createChart(dataset);
+        chart = createChart(dataset, colors);
         ChartPanel chartPanel = new ChartPanel(chart, false);
         chartPanel.setFillZoomRectangle(true);
         chartPanel.setMouseWheelEnabled(true);
@@ -48,6 +49,11 @@ public class BarCharts {
     }
 
     public BarCharts setDataset(String[] rows, String[] columns, Integer[][] values) {
+        return setDataset(rows, columns, values, null);
+    }
+
+    public BarCharts setDataset(String[] rows, String[] columns, Integer[][] values, Paint[] colors) {
+        this.colors = colors;
         dataset = new DefaultCategoryDataset();
         for (int row = 0; row < rows.length; row++) {
             for (int column = 0; column < columns.length; column++) {
@@ -64,7 +70,7 @@ public class BarCharts {
         return Image.getInstance(byteArrayOutputStream.toByteArray());
     }
 
-    private static JFreeChart createChart(CategoryDataset dataset) {
+    private static JFreeChart createChart(CategoryDataset dataset, Paint[] colorsArr) {
         JFreeChart chart = ChartFactory.createBarChart("", null, null, dataset);
         chart.getTitle().setVisible(false);
         chart.getLegend().setPosition(RectangleEdge.TOP);
@@ -73,7 +79,7 @@ public class BarCharts {
         chart.setBackgroundPaint(Color.WHITE);
 
         CategoryPlot plot = (CategoryPlot) chart.getPlot();
-        Paint[] colors = new Paint[]{ ConvertColor(Colors.UABC_YELLOW), ConvertColor(Colors.UABC_GREEN), ConvertColor(Colors.UABC_BLUE), ConvertColor(Colors.UABC_YELLOW_2), ConvertColor(Colors.UABC_GREEN_2), ConvertColor(Colors.UABC_BLUE_2) };
+        Paint[] colors = colorsArr != null ? colorsArr : new Paint[]{ ConvertColor(Colors.UABC_YELLOW), ConvertColor(Colors.UABC_GREEN), ConvertColor(Colors.UABC_BLUE), ConvertColor(Colors.UABC_YELLOW_2), ConvertColor(Colors.UABC_GREEN_2), ConvertColor(Colors.UABC_BLUE_2) };
         plot.setDrawingSupplier(new DefaultDrawingSupplier(colors, colors, DefaultDrawingSupplier.DEFAULT_STROKE_SEQUENCE, DefaultDrawingSupplier.DEFAULT_OUTLINE_STROKE_SEQUENCE, DefaultDrawingSupplier.DEFAULT_SHAPE_SEQUENCE));
         plot.setBackgroundPaint(Color.WHITE);
         plot.setOutlinePaint(Color.WHITE);

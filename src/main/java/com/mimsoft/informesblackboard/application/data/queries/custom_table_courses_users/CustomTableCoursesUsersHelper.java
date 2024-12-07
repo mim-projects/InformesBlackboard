@@ -83,7 +83,7 @@ public class CustomTableCoursesUsersHelper {
     }
 
     public Integer[] getColumnValues(String row) {
-        Integer[] values = new Integer[rows.size()];
+        Integer[] values = new Integer[columns.size()];
         int k = 0;
         for (String column : getAllColumns()) {
             values[k] = getValue(column, row);
@@ -93,7 +93,7 @@ public class CustomTableCoursesUsersHelper {
     }
 
     public Integer[] getRowValues(String column) {
-        Integer[] values = new Integer[columns.size()];
+        Integer[] values = new Integer[rows.size()];
         int k = 0;
         for (String row : getAllRows()) {
             try {

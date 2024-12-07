@@ -103,6 +103,7 @@
                         </p:column>
                         <p:column headerText="#{bundle.options}" width="8rem">
                             <p:commandButton value="#{bundle.details}" styleClass="ui-button-flat ui-button-warning"
+                                             onstart="createGlobalLoader()"
                                              actionListener="#{routerCtrl.navigate('register_users_details', commonCtrl.concat('id', '=', item.id))}"/>
                         </p:column>
                     </p:dataTable>
